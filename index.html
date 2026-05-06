@@ -83,21 +83,28 @@ button { font-family: inherit; cursor: pointer; }
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  gap: 8px;
+  gap: 10px;
   padding: 16px 28px;
   background: var(--ink);
   color: var(--paper);
   font-family: var(--display);
   font-weight: 800;
   font-size: 16px;
+  letter-spacing: -0.01em;
   border: 2px solid var(--ink);
   text-decoration: none;
-  transition: transform 120ms var(--easing), background 120ms;
+  position: relative;
+  box-shadow: 4px 4px 0 var(--ink);
+  transition: transform 160ms var(--easing), box-shadow 160ms var(--easing), background 160ms;
+  cursor: pointer;
 }
-.btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.btn:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--ink); }
+.btn:active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
 .btn.primary { background: var(--watermelon); color: var(--ink); border-color: var(--ink); }
 .btn.citrus { background: var(--citrus); color: var(--ink); }
-.btn.outline { background: transparent; color: var(--ink); }
+.btn.outline { background: var(--paper); color: var(--ink); }
+.btn.ghost { background: transparent; color: inherit; border-color: currentColor; box-shadow: 4px 4px 0 currentColor; }
+.btn.ghost:hover { box-shadow: 7px 7px 0 currentColor; }
 
 /* Fruit illustrations (CSS shapes, no SVG hand-drawing) */
 .fruit-blob {
@@ -207,6 +214,201 @@ button { font-family: inherit; cursor: pointer; }
 .artboard-scroll {
   overflow: hidden;
 }
+
+/* ───────────────────────────────────────────────
+   Depth & shadow utilities (added in upgrade)
+   ─────────────────────────────────────────────── */
+
+/* Hard offset shadows — brutalist depth */
+.shadow-1 { box-shadow: 4px 4px 0 var(--ink); }
+.shadow-2 { box-shadow: 8px 8px 0 var(--ink); }
+.shadow-3 { box-shadow: 12px 12px 0 var(--ink); }
+.shadow-pop { box-shadow: 6px 6px 0 var(--ink), 0 12px 28px -10px rgba(0,0,0,0.25); }
+.shadow-soft { box-shadow: 0 18px 40px -16px rgba(10,10,10,0.18), 0 4px 10px -4px rgba(10,10,10,0.08); }
+.shadow-paper { box-shadow: 6px 6px 0 var(--paper-2), 8px 8px 0 var(--ink); }
+
+/* Card lift with hard shadow appearing on hover */
+.card-lift {
+  transition: transform 220ms var(--easing), box-shadow 220ms var(--easing);
+  box-shadow: 0 0 0 var(--ink);
+  will-change: transform;
+}
+.card-lift:hover {
+  transform: translate(-4px, -4px);
+  box-shadow: 8px 8px 0 var(--ink);
+}
+
+/* Subtle 3D tilt utilities */
+.tilt-l { transform: rotate(-2deg); }
+.tilt-r { transform: rotate(2deg); }
+.tilt-l-strong { transform: rotate(-5deg); }
+.tilt-r-strong { transform: rotate(5deg); }
+
+/* Float / breathing animations */
+@keyframes float-y {
+  0%, 100% { transform: translateY(0); }
+  50% { transform: translateY(-10px); }
+}
+@keyframes float-tilt {
+  0%, 100% { transform: rotate(-6deg) translateY(0); }
+  50% { transform: rotate(-4deg) translateY(-8px); }
+}
+.float-y { animation: float-y 5s ease-in-out infinite; }
+.float-tilt { animation: float-tilt 6s ease-in-out infinite; }
+
+/* Halo / radial glow behind images */
+.halo-accent {
+  position: absolute;
+  inset: 0;
+  background: radial-gradient(circle at 50% 55%, var(--halo-color, var(--watermelon)) 0%, transparent 55%);
+  filter: blur(40px);
+  opacity: 0.55;
+  pointer-events: none;
+  z-index: 0;
+}
+
+/* Stripe / scan-line backgrounds */
+.stripes-soft {
+  background-image: repeating-linear-gradient(
+    45deg,
+    rgba(0,0,0,0.04) 0 2px,
+    transparent 2px 12px
+  );
+}
+.stripes-warning {
+  background-image: repeating-linear-gradient(
+    -45deg,
+    var(--ink) 0 14px,
+    var(--citrus) 14px 28px
+  );
+}
+
+/* Outline numerals — sit behind hero type */
+.outline-numeral {
+  font-family: var(--display);
+  font-weight: 900;
+  -webkit-text-stroke: 1.5px var(--ink);
+  color: transparent;
+  letter-spacing: -0.06em;
+  line-height: 0.8;
+  user-select: none;
+}
+
+/* Underline that draws on first paint */
+@keyframes draw-line {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}
+.draw-line {
+  display: inline-block;
+  height: 6px;
+  background: var(--watermelon);
+  transform-origin: right center;
+  animation: draw-line 900ms var(--easing) 200ms both;
+}
+
+/* Magnetic chip (filter pills) */
+.chip {
+  display: inline-flex;
+  align-items: center;
+  padding: 8px 14px;
+  border: 1.5px solid var(--ink);
+  border-radius: 999px;
+  background: var(--paper);
+  font-family: var(--mono);
+  font-size: 12px;
+  font-weight: 700;
+  letter-spacing: 0.04em;
+  transition: transform 200ms var(--easing), background 160ms, color 160ms, box-shadow 200ms;
+  box-shadow: 2px 2px 0 var(--ink);
+  cursor: pointer;
+}
+.chip:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.chip.active { background: var(--ink); color: var(--paper); }
+
+/* Animated dotted divider */
+.dotted-divider {
+  background-image: radial-gradient(circle, var(--ink) 1.5px, transparent 1.6px);
+  background-size: 14px 6px;
+  background-repeat: repeat-x;
+  background-position: center;
+  height: 6px;
+}
+
+/* Marquee fade edges */
+.marquee-mask {
+  -webkit-mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+          mask-image: linear-gradient(90deg, transparent 0%, black 6%, black 94%, transparent 100%);
+}
+
+/* Accent ring — thin radiating circle for badges */
+.ring-accent {
+  position: relative;
+}
+.ring-accent::before {
+  content: "";
+  position: absolute;
+  inset: -8px;
+  border: 1.5px solid var(--ink);
+  border-radius: inherit;
+  opacity: 0.35;
+  pointer-events: none;
+}
+
+/* Reveal-on-scroll baseline */
+@keyframes rise-in {
+  from { opacity: 0; transform: translateY(24px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.rise { animation: rise-in 700ms var(--easing) both; }
+.rise-d1 { animation: rise-in 700ms var(--easing) 80ms both; }
+.rise-d2 { animation: rise-in 700ms var(--easing) 160ms both; }
+.rise-d3 { animation: rise-in 700ms var(--easing) 240ms both; }
+
+/* Big watermark text behind sections */
+.watermark {
+  position: absolute;
+  font-family: var(--display);
+  font-weight: 900;
+  letter-spacing: -0.06em;
+  -webkit-text-stroke: 1.5px currentColor;
+  color: transparent;
+  pointer-events: none;
+  user-select: none;
+  white-space: nowrap;
+  opacity: 0.08;
+  z-index: 0;
+}
+
+/* Product price tag */
+.price-tag {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 12px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 900;
+  font-size: 18px;
+  border: 2px solid var(--ink);
+  letter-spacing: -0.02em;
+}
+.price-tag.accent { background: var(--citrus); color: var(--ink); }
+
+/* Frame around image (editorial) */
+.image-frame {
+  position: relative;
+  background: var(--paper);
+  border: 2px solid var(--ink);
+  padding: 14px;
+  box-shadow: 10px 10px 0 var(--ink);
+}
+.image-frame.dark {
+  background: var(--ink);
+  box-shadow: 10px 10px 0 rgba(253,251,245,0.12);
+}
+
 </style>
 </head>
 <body>
@@ -1462,7 +1664,7 @@ Object.assign(window, {
 </script>
 
 <script type="text/babel">
-/* home.jsx — דף הבית המשודרג */
+/* home.jsx — דף הבית המשודרג v2 */
 
 const KAYAK_IMG = 'data:image/jpeg;base64,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';
 
@@ -1474,12 +1676,12 @@ function HomePage({ heroVariant = 'mega', accent = 'var(--watermelon)' }) {
       {heroVariant === 'split' && <HeroSplit accent={accent} />}
       {heroVariant === 'editorial' && <HeroEditorial accent={accent} />}
       <TickerStrip />
-      <ValuePropsBar />
+      <ValuePropsBar accent={accent} />
       <BestSellersV2 accent={accent} />
       <KayakHero accent={accent} />
-      <ProcessSection />
+      <ProcessSection accent={accent} />
       <FruitMosaic accent={accent} />
-      <Testimonials />
+      <Testimonials accent={accent} />
       <CTASection accent={accent} />
       <SiteFooter />
     </div>
@@ -1488,6 +1690,7 @@ function HomePage({ heroVariant = 'mega', accent = 'var(--watermelon)' }) {
 
 /* ═══════════════════════════════════════════════════
    HERO 1 — MEGA (default) — אדיטוריאלי, תמונת קיאק
+   עם שכבות, ווטרמרק טיפוגרפי, הילה ועומק
    ═══════════════════════════════════════════════════ */
 function HeroMega({ accent }) {
   return (
@@ -1497,31 +1700,45 @@ function HeroMega({ accent }) {
       background: 'var(--paper)',
       overflow: 'hidden',
     }}>
+      {/* watermark numerals — שכבת רקע ענקית */}
+      <div className="watermark" style={{
+        top: 80, right: -30,
+        fontSize: 'clamp(280px, 38vw, 560px)',
+        color: 'var(--ink)',
+        opacity: 0.045,
+      }}>2026</div>
+
       {/* top meta strip */}
       <div style={{
+        position: 'relative',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-        padding: '18px 40px',
+        padding: '16px 40px',
         borderBottom: '1px solid var(--ink)',
         fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase',
+        zIndex: 2,
       }}>
         <span>גליון 12 · אביב 2026 · דימונה</span>
-        <span style={{ display: 'flex', gap: 24 }}>
-          <span>● נחתך הבוקר</span>
-          <span>● 22°C</span>
-          <span>● משלוח עד 14:00</span>
+        <span style={{ display: 'flex', gap: 28, alignItems: 'center' }}>
+          <span style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
+            <span className="pulse-dot" /> נחתך הבוקר
+          </span>
+          <span>22°C</span>
+          <span>משלוח עד 14:00</span>
         </span>
         <span>פרי לי ™ · est. 2018</span>
       </div>
 
       {/* main grid */}
       <div style={{
+        position: 'relative',
         display: 'grid',
         gridTemplateColumns: '1.4fr 1fr',
-        minHeight: 720,
+        minHeight: 760,
+        zIndex: 1,
       }}>
         {/* LEFT — type */}
         <div style={{
-          padding: '60px 50px 40px',
+          padding: '70px 56px 50px',
           display: 'flex',
           flexDirection: 'column',
           justifyContent: 'space-between',
@@ -1529,41 +1746,87 @@ function HeroMega({ accent }) {
           position: 'relative',
         }}>
           <div>
-            <SectionTag num="01" label="פירות קלופים · קיאקי אירועים" />
-            <h1 className="display" style={{
+            <div className="rise">
+              <SectionTag num="01" label="פירות קלופים · קיאקי אירועים" />
+            </div>
+
+            <h1 className="display rise-d1" style={{
+              position: 'relative',
               fontSize: 'clamp(110px, 14vw, 240px)',
-              margin: '32px 0 0',
+              margin: '36px 0 0',
               lineHeight: 0.82,
               letterSpacing: '-0.06em',
             }}>
+              {/* outline shadow letter behind */}
+              <span aria-hidden style={{
+                position: 'absolute',
+                top: 6, right: 6,
+                color: 'transparent',
+                WebkitTextStroke: '1.5px ' + 'rgba(10,10,10,0.18)',
+                pointerEvents: 'none',
+                whiteSpace: 'pre',
+              }}>פרי{'\n'}שנחתך{'\n'}עכשיו.</span>
               פרי
               <br />
               ש<span style={{
                 fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400,
                 color: accent,
-              }}>נחתך</span>
+                position: 'relative',
+                display: 'inline-block',
+              }}>נחתך
+                <span className="draw-line" style={{
+                  position: 'absolute', bottom: '0.06em', right: 0, left: 0,
+                  background: accent, opacity: 0.35,
+                }} />
+              </span>
               <br />
               עכשיו<span style={{ color: accent }}>.</span>
             </h1>
           </div>
 
-          <div style={{ marginTop: 40 }}>
+          <div style={{ marginTop: 44 }} className="rise-d2">
+            {/* underline accent strip */}
+            <div style={{ width: 64, height: 4, background: accent, marginBottom: 22 }} />
             <p style={{
-              fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.45, maxWidth: 520,
+              fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.5, maxWidth: 540,
               margin: 0, marginBottom: 32,
             }}>
               ב-3 בלילה אנחנו בשוק העיר. ב-7 בבוקר זה כבר על המדף —
-              קלוף, חתוך, ארוז. מדימונה, ביד, באותו יום.
+              קלוף, חתוך, ארוז. <em style={{ color: accent, fontWeight: 700 }}>מדימונה, ביד, באותו יום.</em>
             </p>
-            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
-              <button className="btn primary" style={{ background: accent }}>הזמן עכשיו</button>
-              <button className="btn outline">בנה קיאק לאירוע →</button>
+            <div style={{ display: 'flex', gap: 14, flexWrap: 'wrap', alignItems: 'center' }}>
+              <button className="btn primary" style={{ background: accent }}>הזמן עכשיו →</button>
+              <button className="btn outline">בנה קיאק לאירוע</button>
+              <div style={{
+                display: 'flex', alignItems: 'center', gap: 8,
+                fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase',
+                opacity: 0.65, marginInlineStart: 6,
+              }}>
+                <span style={{ width: 24, height: 1, background: 'var(--ink)' }} />
+                ★★★★★ 4.9 · 280 ביקורות
+              </div>
             </div>
           </div>
 
-          {/* float sticker */}
-          <div style={{ position: 'absolute', top: 80, left: 40 }}>
-            <Sticker color={accent} rotate={-8}>טרי 100%</Sticker>
+          {/* float stickers */}
+          <div style={{ position: 'absolute', top: 90, left: 50 }}>
+            <div className="float-tilt">
+              <Sticker color={accent} rotate={-8}>טרי 100%</Sticker>
+            </div>
+          </div>
+          <div style={{ position: 'absolute', bottom: 200, left: 30 }}>
+            <div style={{
+              transform: 'rotate(8deg)',
+              padding: '10px 14px',
+              background: 'var(--citrus)',
+              border: '2px solid var(--ink)',
+              boxShadow: '4px 4px 0 var(--ink)',
+              fontFamily: 'var(--mono)',
+              fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}>
+              ★ דימונה
+            </div>
           </div>
         </div>
 
@@ -1579,70 +1842,119 @@ function HeroMega({ accent }) {
           justifyContent: 'space-between',
           overflow: 'hidden',
         }}>
+          {/* halftone background */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'radial-gradient(circle, rgba(253,251,245,0.08) 1px, transparent 1.5px)',
+            backgroundSize: '14px 14px',
+            pointerEvents: 'none',
+          }} />
+
           {/* corner index */}
-          <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.2em', opacity: 0.6 }}>
-            <span>FIG. 01</span>
-            <span>קיאק XL · 50 אורחים</span>
+          <div style={{
+            position: 'relative', zIndex: 2,
+            display: 'flex', justifyContent: 'space-between',
+            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.2em', opacity: 0.7,
+          }}>
+            <span>FIG. 01 — KAYAK XL</span>
+            <span>50 אורחים · 90cm</span>
           </div>
 
-          {/* kayak image */}
+          {/* kayak image with halo */}
           <div style={{
             position: 'relative',
-            margin: '40px 0',
+            margin: '30px 0',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
+            minHeight: 360,
           }}>
-            <img
-              src={KAYAK_IMG}
-              alt="קיאק פירות"
-              style={{
-                width: '100%',
-                maxWidth: 520,
-                filter: 'drop-shadow(8px 12px 0 rgba(0,0,0,0.4))',
-              }}
-            />
-            {/* dimension lines */}
+            {/* radial halo behind */}
+            <div className="halo-accent" style={{ '--halo-color': accent }} />
+            <div className="float-y" style={{
+              position: 'relative', zIndex: 2,
+              width: '100%', maxWidth: 540,
+            }}>
+              <img
+                src={KAYAK_IMG}
+                alt="קיאק פירות"
+                style={{
+                  width: '100%',
+                  filter: 'drop-shadow(10px 14px 0 rgba(0,0,0,0.55)) drop-shadow(0 24px 30px rgba(0,0,0,0.4))',
+                }}
+              />
+            </div>
+
+            {/* spec sticker float */}
             <div style={{
-              position: 'absolute', bottom: -16, left: '5%', right: '5%',
+              position: 'absolute', top: 8, right: 12, zIndex: 3,
+              transform: 'rotate(8deg)',
+            }}>
+              <div style={{
+                padding: '8px 14px',
+                background: accent, color: 'var(--ink)',
+                border: '2px solid var(--ink)',
+                boxShadow: '4px 4px 0 var(--paper)',
+                fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
+                textTransform: 'uppercase',
+              }}>חדש · XL</div>
+            </div>
+
+            {/* dimension caption */}
+            <div style={{
+              position: 'absolute', bottom: -8, left: '5%', right: '5%',
               display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-              fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6,
-              letterSpacing: '0.15em',
+              fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.65,
+              letterSpacing: '0.18em', zIndex: 2,
             }}>
               <span>↤ 90cm ↦</span>
+              <span style={{ display: 'flex', alignItems: 'center', gap: 6 }}>
+                <span className="pulse-dot" style={{ background: accent }} /> בהזמנה
+              </span>
             </div>
           </div>
 
           {/* feature bullets */}
           <div style={{
-            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16,
-            paddingTop: 24, borderTop: '1px solid rgba(253,251,245,.2)',
+            position: 'relative', zIndex: 2,
+            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 18,
+            paddingTop: 26, borderTop: '1px solid rgba(253,251,245,.2)',
           }}>
             <FeatureItem label="גודל" value="S · M · L · XL" />
             <FeatureItem label="פירות" value="עד 18 זנים" />
             <FeatureItem label="הכנה" value="ביום האירוע" />
-            <FeatureItem label="התחלה מ-" value="₪480" />
+            <FeatureItem label="התחלה מ-" value="₪480" accent={accent} />
           </div>
         </div>
       </div>
 
       {/* bottom stats bar */}
       <div style={{
+        position: 'relative', zIndex: 1,
         borderTop: '1px solid var(--ink)',
         display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+        background: 'var(--paper)',
       }}>
         {[
-          ['450+', 'אירועים השנה'],
-          ['18', 'זני פירות יומי'],
-          ['04:30', 'ניקיון יומי'],
-          ['8 שנים', 'בדימונה'],
-        ].map(([n, l], i) => (
+          ['450+', 'אירועים השנה', '🎉'],
+          ['18', 'זני פירות יומי', '✻'],
+          ['04:30', 'ניקיון יומי', '◐'],
+          ['8 שנים', 'בדימונה', '◆'],
+        ].map(([n, l, ico], i) => (
           <div key={i} style={{
-            padding: '24px 30px',
+            padding: '26px 30px',
             borderRight: i < 3 ? '1px solid var(--ink)' : 'none',
             display: 'flex', alignItems: 'baseline', gap: 16,
-          }}>
-            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 44, lineHeight: 1, letterSpacing: '-0.04em' }}>{n}</div>
+            position: 'relative',
+            transition: 'background 200ms',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.background = 'var(--paper-2)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.background = 'var(--paper)'; }}
+          >
+            <span style={{
+              fontSize: 16, color: accent, marginInlineEnd: 4,
+            }}>{ico}</span>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 46, lineHeight: 1, letterSpacing: '-0.04em' }}>{n}</div>
             <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.6 }}>{l}</div>
           </div>
         ))}
@@ -1651,11 +1963,14 @@ function HeroMega({ accent }) {
   );
 }
 
-function FeatureItem({ label, value }) {
+function FeatureItem({ label, value, accent }) {
   return (
     <div>
       <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.5 }}>{label}</div>
-      <div style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18, marginTop: 4 }}>{value}</div>
+      <div style={{
+        fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18, marginTop: 4,
+        color: accent || 'inherit',
+      }}>{value}</div>
     </div>
   );
 }
@@ -1693,9 +2008,11 @@ function HeroSplit({ accent }) {
         overflow: 'hidden',
         display: 'flex', alignItems: 'center', justifyContent: 'center',
       }}>
-        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '90%', filter: 'drop-shadow(6px 8px 0 rgba(0,0,0,0.25))' }} />
+        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '90%', filter: 'drop-shadow(8px 12px 0 rgba(0,0,0,0.35))' }} />
         <div style={{ position: 'absolute', top: 40, right: 40 }}>
-          <Sticker color="var(--paper)" rotate={-10}>חדש · 2026</Sticker>
+          <div className="float-tilt">
+            <Sticker color="var(--paper)" rotate={-10}>חדש · 2026</Sticker>
+          </div>
         </div>
         <div style={{ position: 'absolute', bottom: 40, left: 40, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em' }}>
           FIG. 01 — KAYAK XL
@@ -1708,13 +2025,13 @@ function HeroSplit({ accent }) {
 /* HERO 3 — EDITORIAL */
 function HeroEditorial({ accent }) {
   return (
-    <section style={{ padding: '40px 40px 60px', borderBottom: '2px solid var(--ink)', textAlign: 'center' }}>
+    <section style={{ padding: '40px 40px 60px', borderBottom: '2px solid var(--ink)', textAlign: 'center', position: 'relative', overflow: 'hidden' }}>
       <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
         <span>גליון 12 · אביב 2026</span>
         <span>פרי לי ™</span>
         <span>דימונה</span>
       </div>
-      <div style={{ marginTop: 50 }}>
+      <div style={{ marginTop: 50, position: 'relative' }}>
         <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 28, marginBottom: 12 }}>החדש מדימונה</div>
         <h1 className="display" style={{
           fontSize: 'clamp(100px, 14vw, 240px)',
@@ -1724,7 +2041,7 @@ function HeroEditorial({ accent }) {
           <br />
           <span style={{ color: accent }}>פירות.</span>
         </h1>
-        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '70%', maxWidth: 800, margin: '32px auto 0', display: 'block' }} />
+        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '70%', maxWidth: 800, margin: '32px auto 0', display: 'block', filter: 'drop-shadow(10px 14px 0 rgba(0,0,0,0.3))' }} />
         <div style={{ fontFamily: 'var(--serif)', fontSize: 22, marginTop: 24, maxWidth: 600, marginInline: 'auto' }}>
           מגש בצורת קיאק עמוס פירות חתוכים בעבודת יד. לחתונה, ליום הולדת, לכל אירוע שמגיע לו לזכור.
         </div>
@@ -1739,15 +2056,19 @@ function TickerStrip() {
   const items = ['אננס מתוק', 'מלון אמבוסיה', 'אבטיח אדום', 'תות שדה', 'אוכמניות', 'דובדבנים', 'ענבי קונקורד', 'קיווי זהב', 'מנגו ישראלי', 'פפאיה', 'ליצ׳י', 'משמש'];
   const repeated = [...items, ...items, ...items];
   return (
-    <div style={{
+    <div className="marquee-mask" style={{
       background: 'var(--ink)', color: 'var(--paper)',
-      padding: '18px 0', overflow: 'hidden',
+      padding: '20px 0', overflow: 'hidden',
       borderBottom: '2px solid var(--ink)',
+      position: 'relative',
     }}>
       <div className="marquee" style={{ gap: 40, display: 'flex' }}>
         {repeated.map((x, i) => (
-          <span key={i} style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 40, whiteSpace: 'nowrap' }}>
-            {x} <span style={{ color: 'var(--watermelon)' }}>✺</span>
+          <span key={i} style={{
+            fontFamily: 'var(--display)', fontWeight: 800, fontSize: 30, letterSpacing: '-0.02em',
+            display: 'flex', alignItems: 'center', gap: 40, whiteSpace: 'nowrap',
+          }}>
+            {x} <span style={{ color: 'var(--watermelon)', fontSize: 22 }}>✺</span>
           </span>
         ))}
       </div>
@@ -1756,7 +2077,7 @@ function TickerStrip() {
 }
 
 /* ─── Value props bar ─── */
-function ValuePropsBar() {
+function ValuePropsBar({ accent }) {
   const items = [
     { icon: '✻', t: 'נחתך באותו יום', d: 'אין מלאי לא טרי' },
     { icon: '↻', t: 'משלוח עד 14:00', d: 'הזמנה עד 11:00' },
@@ -1765,19 +2086,32 @@ function ValuePropsBar() {
   ];
   return (
     <section style={{
-      padding: '32px 40px', borderBottom: '2px solid var(--ink)',
+      padding: '36px 40px', borderBottom: '2px solid var(--ink)',
       display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0,
+      background: 'var(--paper)',
     }}>
       {items.map((f, i) => (
-        <div key={i} style={{
-          padding: '0 24px',
-          borderRight: i < 3 ? '1px solid rgba(0,0,0,.15)' : 'none',
-          display: 'flex', alignItems: 'center', gap: 16,
-        }}>
-          <div style={{ fontSize: 32, color: 'var(--watermelon)', lineHeight: 1 }}>{f.icon}</div>
+        <div key={i}
+          style={{
+            padding: '4px 24px',
+            borderRight: i < 3 ? '1px solid rgba(0,0,0,.15)' : 'none',
+            display: 'flex', alignItems: 'center', gap: 18,
+            transition: 'transform 220ms var(--easing)',
+          }}
+          onMouseEnter={(e) => { e.currentTarget.style.transform = 'translateY(-3px)'; }}
+          onMouseLeave={(e) => { e.currentTarget.style.transform = 'translateY(0)'; }}
+        >
+          <div style={{
+            width: 52, height: 52,
+            display: 'grid', placeItems: 'center',
+            background: i === 0 ? accent : 'var(--paper-2)',
+            border: '1.5px solid var(--ink)',
+            boxShadow: '3px 3px 0 var(--ink)',
+            fontSize: 24, lineHeight: 1,
+          }}>{f.icon}</div>
           <div>
-            <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18 }}>{f.t}</div>
-            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, marginTop: 2 }}>{f.d}</div>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18, lineHeight: 1.1 }}>{f.t}</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, marginTop: 4, letterSpacing: '0.04em' }}>{f.d}</div>
           </div>
         </div>
       ))}
@@ -1806,87 +2140,161 @@ function BestSellersV2({ accent }) {
   const filtered = active === 'all' ? products : products.filter(p => p.cat === active);
 
   return (
-    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)' }}>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40 }}>
+    <section style={{
+      padding: '100px 40px',
+      borderBottom: '2px solid var(--ink)',
+      position: 'relative',
+      background: 'var(--paper)',
+      overflow: 'hidden',
+    }}>
+      {/* watermark */}
+      <div className="watermark" style={{
+        bottom: -40, left: -20,
+        fontSize: 'clamp(180px, 22vw, 360px)',
+        color: 'var(--ink)',
+      }}>SHOP</div>
+
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 44 }}>
         <div>
           <SectionTag num="02" label="קטלוג · הכי נמכרים" />
-          <h2 className="display" style={{ fontSize: 'clamp(70px, 9vw, 120px)', margin: '16px 0 0', lineHeight: 0.9 }}>
+          <h2 className="display" style={{
+            fontSize: 'clamp(70px, 9vw, 130px)',
+            margin: '18px 0 0', lineHeight: 0.88,
+          }}>
             הקלאסיקות<span style={{ color: accent }}>.</span>
           </h2>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 20, fontStyle: 'italic', opacity: 0.7, marginTop: 10 }}>
+            ששת הפירות שהכי קונים אצלנו השבוע.
+          </div>
         </div>
-        <a style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: 4 }}>כל הקטלוג ↘</a>
+        <a style={{
+          fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em',
+          textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: 4,
+          display: 'inline-flex', alignItems: 'center', gap: 8,
+        }}>
+          כל הקטלוג
+          <span style={{
+            display: 'inline-grid', placeItems: 'center',
+            width: 28, height: 28, background: 'var(--ink)', color: 'var(--paper)',
+            borderRadius: '50%',
+          }}>↘</span>
+        </a>
       </div>
 
       {/* category tabs */}
-      <div style={{
-        display: 'flex', gap: 0, borderTop: '1px solid var(--ink)', borderBottom: '1px solid var(--ink)',
-        marginBottom: 0,
-      }}>
-        {categories.map((c, i) => (
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', gap: 10, flexWrap: 'wrap', marginBottom: 32 }}>
+        {categories.map((c) => (
           <button
             key={c.id}
             onClick={() => setActive(c.id)}
+            className={`chip ${active === c.id ? 'active' : ''}`}
             style={{
-              flex: 1,
-              padding: '18px 20px',
-              background: active === c.id ? 'var(--ink)' : 'transparent',
-              color: active === c.id ? 'var(--paper)' : 'var(--ink)',
               border: 'none',
-              borderRight: i < categories.length - 1 ? '1px solid var(--ink)' : 'none',
-              fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18,
+              padding: '10px 18px',
+              background: active === c.id ? 'var(--ink)' : 'var(--paper)',
+              color: active === c.id ? 'var(--paper)' : 'var(--ink)',
+              fontFamily: 'var(--display)', fontWeight: 700, fontSize: 15,
+              borderRadius: 999,
               cursor: 'pointer',
-              transition: 'all 0.2s',
+              boxShadow: active === c.id ? '4px 4px 0 var(--ink)' : '3px 3px 0 var(--ink)',
+              border: '1.5px solid var(--ink)',
+              transition: 'all 200ms var(--easing)',
             }}
           >
             {c.label}
-            <span style={{ fontFamily: 'var(--mono)', fontSize: 10, marginInlineStart: 8, opacity: 0.6 }}>
+            <span style={{
+              fontFamily: 'var(--mono)', fontSize: 10, marginInlineStart: 8,
+              opacity: 0.7,
+              padding: '2px 6px',
+              background: active === c.id ? 'rgba(253,251,245,0.18)' : 'var(--paper-2)',
+              borderRadius: 999,
+            }}>
               {c.id === 'all' ? products.length : products.filter(p => p.cat === c.id).length}
             </span>
           </button>
         ))}
       </div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, border: '1px solid var(--ink)', borderTop: 'none' }}>
+      <div style={{
+        position: 'relative', zIndex: 1,
+        display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 20,
+      }}>
         {filtered.map((p, i) => (
-          <ProductCard key={p.name} product={p} index={i} cols={3} total={filtered.length} />
+          <ProductCard key={p.name} product={p} accent={accent} />
         ))}
       </div>
     </section>
   );
 }
 
-function ProductCard({ product, index, cols, total }) {
-  const lastRow = index >= total - cols;
-  const lastCol = (index + 1) % cols === 0;
+function ProductCard({ product, accent }) {
+  const [hover, setHover] = React.useState(false);
   return (
-    <div className="product-card" style={{
-      padding: '32px 30px',
-      borderRight: lastCol ? 'none' : '1px solid var(--ink)',
-      borderBottom: lastRow ? 'none' : '1px solid var(--ink)',
-      position: 'relative',
-      background: 'var(--paper)',
-      cursor: 'pointer',
-      transition: 'background 0.2s',
-    }}>
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '28px 26px 22px',
+        border: '1.5px solid var(--ink)',
+        position: 'relative',
+        background: hover ? 'var(--paper-2)' : 'var(--paper)',
+        cursor: 'pointer',
+        transition: 'all 240ms var(--easing)',
+        transform: hover ? 'translate(-4px, -4px)' : 'translate(0, 0)',
+        boxShadow: hover ? '8px 8px 0 var(--ink)' : '0 0 0 var(--ink)',
+      }}
+    >
       {product.tag && (
-        <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 2 }}>
-          <Sticker color={product.tag === 'חדש' ? 'var(--leaf)' : 'var(--watermelon)'} rotate={-6}>{product.tag}</Sticker>
+        <div style={{ position: 'absolute', top: 14, right: 14, zIndex: 2 }}>
+          <Sticker color={product.tag === 'חדש' ? 'var(--leaf)' : 'var(--citrus)'} rotate={-6}>{product.tag}</Sticker>
         </div>
       )}
-      <div style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
-        <Fruit kind={product.kind} size={200} />
+
+      {/* halo behind fruit */}
+      <div style={{
+        height: 240,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'relative',
+      }}>
+        <div style={{
+          position: 'absolute',
+          width: 220, height: 220,
+          background: `radial-gradient(circle, ${accent} 0%, transparent 65%)`,
+          opacity: hover ? 0.32 : 0.18,
+          filter: 'blur(20px)',
+          transition: 'opacity 240ms',
+        }} />
+        <div style={{
+          position: 'relative', zIndex: 1,
+          transition: 'transform 320ms var(--easing)',
+          transform: hover ? 'scale(1.06) rotate(-2deg)' : 'scale(1)',
+        }}>
+          <Fruit kind={product.kind} size={210} />
+        </div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 28 }}>
-        <div className="display" style={{ fontSize: 30, lineHeight: 1 }}>{product.name}</div>
-        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.06em' }}>{product.weight}</div>
+
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'baseline',
+        marginTop: 20, paddingTop: 20, borderTop: '1px dashed rgba(0,0,0,0.18)',
+      }}>
+        <div className="display" style={{ fontSize: 28, lineHeight: 1, letterSpacing: '-0.03em' }}>{product.name}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.55, letterSpacing: '0.06em' }}>{product.weight}</div>
       </div>
-      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
-        <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 26 }}>₪{product.price}</div>
+
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 14 }}>
+        <div className="price-tag" style={{ background: hover ? accent : 'var(--ink)', color: hover ? 'var(--ink)' : 'var(--paper)', transition: 'all 240ms' }}>
+          ₪{product.price}
+        </div>
         <button style={{
-          background: 'var(--ink)', color: 'var(--paper)',
-          border: 'none', padding: '12px 16px',
+          background: hover ? accent : 'var(--ink)',
+          color: hover ? 'var(--ink)' : 'var(--paper)',
+          border: '2px solid var(--ink)',
+          padding: '10px 16px',
           fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
           cursor: 'pointer',
+          boxShadow: hover ? '3px 3px 0 var(--ink)' : '0 0 0 var(--ink)',
+          transition: 'all 240ms var(--easing)',
+          letterSpacing: '0.04em',
         }}>הוסף לסל +</button>
       </div>
     </div>
@@ -1897,66 +2305,105 @@ function ProductCard({ product, index, cols, total }) {
 function KayakHero({ accent }) {
   return (
     <section style={{
-      padding: '90px 40px',
+      padding: '110px 40px',
       background: 'var(--ink)',
       color: 'var(--paper)',
       position: 'relative',
       overflow: 'hidden',
       borderBottom: '2px solid var(--ink)',
     }}>
-      <SectionTag num="03" label="קיאקי פירות · בלעדי לאירועים" dark />
+      {/* watermark */}
+      <div className="watermark" style={{
+        top: 40, left: -40,
+        fontSize: 'clamp(220px, 28vw, 460px)',
+        color: 'var(--paper)',
+        opacity: 0.07,
+      }}>KAYAK.</div>
 
-      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 60, marginTop: 40, alignItems: 'center' }}>
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <SectionTag num="03" label="קיאקי פירות · בלעדי לאירועים" />
+      </div>
+
+      <div style={{
+        position: 'relative', zIndex: 1,
+        display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 70,
+        marginTop: 50, alignItems: 'center',
+      }}>
         <div>
-          <h2 className="display" style={{ fontSize: 'clamp(70px, 10vw, 160px)', margin: 0, lineHeight: 0.85, color: 'var(--paper)' }}>
+          <h2 className="display" style={{
+            fontSize: 'clamp(70px, 10vw, 170px)',
+            margin: 0, lineHeight: 0.85,
+            color: 'var(--paper)',
+            letterSpacing: '-0.05em',
+          }}>
             מגש <span style={{ color: accent, fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>בצורת</span>
             <br />
-            קיאק.
+            קיאק<span style={{ color: accent }}>.</span>
           </h2>
-          <p style={{ fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.5, marginTop: 32, maxWidth: 480 }}>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.55, marginTop: 32, maxWidth: 480, opacity: 0.92 }}>
             עמוס בפירות חתוכים בעבודת יד, מסודרים כמו ציור.
-            אורחים ניגשים, לוקחים, מתפעלים. מגיע ביום האירוע.
+            אורחים ניגשים, לוקחים, מתפעלים. <em style={{ color: accent }}>מגיע ביום האירוע.</em>
           </p>
 
-          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginTop: 40, maxWidth: 480 }}>
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 14, marginTop: 44, maxWidth: 480 }}>
             {[
               ['S', '8–12 אורחים', '₪480'],
               ['M', '15–25 אורחים', '₪780'],
               ['L', '30–50 אורחים', '₪1,180'],
               ['XL', '60+ אורחים', '₪1,680'],
             ].map(([sz, gt, pr], i) => (
-              <div key={i} style={{
-                padding: '16px 18px',
-                border: '1px solid rgba(253,251,245,.25)',
-                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
-              }}>
-                <div>
-                  <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 22 }}>{sz}</div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.5, letterSpacing: '0.1em' }}>{gt}</div>
-                </div>
-                <div style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18 }}>{pr}</div>
-              </div>
+              <KayakSizeCard key={i} size={sz} guests={gt} price={pr} accent={accent} highlight={i === 2} />
             ))}
           </div>
 
-          <button className="btn" style={{ background: accent, color: 'var(--ink)', borderColor: accent, marginTop: 32 }}>
+          <button className="btn" style={{
+            background: accent, color: 'var(--ink)', borderColor: accent,
+            marginTop: 36, boxShadow: '4px 4px 0 var(--paper)',
+          }}>
             פתח קונפיגורטור →
           </button>
         </div>
 
-        {/* Kayak image */}
+        {/* Kayak image with halo */}
         <div style={{ position: 'relative' }}>
-          <img src={KAYAK_IMG} alt="קיאק פירות" style={{
-            width: '100%',
-            filter: 'drop-shadow(12px 16px 0 rgba(0,0,0,0.5))',
+          <div className="halo-accent" style={{
+            '--halo-color': accent,
+            opacity: 0.45,
+            filter: 'blur(60px)',
           }} />
-          <div style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-12deg)' }}>
-            <Sticker color={accent} rotate={0}>L · 30 אורחים</Sticker>
+          <div className="float-y" style={{ position: 'relative', zIndex: 2 }}>
+            <img src={KAYAK_IMG} alt="קיאק פירות" style={{
+              width: '100%',
+              filter: 'drop-shadow(14px 18px 0 rgba(0,0,0,0.55)) drop-shadow(0 30px 40px rgba(0,0,0,0.5))',
+            }} />
           </div>
+
+          {/* size sticker */}
+          <div style={{ position: 'absolute', top: -10, right: -10, zIndex: 3 }}>
+            <div className="float-tilt">
+              <Sticker color={accent} rotate={-6}>L · 30 אורחים</Sticker>
+            </div>
+          </div>
+
+          {/* ingredients sticker */}
+          <div style={{ position: 'absolute', bottom: 30, left: -20, zIndex: 3 }}>
+            <div style={{
+              transform: 'rotate(6deg)',
+              padding: '10px 14px',
+              background: 'var(--paper)', color: 'var(--ink)',
+              border: '2px solid var(--paper)',
+              boxShadow: '4px 4px 0 ' + accent,
+              fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.1em',
+              textTransform: 'uppercase',
+            }}>
+              18 זנים
+            </div>
+          </div>
+
           <div style={{
-            position: 'absolute', bottom: -20, left: '5%', right: '5%',
+            position: 'absolute', bottom: -30, left: '5%', right: '5%',
             display: 'flex', justifyContent: 'space-between',
-            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', opacity: 0.6,
+            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', opacity: 0.7,
           }}>
             <span>↤ 90cm ↦</span>
             <span>FIG. 02 — XL</span>
@@ -1967,36 +2414,135 @@ function KayakHero({ accent }) {
   );
 }
 
+function KayakSizeCard({ size, guests, price, accent, highlight }) {
+  const [hover, setHover] = React.useState(false);
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '18px 20px',
+        border: highlight ? `1.5px solid ${accent}` : '1px solid rgba(253,251,245,.25)',
+        background: hover ? accent : (highlight ? 'rgba(255,77,109,0.08)' : 'transparent'),
+        color: hover ? 'var(--ink)' : 'var(--paper)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        cursor: 'pointer',
+        transition: 'all 220ms var(--easing)',
+        transform: hover ? 'translate(-2px, -2px)' : 'translate(0,0)',
+        position: 'relative',
+      }}
+    >
+      {highlight && !hover && (
+        <span style={{
+          position: 'absolute', top: -10, left: 12,
+          padding: '3px 8px',
+          background: accent, color: 'var(--ink)',
+          fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700, letterSpacing: '0.12em',
+          border: '1px solid var(--ink)',
+        }}>הכי פופולרי</span>
+      )}
+      <div>
+        <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 24, letterSpacing: '-0.04em' }}>{size}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6, letterSpacing: '0.1em', marginTop: 2 }}>{guests}</div>
+      </div>
+      <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 19 }}>{price}</div>
+    </div>
+  );
+}
+
 /* ─── Process timeline ─── */
-function ProcessSection() {
+function ProcessSection({ accent }) {
   const steps = [
-    { n: '03:00', t: 'שוק העיר', d: 'בוחרים פירות אחד אחד. רק מה שטעים הולך הביתה.' },
-    { n: '06:00', t: 'במטבח', d: 'שוטפים, קולפים, חותכים. הכל בידיים. הכל באותו בוקר.' },
-    { n: '07:30', t: 'במקרר', d: 'אורזים, מתייגים, מסדרים על המדף. מוכנים לכם.' },
-    { n: '11:00', t: 'אצלכם', d: 'משלוח חינם בדימונה. או באים לקחת מהחנות.' },
+    { n: '03:00', t: 'שוק העיר', d: 'בוחרים פירות אחד אחד. רק מה שטעים הולך הביתה.', ico: '◐' },
+    { n: '06:00', t: 'במטבח', d: 'שוטפים, קולפים, חותכים. הכל בידיים. הכל באותו בוקר.', ico: '✻' },
+    { n: '07:30', t: 'במקרר', d: 'אורזים, מתייגים, מסדרים על המדף. מוכנים לכם.', ico: '◆' },
+    { n: '11:00', t: 'אצלכם', d: 'משלוח חינם בדימונה. או באים לקחת מהחנות.', ico: '✦' },
   ];
   return (
-    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)', background: 'var(--paper-2)' }}>
-      <SectionTag num="04" label="היום שלנו" />
-      <h2 className="display" style={{ fontSize: 'clamp(70px, 9vw, 140px)', marginTop: 16, marginBottom: 60, lineHeight: 0.9 }}>
-        איך פרי <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>מגיע</span> אליכם.
-      </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, borderTop: '1px solid var(--ink)' }}>
-        {steps.map((s, i) => (
-          <div key={i} style={{
-            padding: '36px 24px',
-            borderRight: i < 3 ? '1px solid var(--ink)' : 'none',
-            position: 'relative',
-          }}>
-            <div style={{
-              fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.18em',
-              marginBottom: 16,
-            }}>STEP 0{i + 1}</div>
-            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 32, marginBottom: 12 }}>{s.n}</div>
-            <div className="display" style={{ fontSize: 36, marginBottom: 12 }}>{s.t}</div>
-            <div style={{ fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.45, opacity: 0.75 }}>{s.d}</div>
-          </div>
-        ))}
+    <section style={{
+      padding: '100px 40px',
+      borderBottom: '2px solid var(--ink)',
+      background: 'var(--paper-2)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div className="watermark" style={{
+        top: 60, right: -40,
+        fontSize: 'clamp(220px, 26vw, 420px)',
+        color: 'var(--ink)',
+      }}>04:30</div>
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <SectionTag num="04" label="היום שלנו" />
+        <h2 className="display" style={{
+          fontSize: 'clamp(70px, 9vw, 140px)',
+          marginTop: 18, marginBottom: 12, lineHeight: 0.9,
+          letterSpacing: '-0.05em',
+        }}>
+          איך פרי <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, color: accent }}>מגיע</span> אליכם.
+        </h2>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, opacity: 0.75, marginBottom: 50, maxWidth: 580 }}>
+          ארבע שעות בין השוק לבין הצלחת שלכם. ככה זה אצלנו מאז 2018.
+        </p>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        {/* connecting line */}
+        <div style={{
+          position: 'absolute', top: 60, left: 40, right: 40, height: 2,
+          background: `repeating-linear-gradient(to right, var(--ink) 0 8px, transparent 8px 14px)`,
+          zIndex: 0,
+        }} />
+
+        <div style={{
+          display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 24,
+          position: 'relative', zIndex: 1,
+        }}>
+          {steps.map((s, i) => (
+            <div key={i} style={{
+              padding: '32px 24px',
+              background: 'var(--paper)',
+              border: '1.5px solid var(--ink)',
+              boxShadow: '6px 6px 0 var(--ink)',
+              position: 'relative',
+              transition: 'transform 240ms var(--easing)',
+            }}
+              onMouseEnter={(e) => { e.currentTarget.style.transform = 'translate(-3px, -3px)'; e.currentTarget.style.boxShadow = '9px 9px 0 var(--ink)'; }}
+              onMouseLeave={(e) => { e.currentTarget.style.transform = 'translate(0,0)'; e.currentTarget.style.boxShadow = '6px 6px 0 var(--ink)'; }}
+            >
+              {/* step badge */}
+              <div style={{
+                position: 'absolute', top: -16, right: 20,
+                width: 40, height: 40,
+                background: i === 1 ? accent : 'var(--ink)',
+                color: i === 1 ? 'var(--ink)' : 'var(--paper)',
+                border: '2px solid var(--ink)',
+                display: 'grid', placeItems: 'center',
+                fontFamily: 'var(--display)', fontWeight: 900, fontSize: 16,
+                boxShadow: '3px 3px 0 var(--ink)',
+              }}>0{i + 1}</div>
+
+              <div style={{
+                fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.18em',
+                marginBottom: 12,
+              }}>STEP</div>
+              <div style={{
+                fontFamily: 'var(--display)', fontWeight: 900, fontSize: 36,
+                lineHeight: 1, letterSpacing: '-0.03em',
+                color: i === 1 ? accent : 'var(--ink)',
+              }}>{s.n}</div>
+              <div className="display" style={{
+                fontSize: 28, marginTop: 14, marginBottom: 10,
+                letterSpacing: '-0.03em',
+                display: 'flex', alignItems: 'center', gap: 8,
+              }}>
+                <span style={{ fontSize: 22, color: accent }}>{s.ico}</span>
+                {s.t}
+              </div>
+              <div style={{ fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.5, opacity: 0.8 }}>{s.d}</div>
+            </div>
+          ))}
+        </div>
       </div>
     </section>
   );
@@ -2006,106 +2552,291 @@ function ProcessSection() {
 function FruitMosaic({ accent }) {
   return (
     <section style={{
-      padding: '90px 40px', borderBottom: '2px solid var(--ink)',
-      display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center',
+      padding: '100px 40px',
+      borderBottom: '2px solid var(--ink)',
+      display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 70, alignItems: 'center',
+      position: 'relative', overflow: 'hidden',
     }}>
-      <div>
+      <div style={{ position: 'relative', zIndex: 1 }}>
         <SectionTag num="05" label="הזנים שלנו" />
-        <h2 className="display" style={{ fontSize: 'clamp(60px, 8vw, 110px)', margin: '16px 0 0', lineHeight: 0.9 }}>
+        <h2 className="display" style={{
+          fontSize: 'clamp(60px, 8vw, 120px)',
+          margin: '18px 0 0', lineHeight: 0.88,
+          letterSpacing: '-0.05em',
+        }}>
           18 זנים<span style={{ color: accent }}>.</span>
           <br />
-          <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, fontSize: '0.7em' }}>מתחלפים יומית.</span>
+          <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, fontSize: '0.66em' }}>מתחלפים יומית.</span>
         </h2>
-        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, lineHeight: 1.5, maxWidth: 420, marginTop: 24 }}>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, lineHeight: 1.55, maxWidth: 420, marginTop: 24 }}>
           מה שיש בשוק היום — נמצא אצלנו. אבוקדו, פפאיה, ליצ׳י,
           תאנים, רימונים, אננס. כל מה שעונתי, כל מה שמבשיל.
         </p>
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 24 }}>
-          {['אננס', 'אבטיח', 'מלון', 'תות', 'ענבים', 'קיווי', 'מנגו', 'פפאיה', 'ליצ׳י', 'תאנה', 'רימון', 'אבוקדו'].map(t => (
-            <span key={t} style={{
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 28 }}>
+          {['אננס', 'אבטיח', 'מלון', 'תות', 'ענבים', 'קיווי', 'מנגו', 'פפאיה', 'ליצ׳י', 'תאנה', 'רימון', 'אבוקדו'].map((t, i) => (
+            <span key={t} className="chip" style={{
               padding: '6px 14px',
-              border: '1px solid var(--ink)',
-              borderRadius: 999,
-              fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+              fontSize: 12,
+              transform: `rotate(${(i % 3 - 1) * 1}deg)`,
             }}>{t}</span>
           ))}
         </div>
       </div>
+
       <div style={{
         display: 'grid',
         gridTemplateColumns: 'repeat(4, 1fr)',
-        gap: 12,
+        gap: 14,
+        position: 'relative', zIndex: 1,
       }}>
-        {['pineapple', 'watermelon', 'strawberry', 'grape', 'melon', 'kiwi', 'pineapple', 'watermelon'].map((k, i) => (
-          <div key={i} style={{
-            aspectRatio: '1',
-            border: '1px solid var(--ink)',
-            background: i % 3 === 0 ? accent : i % 3 === 1 ? 'var(--paper-2)' : 'var(--paper)',
-            display: 'flex', alignItems: 'center', justifyContent: 'center',
-            position: 'relative',
-          }}>
-            <Fruit kind={k} size={140} />
-            <div style={{
-              position: 'absolute', bottom: 8, left: 8,
-              fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700,
-              letterSpacing: '0.1em',
-            }}>0{i + 1}</div>
-          </div>
+        {[
+          { k: 'pineapple', n: 'אננס' },
+          { k: 'watermelon', n: 'אבטיח' },
+          { k: 'strawberry', n: 'תות' },
+          { k: 'grape', n: 'ענבים' },
+          { k: 'melon', n: 'מלון' },
+          { k: 'kiwi', n: 'קיווי' },
+          { k: 'pineapple', n: 'אננס מנדה' },
+          { k: 'watermelon', n: 'אבטיח אדום' },
+        ].map((it, i) => (
+          <MosaicCell key={i} kind={it.k} name={it.n} index={i} accent={accent} />
         ))}
       </div>
     </section>
   );
 }
 
-function Testimonials() {
+function MosaicCell({ kind, name, index, accent }) {
+  const [hover, setHover] = React.useState(false);
+  const bg = index % 3 === 0 ? accent : index % 3 === 1 ? 'var(--paper-2)' : 'var(--paper)';
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        aspectRatio: '1',
+        border: '1.5px solid var(--ink)',
+        background: bg,
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+        position: 'relative',
+        cursor: 'pointer',
+        transition: 'all 280ms var(--easing)',
+        transform: hover ? 'translate(-3px, -3px) rotate(-1deg)' : 'translate(0,0) rotate(0)',
+        boxShadow: hover ? '6px 6px 0 var(--ink)' : '0 0 0 var(--ink)',
+        overflow: 'hidden',
+      }}
+    >
+      <div style={{
+        transition: 'transform 320ms var(--easing)',
+        transform: hover ? 'scale(1.12) rotate(4deg)' : 'scale(1)',
+      }}>
+        <Fruit kind={kind} size={140} />
+      </div>
+      <div style={{
+        position: 'absolute', bottom: 8, left: 8,
+        fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700,
+        letterSpacing: '0.12em',
+        background: hover ? 'var(--ink)' : 'transparent',
+        color: hover ? 'var(--paper)' : 'var(--ink)',
+        padding: '3px 7px',
+        transition: 'all 240ms',
+      }}>0{index + 1} · {name}</div>
+    </div>
+  );
+}
+
+function Testimonials({ accent }) {
   const items = [
-    { q: 'הזמנתי קיאק XL לחתונה של אחי. כל האורחים צילמו אותו לפני שאכלו.', a: 'נירית', r: 'חתונה ב-180 איש' },
-    { q: 'אני קונה אצלם פירות קלופים פעמיים בשבוע כבר שנתיים. הילדים אוהבים, אני אוהבת את המחירים.', a: 'תהילה', r: 'דימונה' },
-    { q: 'הקיאק הגיע בדיוק בזמן, נראה כמו תמונה מאינסטגרם. שירות מעולה.', a: 'יוסי', r: 'בר מצווה · ערד' },
+    { q: 'הזמנתי קיאק XL לחתונה של אחי. כל האורחים צילמו אותו לפני שאכלו.', a: 'נירית', r: 'חתונה ב-180 איש', stars: 5 },
+    { q: 'אני קונה אצלם פירות קלופים פעמיים בשבוע כבר שנתיים. הילדים אוהבים, אני אוהבת את המחירים.', a: 'תהילה', r: 'דימונה', stars: 5 },
+    { q: 'הקיאק הגיע בדיוק בזמן, נראה כמו תמונה מאינסטגרם. שירות מעולה.', a: 'יוסי', r: 'בר מצווה · ערד', stars: 5 },
   ];
   return (
-    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)' }}>
-      <SectionTag num="06" label="מה אומרים עלינו" />
-      <h2 className="display" style={{ fontSize: 'clamp(60px, 8vw, 110px)', margin: '16px 0 40px', lineHeight: 0.9 }}>
-        לקוחות <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>חוזרים.</span>
-      </h2>
-      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, border: '1px solid var(--ink)' }}>
-        {items.map((t, i) => (
-          <div key={i} style={{
-            padding: 32,
-            borderRight: i < 2 ? '1px solid var(--ink)' : 'none',
+    <section style={{
+      padding: '100px 40px',
+      borderBottom: '2px solid var(--ink)',
+      position: 'relative',
+      background: 'var(--paper)',
+      overflow: 'hidden',
+    }}>
+      <div className="watermark" style={{
+        bottom: -50, right: -30,
+        fontSize: 'clamp(180px, 22vw, 360px)',
+        color: 'var(--ink)',
+      }}>★★★★★</div>
+
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', flexWrap: 'wrap', gap: 24, marginBottom: 48 }}>
+        <div>
+          <SectionTag num="06" label="מה אומרים עלינו" />
+          <h2 className="display" style={{
+            fontSize: 'clamp(60px, 8vw, 120px)',
+            margin: '18px 0 0', lineHeight: 0.9,
+            letterSpacing: '-0.05em',
           }}>
-            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 48, lineHeight: 0.7, color: 'var(--watermelon)', marginBottom: 16 }}>"</div>
-            <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, lineHeight: 1.4 }}>{t.q}</div>
-            <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(0,0,0,.15)', display: 'flex', justifyContent: 'space-between' }}>
-              <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16 }}>{t.a}</div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, letterSpacing: '0.1em' }}>{t.r}</div>
-            </div>
-          </div>
+            לקוחות <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, color: accent }}>חוזרים.</span>
+          </h2>
+        </div>
+        <div style={{
+          fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 700, letterSpacing: '0.12em',
+          textTransform: 'uppercase',
+          background: accent, color: 'var(--ink)',
+          padding: '14px 22px',
+          border: '2px solid var(--ink)',
+          boxShadow: '5px 5px 0 var(--ink)',
+        }}>
+          ★ 4.9 · 280 ביקורות
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 24 }}>
+        {items.map((t, i) => (
+          <TestimonialCard key={i} item={t} accent={accent} idx={i} />
         ))}
       </div>
     </section>
+  );
+}
+
+function TestimonialCard({ item, accent, idx }) {
+  const [hover, setHover] = React.useState(false);
+  const tilt = idx % 2 === 0 ? -1 : 1;
+  return (
+    <div
+      onMouseEnter={() => setHover(true)}
+      onMouseLeave={() => setHover(false)}
+      style={{
+        padding: '36px 32px 28px',
+        border: '1.5px solid var(--ink)',
+        background: 'var(--paper)',
+        position: 'relative',
+        transition: 'all 260ms var(--easing)',
+        transform: hover ? `translate(-4px, -4px) rotate(0deg)` : `translate(0,0) rotate(${tilt * 0.6}deg)`,
+        boxShadow: hover ? '9px 9px 0 var(--ink)' : '4px 4px 0 var(--ink)',
+      }}
+    >
+      <div style={{
+        position: 'absolute', top: -14, right: 24,
+        fontFamily: 'var(--display)', fontWeight: 900, fontSize: 84, lineHeight: 0.6,
+        color: accent,
+        textShadow: '3px 3px 0 var(--ink)',
+        userSelect: 'none',
+      }}>"</div>
+
+      <div style={{
+        display: 'flex', gap: 4, color: accent,
+        marginBottom: 16, fontSize: 16,
+      }}>
+        {Array.from({ length: item.stars }).map((_, i) => <span key={i}>★</span>)}
+      </div>
+
+      <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, lineHeight: 1.45 }}>{item.q}</div>
+
+      <div style={{
+        marginTop: 24, paddingTop: 18, borderTop: '1px dashed rgba(0,0,0,.2)',
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+      }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <div style={{
+            width: 36, height: 36, background: accent,
+            border: '2px solid var(--ink)',
+            borderRadius: '50%',
+            display: 'grid', placeItems: 'center',
+            fontFamily: 'var(--display)', fontWeight: 900, fontSize: 14,
+          }}>{item.a[0]}</div>
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16 }}>{item.a}</div>
+        </div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, letterSpacing: '0.1em' }}>{item.r}</div>
+      </div>
+    </div>
   );
 }
 
 function CTASection({ accent }) {
   return (
     <section style={{
-      padding: '120px 40px', background: accent, color: 'var(--ink)',
+      padding: '130px 40px 140px', background: accent, color: 'var(--ink)',
       borderBottom: '2px solid var(--ink)',
       textAlign: 'center', position: 'relative', overflow: 'hidden',
     }}>
-      <h2 className="display" style={{ fontSize: 'clamp(80px, 12vw, 200px)', margin: 0, lineHeight: 0.85, letterSpacing: '-0.06em' }}>
-        בא לכם <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>פרי?</span>
-      </h2>
-      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 48 }}>
-        <button className="btn" style={{ background: 'var(--ink)', color: accent, borderColor: 'var(--ink)' }}>פתח את הקטלוג</button>
-        <button className="btn outline">בנה קיאק לאירוע</button>
-      </div>
+      {/* halftone overlay */}
       <div style={{
-        marginTop: 48, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
-      }}>
-        משלוח חינם בדימונה · הזמנה עד 11:00 = אצלך עד 14:00
+        position: 'absolute', inset: 0,
+        backgroundImage: 'radial-gradient(circle, rgba(10,10,10,0.12) 1.5px, transparent 1.6px)',
+        backgroundSize: '14px 14px',
+        pointerEvents: 'none',
+      }} />
+
+      {/* floating fruit illustrations */}
+      <div style={{ position: 'absolute', top: 50, left: '8%', opacity: 0.85 }}>
+        <div className="float-y" style={{ animationDuration: '7s' }}>
+          <Fruit kind="strawberry" size={110} />
+        </div>
+      </div>
+      <div style={{ position: 'absolute', top: 80, right: '10%', opacity: 0.85 }}>
+        <div className="float-y" style={{ animationDuration: '5.5s', animationDelay: '0.5s' }}>
+          <Fruit kind="pineapple" size={120} />
+        </div>
+      </div>
+      <div style={{ position: 'absolute', bottom: 50, left: '12%', opacity: 0.85 }}>
+        <div className="float-y" style={{ animationDuration: '6.5s', animationDelay: '1s' }}>
+          <Fruit kind="kiwi" size={90} />
+        </div>
+      </div>
+      <div style={{ position: 'absolute', bottom: 80, right: '14%', opacity: 0.85 }}>
+        <div className="float-y" style={{ animationDuration: '6s', animationDelay: '1.5s' }}>
+          <Fruit kind="grape" size={100} />
+        </div>
+      </div>
+
+      <div style={{ position: 'relative', zIndex: 1 }}>
+        <div style={{
+          display: 'inline-flex', gap: 8,
+          padding: '8px 16px',
+          background: 'var(--ink)', color: accent,
+          fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, letterSpacing: '0.18em',
+          textTransform: 'uppercase',
+          boxShadow: '4px 4px 0 var(--paper)',
+        }}>
+          <span className="pulse-dot" style={{ background: accent }} /> פתוח עכשיו
+        </div>
+
+        <h2 className="display" style={{
+          fontSize: 'clamp(80px, 13vw, 220px)',
+          margin: '32px 0 0', lineHeight: 0.85, letterSpacing: '-0.06em',
+        }}>
+          בא לכם <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>פרי</span>
+          <span>?</span>
+        </h2>
+
+        <p style={{
+          fontFamily: 'var(--serif)', fontSize: 24, lineHeight: 1.4,
+          margin: '24px auto 0', maxWidth: 640,
+        }}>
+          הזמנה עד 11:00 = אצלך עד 14:00. <em>פשוט וטרי.</em>
+        </p>
+
+        <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 44, flexWrap: 'wrap' }}>
+          <button className="btn" style={{
+            background: 'var(--ink)', color: accent, borderColor: 'var(--ink)',
+            boxShadow: '5px 5px 0 var(--paper)',
+            padding: '18px 32px', fontSize: 17,
+          }}>פתח את הקטלוג →</button>
+          <button className="btn outline" style={{
+            background: 'var(--paper)', borderColor: 'var(--ink)',
+            boxShadow: '5px 5px 0 var(--ink)',
+            padding: '18px 32px', fontSize: 17,
+          }}>בנה קיאק לאירוע</button>
+        </div>
+
+        <div style={{
+          marginTop: 56, paddingTop: 28, borderTop: '1px solid rgba(10,10,10,0.2)',
+          display: 'flex', justifyContent: 'center', gap: 36, flexWrap: 'wrap',
+          fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
+        }}>
+          <span>✓ משלוח חינם בדימונה</span>
+          <span>✓ הזמנה עד 11:00</span>
+          <span>✓ אצלך עד 14:00</span>
+        </div>
       </div>
     </section>
   );
