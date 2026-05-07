@@ -22,7 +22,7 @@
 
   /* Fruit accents — saturated, bold */
   --citrus: #FFD60A;       /* lemon / pineapple */
-  --watermelon: #FF4D6D;   /* watermelon pink */
+  --watermelon: #C9184A;   /* Berry Punch — primary brand accent (was #FF4D6D) */
   --leaf: #1F8A5B;         /* fresh green */
   --berry: #6B1F3A;        /* deep berry */
   --tangerine: #FF7A1A;    /* mango / orange */
@@ -1516,16 +1516,30 @@ const FRUIT_ART = {
   grape: GrapeArt,
   melon: MelonArt,
   kiwi: KiwiArt,
+  // Reused fallbacks for new kinds — photos are primary, CSS-art only loads if photo fails
+  blueberry: GrapeArt,
+  cherry: StrawberryArt,
+  'green-grape': GrapeArt,
+  'berry-mix': StrawberryArt,
+  'mixed-salad': StrawberryArt,
+  mango: MelonArt,
 };
 
-/* Real photos — Unsplash direct image URLs */
+/* Curated Unsplash photos — square crop, white/off-white backgrounds, single-subject editorial */
 const FRUIT_PHOTOS = {
-  pineapple: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=400&fit=crop',
-  watermelon: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop',
-  strawberry: 'https://images.unsplash.com/photo-1543528176-61b239494933?w=400&h=400&fit=crop',
-  grape: 'https://images.unsplash.com/photo-1599819177626-b06d7e5d80f4?w=400&h=400&fit=crop',
-  melon: 'https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=400&h=400&fit=crop',
-  kiwi: 'https://images.unsplash.com/photo-1610917040803-1fccf9623064?w=400&h=400&fit=crop',
+  pineapple:    'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=800&q=80&fit=crop&auto=format',
+  watermelon:   'https://images.unsplash.com/photo-1563114773-84221bd62daa?w=800&q=80&fit=crop&auto=format',
+  strawberry:   'https://images.unsplash.com/photo-1464965911861-746a04b4bca6?w=800&q=80&fit=crop&auto=format',
+  grape:        'https://images.unsplash.com/photo-1599819811279-d5ad9cccf838?w=800&q=80&fit=crop&auto=format',
+  melon:        'https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=800&q=80&fit=crop&auto=format',
+  kiwi:         'https://images.unsplash.com/photo-1585059895524-72359e06133a?w=800&q=80&fit=crop&auto=format',
+  // New unique photos for products that previously reused another kind
+  'mixed-salad':'https://images.unsplash.com/photo-1490474504059-bf2db5ab2348?w=800&q=80&fit=crop&auto=format',
+  blueberry:    'https://images.unsplash.com/photo-1498557850523-fd3d118b962e?w=800&q=80&fit=crop&auto=format',
+  cherry:       'https://images.unsplash.com/photo-1528821128474-27f963b062bf?w=800&q=80&fit=crop&auto=format',
+  'green-grape':'https://images.unsplash.com/photo-1599819177626-b62d1c1adff4?w=800&q=80&fit=crop&auto=format',
+  'berry-mix':  'https://images.unsplash.com/photo-1546173159-315724a31696?w=800&q=80&fit=crop&auto=format',
+  mango:        'https://images.unsplash.com/photo-1605027990121-cbae9e0642db?w=800&q=80&fit=crop&auto=format',
 };
 
 function Fruit({ kind, size, photo = true }) {
@@ -2719,7 +2733,7 @@ function KayakSizeCard({ size, guests, price, accent, highlight, m }) {
       style={{
         padding: m ? '14px 14px' : '18px 20px',
         border: highlight ? `1.5px solid ${accent}` : '1px solid rgba(253,251,245,.25)',
-        background: hover ? accent : (highlight ? 'rgba(255,77,109,0.08)' : 'transparent'),
+        background: hover ? accent : (highlight ? 'rgba(201,24,74,0.22)' : 'transparent'),
         color: hover ? 'var(--ink)' : 'var(--paper)',
         display: 'flex', justifyContent: 'space-between', alignItems: 'center',
         cursor: 'pointer',
@@ -3128,10 +3142,10 @@ function CTASection({ accent, compact }) {
         </h2>
 
         <p style={{
-          fontFamily: 'var(--serif)', fontSize: m ? 18 : 24, lineHeight: 1.4,
+          fontFamily: 'var(--serif)', fontSize: m ? 18 : 24, lineHeight: 1.4, fontWeight: 600,
           margin: m ? '16px auto 0' : '24px auto 0', maxWidth: 640,
         }}>
-          הזמנה עד 11:00 = אצלך עד 14:00. <em>פשוט וטרי.</em>
+          הזמנה עד 11:00 = אצלך עד 14:00. <em style={{ fontWeight: 700 }}>פשוט וטרי.</em>
         </p>
 
         <div style={{ display: 'flex', gap: m ? 10 : 16, justifyContent: 'center', marginTop: m ? 28 : 44, flexWrap: 'wrap' }}>
@@ -3174,12 +3188,12 @@ const ALL_PRODUCTS = [
   { id: 4, name: 'ענבי קונקורד', kind: 'grape', price: 26.90, weight: '400ג׳', category: 'יבשים', rating: 4.7, reviews: 41 },
   { id: 5, name: 'מלון אמבוסיה', kind: 'melon', price: 22.90, weight: '500ג׳', category: 'קלופים', rating: 4.8, reviews: 73 },
   { id: 6, name: 'קיווי זהב', kind: 'kiwi', price: 27.90, weight: '350ג׳', category: 'יער', rating: 4.6, reviews: 32 },
-  { id: 7, name: 'סלט פירות מעורב', kind: 'strawberry', price: 34.90, weight: '500ג׳', category: 'סלטים', tag: 'מומלץ', rating: 4.9, reviews: 156 },
-  { id: 8, name: 'אוכמניות פרמיום', kind: 'grape', price: 32.90, weight: '250ג׳', category: 'יער', rating: 4.8, reviews: 47 },
-  { id: 9, name: 'דובדבנים', kind: 'strawberry', price: 38.90, weight: '300ג׳', category: 'יער', rating: 4.7, reviews: 38 },
-  { id: 10, name: 'ענבים ירוקים', kind: 'grape', price: 22.90, weight: '500ג׳', category: 'קלופים', rating: 4.6, reviews: 52 },
-  { id: 11, name: 'קוקטייל פירות יער', kind: 'grape', price: 39.90, weight: '400ג׳', category: 'סלטים', rating: 4.9, reviews: 81 },
-  { id: 12, name: 'מנגו ישראלי', kind: 'melon', price: 24.90, weight: '450ג׳', category: 'קלופים', tag: 'בעונה', rating: 4.8, reviews: 49 },
+  { id: 7, name: 'סלט פירות מעורב', kind: 'mixed-salad', price: 34.90, weight: '500ג׳', category: 'סלטים', tag: 'מומלץ', rating: 4.9, reviews: 156 },
+  { id: 8, name: 'אוכמניות פרמיום', kind: 'blueberry', price: 32.90, weight: '250ג׳', category: 'יער', rating: 4.8, reviews: 47 },
+  { id: 9, name: 'דובדבנים', kind: 'cherry', price: 38.90, weight: '300ג׳', category: 'יער', rating: 4.7, reviews: 38 },
+  { id: 10, name: 'ענבים ירוקים', kind: 'green-grape', price: 22.90, weight: '500ג׳', category: 'קלופים', rating: 4.6, reviews: 52 },
+  { id: 11, name: 'קוקטייל פירות יער', kind: 'berry-mix', price: 39.90, weight: '400ג׳', category: 'סלטים', rating: 4.9, reviews: 81 },
+  { id: 12, name: 'מנגו ישראלי', kind: 'mango', price: 24.90, weight: '450ג׳', category: 'קלופים', tag: 'בעונה', rating: 4.8, reviews: 49 },
 ];
 
 function ShopPage({ accent = 'var(--watermelon)', compact }) {
@@ -4885,7 +4899,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const PALETTES = {
-  watermelon: { accent: '#FF4D6D', label: 'אבטיח' },
+  watermelon: { accent: '#C9184A', label: 'ברי' },
   citrus:     { accent: '#FFD60A', label: 'הדרים' },
   leaf:       { accent: '#1F8A5B', label: 'עלה' },
   berry:      { accent: '#6B1F3A', label: 'יער' },
