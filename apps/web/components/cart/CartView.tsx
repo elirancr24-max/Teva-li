@@ -92,7 +92,7 @@ export function CartView() {
             onClick={clear}
             style={{
               background: 'none',
-              border: '1.5px solid rgba(0,0,0,0.3)',
+              border: '1.5px solid rgba(245,240,232,0.25)',
               padding: '8px 14px',
               fontFamily: 'var(--mono)',
               fontSize: 11,
@@ -117,7 +117,7 @@ export function CartView() {
                   alignItems: 'center',
                   gap: m ? 14 : 20,
                   padding: m ? '16px 0' : '20px 0',
-                  borderTop: i === 0 ? '2px solid var(--ink)' : '1px dashed rgba(0,0,0,0.18)',
+                  borderTop: i === 0 ? '2px solid var(--ink)' : '1px dashed rgba(245,240,232,0.18)',
                   borderBottom: i === items.length - 1 ? '2px solid var(--ink)' : 'none',
                 }}
               >
@@ -182,7 +182,7 @@ export function CartView() {
               סיכום הזמנה
             </h2>
 
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20, borderBottom: '1px dashed rgba(0,0,0,0.18)', paddingBottom: 20 }}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20, borderBottom: '1px dashed rgba(245,240,232,0.18)', paddingBottom: 20 }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 13 }}>
                 <span style={{ opacity: 0.6 }}>{itemCount()} פריטים</span>
                 <span style={{ fontWeight: 700 }}>{formatPrice(subtotal)}</span>

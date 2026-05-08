@@ -4,17 +4,20 @@
    פרי לי — Design tokens (Tailwind v4 @theme)
    ─────────────────────────────────────────────── */
 @theme {
-  --color-ink: #0a0a0a;
-  --color-paper: #fdfbf5;
-  --color-paper-2: #f4efe2;
-  --color-line: #1a1a1a;
+  --color-ink: #F5F0E8;
+  --color-paper: #0D0D0D;
+  --color-paper-2: #161616;
+  --color-line: rgba(245,240,232,0.15);
 
-  --color-berry: #C9184A;       /* primary brand accent (was --watermelon) */
-  --color-watermelon: #C9184A;  /* alias retained for legacy refs */
+  --color-berry: #C9184A;
+  --color-watermelon: #C9184A;
   --color-citrus: #FFD60A;
   --color-leaf: #1F8A5B;
   --color-deepberry: #6B1F3A;
   --color-tangerine: #FF7A1A;
+  --color-lime: #8BC34A;
+  --color-teal: #26C6DA;
+  --color-gold: #F9A825;
 
   --font-display: var(--font-heebo), "Assistant", system-ui, sans-serif;
   --font-serif: var(--font-frank), "David Libre", Georgia, serif;
@@ -26,16 +29,19 @@
 
 /* CSS-var aliases for legacy inline styles ported from JSX */
 :root {
-  --ink: #0a0a0a;
-  --paper: #fdfbf5;
-  --paper-2: #f4efe2;
-  --line: #1a1a1a;
+  --ink: #F5F0E8;
+  --paper: #0D0D0D;
+  --paper-2: #161616;
+  --line: rgba(245,240,232,0.15);
 
   --watermelon: #C9184A;
   --citrus: #FFD60A;
   --leaf: #1F8A5B;
   --berry: #6B1F3A;
   --tangerine: #FF7A1A;
+  --lime: #8BC34A;
+  --teal: #26C6DA;
+  --gold: #F9A825;
 
   --display: var(--font-heebo), "Assistant", system-ui, sans-serif;
   --serif: var(--font-frank), "David Libre", Georgia, serif;
@@ -90,9 +96,9 @@ button:active { transform: translateY(1px); }
 }
 .btn:hover { transform: translate(-3px, -3px); box-shadow: 7px 7px 0 var(--ink); }
 .btn:active { transform: translate(1px, 1px); box-shadow: 2px 2px 0 var(--ink); }
-.btn.primary { background: var(--watermelon); color: var(--paper); border-color: var(--ink); }
-.btn.citrus { background: var(--citrus); color: var(--ink); }
-.btn.outline { background: var(--paper); color: var(--ink); }
+.btn.primary { background: var(--watermelon); color: #fdfbf5; border-color: var(--watermelon); }
+.btn.citrus { background: var(--citrus); color: #0a0a0a; border-color: var(--citrus); }
+.btn.outline { background: transparent; color: var(--ink); border-color: var(--ink); }
 .btn.ghost { background: transparent; color: inherit; border-color: currentColor; box-shadow: 4px 4px 0 currentColor; }
 .btn.ghost:hover { box-shadow: 7px 7px 0 currentColor; }
 
@@ -105,8 +111,8 @@ button:active { transform: translateY(1px); }
   content: '';
   position: absolute; inset: 0;
   pointer-events: none;
-  opacity: 0.06;
-  mix-blend-mode: multiply;
+  opacity: 0.08;
+  mix-blend-mode: overlay;
   background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
 }
 
@@ -232,11 +238,11 @@ button:active { transform: translateY(1px); }
   pointer-events: none;
   user-select: none;
   white-space: nowrap;
-  opacity: 0.08;
+  opacity: 0.12;
   z-index: 0;
 }
 @media (max-width: 420px) {
-  .watermark { opacity: 0.035 !important; }
+  .watermark { opacity: 0.06 !important; }
 }
 
 .price-tag {

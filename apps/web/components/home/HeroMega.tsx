@@ -5,6 +5,7 @@ import { SectionTag } from '@/components/brand/SectionTag';
 import { Sticker } from '@/components/brand/Sticker';
 import { Watermark } from '@/components/brand/Watermark';
 import { Halo } from '@/components/brand/Halo';
+import { Logo } from '@/components/brand/Logo';
 
 type Props = { accent?: string; compact?: boolean };
 
@@ -81,7 +82,8 @@ export function HeroMega({ accent = 'var(--watermelon)', compact }: Props) {
           }}
         >
           <div>
-            <div className="rise">
+            <div className="rise" style={{ marginBottom: m ? 12 : 20, display: 'flex', gap: 16, alignItems: 'center' }}>
+              <Logo size={m ? 80 : 120} />
               <SectionTag num="01" label={m ? 'פירות קלופים' : 'פירות קלופים · קיאקי אירועים'} />
             </div>
 
@@ -250,10 +252,10 @@ export function HeroMega({ accent = 'var(--watermelon)', compact }: Props) {
         {/* RIGHT — kayak photo block */}
         <div
           style={{
-            background: 'var(--ink)',
-            color: 'var(--paper)',
-            borderLeft: m ? 'none' : '1px solid var(--ink)',
-            borderTop: m ? '1px solid var(--ink)' : 'none',
+            background: '#0a0a0a',
+            color: '#F5F0E8',
+            borderLeft: m ? 'none' : '1px solid rgba(245,240,232,0.15)',
+            borderTop: m ? '1px solid rgba(245,240,232,0.15)' : 'none',
             position: 'relative',
             padding: m ? '24px 16px' : '40px 36px',
             display: 'flex',
@@ -370,7 +372,7 @@ export function HeroMega({ accent = 'var(--watermelon)', compact }: Props) {
               gridTemplateColumns: '1fr 1fr',
               gap: m ? 12 : 18,
               paddingTop: m ? 18 : 26,
-              borderTop: '1px solid rgba(253,251,245,.2)',
+              borderTop: '1px solid rgba(245,240,232,0.2)',
             }}
           >
             <FeatureItem label="גודל" value="S · M · L · XL" m={m} />

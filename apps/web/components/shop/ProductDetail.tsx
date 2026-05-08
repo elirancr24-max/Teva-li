@@ -130,7 +130,7 @@ export function ProductDetail({ product, reviews }: Props) {
                 <span
                   key={s}
                   style={{
-                    color: s <= Math.round(product.rating ?? 0) ? 'var(--citrus)' : 'rgba(0,0,0,0.2)',
+                    color: s <= Math.round(product.rating ?? 0) ? 'var(--citrus)' : 'rgba(245,240,232,0.25)',
                     fontSize: 20,
                   }}
                 >
@@ -166,8 +166,8 @@ export function ProductDetail({ product, reviews }: Props) {
               alignItems: 'center',
               gap: 12,
               padding: '16px 0',
-              borderTop: '1.5px dashed rgba(0,0,0,0.18)',
-              borderBottom: '1.5px dashed rgba(0,0,0,0.18)',
+              borderTop: '1.5px dashed rgba(245,240,232,0.18)',
+              borderBottom: '1.5px dashed rgba(245,240,232,0.18)',
               marginBottom: 28,
             }}
           >
@@ -284,7 +284,7 @@ export function ProductDetail({ product, reviews }: Props) {
               >
                 <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
                   {[1, 2, 3, 4, 5].map((s) => (
-                    <span key={s} style={{ color: s <= r.rating ? 'var(--citrus)' : 'rgba(0,0,0,0.2)', fontSize: 16 }}>
+                    <span key={s} style={{ color: s <= r.rating ? 'var(--citrus)' : 'rgba(245,240,232,0.25)', fontSize: 16 }}>
                       ★
                     </span>
                   ))}

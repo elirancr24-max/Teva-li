@@ -34,31 +34,8 @@ export function SiteHeader({ active = 'home', compact, cartCount = 3 }: Props) {
         gap: 8,
       }}
     >
-      <Link href="/" style={{ display: 'flex', alignItems: 'center', gap: m ? 10 : 14, textDecoration: 'none', color: 'inherit' }}>
-        <Logo size={m ? 34 : 44} />
-        <div>
-          <div
-            style={{
-              fontFamily: 'var(--display)',
-              fontWeight: 900,
-              fontSize: m ? 18 : 22,
-              letterSpacing: '-0.04em',
-            }}
-          >
-            פרי לי
-          </div>
-          <div
-            style={{
-              fontFamily: 'var(--mono)',
-              fontSize: m ? 8 : 10,
-              letterSpacing: '0.18em',
-              opacity: 0.6,
-              marginTop: -2,
-            }}
-          >
-            {m ? 'דימונה' : 'DIMONA · EST. 2019'}
-          </div>
-        </div>
+      <Link href="/" style={{ display: 'flex', alignItems: 'center', textDecoration: 'none', color: 'inherit' }}>
+        <Logo size={m ? 52 : 68} />
       </Link>
 
       {!m && (
@@ -74,7 +51,7 @@ export function SiteHeader({ active = 'home', compact, cartCount = 3 }: Props) {
                 color: 'var(--ink)',
                 textDecoration: 'none',
                 borderBottom:
-                  active === it.id ? '2px solid var(--watermelon)' : '2px solid transparent',
+                  active === it.id ? '2px solid var(--citrus)' : '2px solid transparent',
                 paddingBottom: 4,
               }}
             >
@@ -119,9 +96,9 @@ export function SiteHeader({ active = 'home', compact, cartCount = 3 }: Props) {
         <Link
           href="/cart"
           style={{
-            background: 'var(--ink)',
-            color: 'var(--paper)',
-            border: '2px solid var(--ink)',
+            background: 'var(--watermelon)',
+            color: '#fdfbf5',
+            border: '2px solid var(--watermelon)',
             padding: m ? '8px 10px' : '10px 16px',
             fontFamily: 'var(--mono)',
             fontSize: m ? 11 : 12,
@@ -130,13 +107,14 @@ export function SiteHeader({ active = 'home', compact, cartCount = 3 }: Props) {
             gap: 6,
             alignItems: 'center',
             textDecoration: 'none',
+            boxShadow: '3px 3px 0 var(--citrus)',
           }}
         >
           סל{' '}
           <span
             style={{
-              background: 'var(--citrus)',
-              color: 'var(--ink)',
+              background: 'rgba(255,255,255,0.25)',
+              color: '#fdfbf5',
               padding: '0 6px',
               borderRadius: 999,
             }}

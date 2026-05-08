@@ -22,11 +22,11 @@ export function KayakHero({ accent = 'var(--watermelon)', compact }: Props) {
     <section
       style={{
         padding: m ? '60px 16px' : '110px 40px',
-        background: 'var(--ink)',
-        color: 'var(--paper)',
+        background: '#0a0a0a',
+        color: '#F5F0E8',
         position: 'relative',
         overflow: 'hidden',
-        borderBottom: '2px solid var(--ink)',
+        borderBottom: '2px solid rgba(245,240,232,0.15)',
       }}
     >
       <Watermark

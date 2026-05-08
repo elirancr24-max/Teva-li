@@ -46,7 +46,7 @@ function PaymentStep({ orderId, onBack }: { orderId: string; onBack: () => void 
     <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
       <PaymentElement />
       {error && (
-        <div style={{ padding: '10px 14px', background: 'rgba(201,24,74,0.08)', border: '1.5px solid var(--watermelon)', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--watermelon)' }}>
+        <div style={{ padding: '10px 14px', background: 'rgba(201,24,74,0.18)', border: '1.5px solid var(--watermelon)', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--watermelon)' }}>
           {error}
         </div>
       )}
@@ -63,7 +63,7 @@ function PaymentStep({ orderId, onBack }: { orderId: string; onBack: () => void 
           style={{
             flex: 1,
             padding: '14px',
-            background: loading ? 'rgba(0,0,0,0.5)' : 'var(--ink)',
+            background: loading ? 'rgba(245,240,232,0.15)' : 'var(--ink)',
             color: 'var(--paper)',
             border: '2px solid var(--ink)',
             fontFamily: 'var(--mono)',
@@ -148,8 +148,9 @@ export function CheckoutForm() {
   const inputStyle: React.CSSProperties = {
     width: '100%',
     padding: '12px 14px',
-    border: '1.5px solid var(--ink)',
-    background: 'var(--paper)',
+    border: '1.5px solid rgba(245,240,232,0.35)',
+    background: 'var(--paper-2)',
+    color: 'var(--ink)',
     fontFamily: 'var(--serif)',
     fontSize: 16,
     outline: 'none',
@@ -229,7 +230,7 @@ export function CheckoutForm() {
                 </div>
 
                 {error && (
-                  <div style={{ padding: '10px 14px', background: 'rgba(201,24,74,0.08)', border: '1.5px solid var(--watermelon)', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--watermelon)' }}>
+                  <div style={{ padding: '10px 14px', background: 'rgba(201,24,74,0.18)', border: '1.5px solid var(--watermelon)', fontFamily: 'var(--mono)', fontSize: 12, color: 'var(--watermelon)' }}>
                     {error}
                   </div>
                 )}
@@ -239,7 +240,7 @@ export function CheckoutForm() {
                   disabled={loading}
                   style={{
                     padding: '16px',
-                    background: loading ? 'rgba(0,0,0,0.5)' : 'var(--ink)',
+                    background: loading ? 'rgba(245,240,232,0.15)' : 'var(--ink)',
                     color: 'var(--paper)',
                     border: '2px solid var(--ink)',
                     fontFamily: 'var(--mono)',

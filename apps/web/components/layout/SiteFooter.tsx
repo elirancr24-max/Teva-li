@@ -14,9 +14,10 @@ export function SiteFooter({ compact }: Props) {
   return (
     <footer
       style={{
-        background: 'var(--ink)',
-        color: 'var(--paper)',
+        background: '#0a0a0a',
+        color: '#F5F0E8',
         padding: m ? '32px 16px 18px' : '50px 40px 24px',
+        borderTop: '2px solid var(--watermelon)',
       }}
     >
       <div
@@ -81,7 +82,7 @@ export function SiteFooter({ compact }: Props) {
       </div>
       <div
         style={{
-          borderTop: '1px solid #333',
+          borderTop: '1px solid rgba(245,240,232,0.15)',
           paddingTop: 16,
           display: 'flex',
           flexDirection: m ? 'column' : 'row',

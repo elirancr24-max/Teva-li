@@ -24,7 +24,7 @@ export function MobileGreeting({ accent = 'var(--watermelon)' }: Props) {
         display: 'flex',
         justifyContent: 'space-between',
         alignItems: 'center',
-        borderBottom: '1px dashed rgba(0,0,0,0.15)',
+        borderBottom: '1px dashed rgba(245,240,232,0.15)',
       }}
     >
       <div>

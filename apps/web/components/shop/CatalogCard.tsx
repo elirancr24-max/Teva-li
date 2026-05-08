@@ -117,7 +117,7 @@ export function CatalogCard({ product, compact: m = false }: Props) {
             justifyContent: 'space-between',
             alignItems: 'baseline',
             paddingTop: m ? 10 : 14,
-            borderTop: '1px dashed rgba(0,0,0,0.18)',
+            borderTop: '1px dashed rgba(245,240,232,0.18)',
           }}
         >
           <div className="display" style={{ fontSize: m ? 20 : 26, lineHeight: 1, letterSpacing: '-0.03em' }}>

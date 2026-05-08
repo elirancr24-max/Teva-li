@@ -84,7 +84,7 @@ export function ProductCard({ product, accent = 'var(--watermelon)', compact: m 
           alignItems: 'baseline',
           marginTop: m ? 14 : 20,
           paddingTop: m ? 14 : 20,
-          borderTop: '1px dashed rgba(0,0,0,0.18)',
+          borderTop: '1px dashed rgba(245,240,232,0.18)',
         }}
       >
         <div className="display" style={{ fontSize: m ? 22 : 28, lineHeight: 1, letterSpacing: '-0.03em' }}>
