@@ -1,254 +1,165 @@
 'use client';
 import Link from 'next/link';
-import { useCompact } from '@/hooks/use-compact';
-import { useCart } from '@/store/cart';
-import { SiteHeader } from '@/components/layout/SiteHeader';
-import { SiteFooter } from '@/components/layout/SiteFooter';
-import { SectionTag } from '@/components/brand/SectionTag';
-import { PriceTag } from '@/components/brand/PriceTag';
-import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
-import { Fruit, type FruitKind } from '@/components/fruits/Fruit';
-import { formatPrice } from '@/lib/utils';
+import { useMemo } from 'react';
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Button,
+  Paper,
+  IconButton,
+  Divider,
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableRow,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import { Header } from '@/components/layout/Header';
+import { Footer } from '@/components/layout/Footer';
+import { useAppDispatch, useAppSelector } from '@/store';
+import {
+  clearCart,
+  decrementAmount,
+  incrementAmount,
+  removeItem,
+} from '@/store/slices/cartSlice';
+import { BRAND } from '@/lib/theme';
 
-const DELIVERY_FREE_CITY = 'דימונה';
-const DELIVERY_FEE_CENTS = 2500;
+const UNIT_LABEL: Record<string, string> = {
+  kg: 'ק״ג',
+  unit: 'יח׳',
+  bunch: 'צרור',
+};
 
 export function CartView() {
-  const m = useCompact();
-  const { items, remove, setQty, clear, totalCents, itemCount } = useCart();
-  const subtotal = totalCents();
-  const delivery = subtotal > 0 ? DELIVERY_FEE_CENTS : 0;
-  const total = subtotal + delivery;
+  const dispatch = useAppDispatch();
+  const items = useAppSelector((s) => s.cart.items);
 
-  if (items.length === 0) {
-    return (
-      <div style={{ background: 'var(--paper)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-        <SiteHeader active="shop" />
-        <main
-          style={{
-            flex: 1,
-            maxWidth: 900,
-            margin: '0 auto',
-            width: '100%',
-            padding: m ? '80px 20px 100px' : '120px 60px',
-            display: 'flex',
-            flexDirection: 'column',
-            alignItems: 'flex-start',
-          }}
-        >
-          <SectionTag num="03" label="הסל" />
-          <h1 className="display" style={{ fontSize: m ? 64 : 120, lineHeight: 0.85, letterSpacing: '-0.05em', margin: '16px 0 24px' }}>
-            הסל ריק<span style={{ color: 'var(--watermelon)' }}>.</span>
-          </h1>
-          <p style={{ fontFamily: 'var(--serif)', fontSize: m ? 18 : 22, opacity: 0.7, marginBottom: 32 }}>
-            עוד לא בחרת פירות. כנס לקטלוג ובחר.
-          </p>
-          <Link
-            href="/shop"
-            style={{
-              padding: '14px 28px',
-              background: 'var(--ink)',
-              color: 'var(--paper)',
-              fontFamily: 'var(--mono)',
-              fontSize: 13,
-              fontWeight: 700,
-              letterSpacing: '0.06em',
-              textDecoration: 'none',
-              border: '2px solid var(--ink)',
-              boxShadow: '5px 5px 0 var(--watermelon)',
-              display: 'inline-block',
-            }}
-          >
-            לקטלוג →
-          </Link>
-        </main>
-        <SiteFooter />
-        {m && <MobileBottomNav active="cart" />}
-      </div>
-    );
-  }
+  const total = useMemo(
+    () => items.reduce((sum, i) => sum + i.product.priceCents * i.amount, 0),
+    [items],
+  );
+
+  const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
 
   return (
-    <div style={{ background: 'var(--paper)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <SiteHeader active="shop" />
+    <>
+      <Header />
+      <Container maxWidth="lg" sx={{ py: 4, minHeight: '60vh' }}>
+        <Typography variant="h1" sx={{ fontSize: 32, fontWeight: 800, mb: 3 }}>
+          הסל שלי
+        </Typography>
 
-      <main
-        style={{
-          flex: 1,
-          maxWidth: 1100,
-          margin: '0 auto',
-          width: '100%',
-          padding: m ? '70px 20px 120px' : '100px clamp(20px,5vw,60px) 80px',
-        }}
-      >
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', marginBottom: 36, flexWrap: 'wrap', gap: 16 }}>
-          <div>
-            <SectionTag num="03" label="הסל" />
-            <h1 className="display" style={{ fontSize: m ? 56 : 100, lineHeight: 0.85, letterSpacing: '-0.05em', margin: '12px 0 0' }}>
-              הסל שלי<span style={{ color: 'var(--watermelon)' }}>.</span>
-            </h1>
-          </div>
-          <button
-            onClick={clear}
-            style={{
-              background: 'none',
-              border: '1.5px solid rgba(245,240,232,0.25)',
-              padding: '8px 14px',
-              fontFamily: 'var(--mono)',
-              fontSize: 11,
-              cursor: 'pointer',
-              letterSpacing: '0.08em',
-              opacity: 0.6,
-              alignSelf: 'flex-end',
-            }}
-          >
-            נקה סל
-          </button>
-        </div>
+        {items.length === 0 ? (
+          <Paper sx={{ p: 6, textAlign: 'center' }}>
+            <ShoppingCartOutlinedIcon sx={{ fontSize: 64, opacity: 0.4, mb: 2 }} />
+            <Typography sx={{ fontSize: 18, fontWeight: 600, mb: 1 }}>הסל ריק</Typography>
+            <Typography sx={{ color: 'text.secondary', mb: 3 }}>
+              התחילו להוסיף מוצרים לקטלוג
+            </Typography>
+            <Button component={Link} href="/shop" variant="contained" size="large">
+              לקטלוג המוצרים
+            </Button>
+          </Paper>
+        ) : (
+          <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
+            <Paper sx={{ flex: 1, p: 2 }}>
+              <Table>
+                <TableHead>
+                  <TableRow>
+                    <TableCell sx={{ fontWeight: 700 }}>מוצר</TableCell>
+                    <TableCell sx={{ fontWeight: 700 }} align="center">
+                      כמות
+                    </TableCell>
+                    <TableCell sx={{ fontWeight: 700 }} align="left">
+                      סה״כ
+                    </TableCell>
+                    <TableCell />
+                  </TableRow>
+                </TableHead>
+                <TableBody>
+                  {items.map((item) => (
+                    <TableRow key={item.productId}>
+                      <TableCell>
+                        <Typography sx={{ fontWeight: 600 }}>{item.product.name}</Typography>
+                        <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
+                          {formatPrice(item.product.priceCents)} / {UNIT_LABEL[item.product.unit]}
+                        </Typography>
+                      </TableCell>
+                      <TableCell align="center">
+                        <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>
+                          <IconButton
+                            size="small"
+                            onClick={() => dispatch(decrementAmount(item.productId))}
+                          >
+                            <RemoveIcon fontSize="small" />
+                          </IconButton>
+                          <Typography sx={{ minWidth: 60, textAlign: 'center', fontWeight: 600 }}>
+                            {item.amount} {UNIT_LABEL[item.product.unit]}
+                          </Typography>
+                          <IconButton
+                            size="small"
+                            onClick={() => dispatch(incrementAmount(item.productId))}
+                            sx={{ bgcolor: BRAND.green, color: '#fff', '&:hover': { bgcolor: BRAND.greenDark } }}
+                          >
+                            <AddIcon fontSize="small" />
+                          </IconButton>
+                        </Stack>
+                      </TableCell>
+                      <TableCell align="left" sx={{ fontWeight: 700, color: BRAND.green }}>
+                        {formatPrice(item.product.priceCents * item.amount)}
+                      </TableCell>
+                      <TableCell align="left">
+                        <IconButton
+                          size="small"
+                          onClick={() => dispatch(removeItem(item.productId))}
+                          sx={{ color: 'text.secondary' }}
+                        >
+                          <DeleteOutlineIcon fontSize="small" />
+                        </IconButton>
+                      </TableCell>
+                    </TableRow>
+                  ))}
+                </TableBody>
+              </Table>
+              <Box sx={{ pt: 2, textAlign: 'left' }}>
+                <Button onClick={() => dispatch(clearCart())} color="inherit" size="small">
+                  ריקון הסל
+                </Button>
+              </Box>
+            </Paper>
 
-        <div style={{ display: 'grid', gridTemplateColumns: m ? '1fr' : '1fr 340px', gap: m ? 24 : 40, alignItems: 'start' }}>
-          {/* Item list */}
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 0 }}>
-            {items.map((item, i) => (
-              <div
-                key={item.product_id}
-                style={{
-                  display: 'flex',
-                  alignItems: 'center',
-                  gap: m ? 14 : 20,
-                  padding: m ? '16px 0' : '20px 0',
-                  borderTop: i === 0 ? '2px solid var(--ink)' : '1px dashed rgba(245,240,232,0.18)',
-                  borderBottom: i === items.length - 1 ? '2px solid var(--ink)' : 'none',
-                }}
-              >
-                <Fruit kind={item.kind as FruitKind} size={m ? 64 : 88} alt={item.name_he} />
-
-                <div style={{ flex: 1, minWidth: 0 }}>
-                  <div className="display" style={{ fontSize: m ? 20 : 26, lineHeight: 1, letterSpacing: '-0.03em' }}>
-                    {item.name_he}
-                  </div>
-                  <div style={{ fontFamily: 'var(--mono)', fontSize: m ? 10 : 11, opacity: 0.45, marginTop: 4, letterSpacing: '0.06em' }}>
-                    {item.weight} · {formatPrice(item.price_cents)} ליח׳
-                  </div>
-                </div>
-
-                {/* Qty stepper */}
-                <div style={{ display: 'flex', border: '1.5px solid var(--ink)', overflow: 'hidden' }}>
-                  <button
-                    onClick={() => setQty(item.product_id, item.qty - 1)}
-                    style={{ width: m ? 32 : 36, height: m ? 36 : 40, background: 'var(--paper)', border: 'none', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: 18, fontWeight: 700 }}
-                  >
-                    −
-                  </button>
-                  <div style={{ width: m ? 32 : 40, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--mono)', fontSize: 14, fontWeight: 700, borderInline: '1.5px solid var(--ink)' }}>
-                    {item.qty}
-                  </div>
-                  <button
-                    onClick={() => setQty(item.product_id, item.qty + 1)}
-                    style={{ width: m ? 32 : 36, height: m ? 36 : 40, background: 'var(--paper)', border: 'none', cursor: 'pointer', fontFamily: 'var(--mono)', fontSize: 18, fontWeight: 700 }}
-                  >
-                    +
-                  </button>
-                </div>
-
-                <div style={{ minWidth: m ? 64 : 80, textAlign: 'end' }}>
-                  <PriceTag variant="ink" size={m ? 14 : 16} style={{ padding: '4px 8px' }}>
-                    {formatPrice(item.price_cents * item.qty)}
-                  </PriceTag>
-                </div>
-
-                <button
-                  onClick={() => remove(item.product_id)}
-                  style={{ background: 'none', border: 'none', cursor: 'pointer', opacity: 0.4, fontSize: 18, padding: '4px', lineHeight: 1 }}
-                  aria-label="הסר"
-                >
-                  ×
-                </button>
-              </div>
-            ))}
-          </div>
-
-          {/* Order summary */}
-          <div
-            style={{
-              border: '2px solid var(--ink)',
-              padding: m ? '20px' : '28px',
-              boxShadow: '6px 6px 0 var(--ink)',
-              position: m ? 'static' : 'sticky',
-              top: 100,
-            }}
-          >
-            <h2 className="display" style={{ fontSize: m ? 28 : 36, letterSpacing: '-0.04em', marginBottom: 20 }}>
-              סיכום הזמנה
-            </h2>
-
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginBottom: 20, borderBottom: '1px dashed rgba(245,240,232,0.18)', paddingBottom: 20 }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 13 }}>
-                <span style={{ opacity: 0.6 }}>{itemCount()} פריטים</span>
-                <span style={{ fontWeight: 700 }}>{formatPrice(subtotal)}</span>
-              </div>
-              <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 13 }}>
-                <span style={{ opacity: 0.6 }}>משלוח</span>
-                <span style={{ fontWeight: 700, color: 'var(--leaf)' }}>
-                  {delivery === 0 ? 'חינם' : formatPrice(delivery)}
-                </span>
-              </div>
-              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.45, letterSpacing: '0.06em' }}>
-                * משלוח חינם ב{DELIVERY_FREE_CITY}
-              </div>
-            </div>
-
-            <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 24 }}>
-              <span className="display" style={{ fontSize: 20, letterSpacing: '-0.03em' }}>סה"כ לתשלום</span>
-              <PriceTag variant="accent" size={22} style={{ padding: '6px 14px' }}>
-                {formatPrice(total)}
-              </PriceTag>
-            </div>
-
-            <Link
-              href="/checkout"
-              style={{
-                display: 'block',
-                padding: '16px',
-                background: 'var(--ink)',
-                color: 'var(--paper)',
-                fontFamily: 'var(--mono)',
-                fontSize: 14,
-                fontWeight: 700,
-                letterSpacing: '0.06em',
-                textDecoration: 'none',
-                textAlign: 'center',
-                border: '2px solid var(--ink)',
-                boxShadow: '5px 5px 0 var(--watermelon)',
-                transition: 'all 200ms var(--easing)',
-              }}
-            >
-              המשך לתשלום →
-            </Link>
-
-            <Link
-              href="/shop"
-              style={{
-                display: 'block',
-                padding: '12px',
-                textAlign: 'center',
-                fontFamily: 'var(--mono)',
-                fontSize: 12,
-                opacity: 0.5,
-                textDecoration: 'none',
-                color: 'inherit',
-                marginTop: 12,
-                letterSpacing: '0.06em',
-              }}
-            >
-              ← המשך קנייה
-            </Link>
-          </div>
-        </div>
-      </main>
-
-      <SiteFooter />
-      {m && <MobileBottomNav active="cart" />}
-    </div>
+            <Paper sx={{ width: { md: 320 }, p: 3, height: 'fit-content' }}>
+              <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>סיכום</Typography>
+              <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                <Typography>סכום ביניים</Typography>
+                <Typography>{formatPrice(total)}</Typography>
+              </Stack>
+              <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                <Typography>משלוח</Typography>
+                <Typography sx={{ color: BRAND.green, fontWeight: 700 }}>חינם בדימונה</Typography>
+              </Stack>
+              <Divider sx={{ my: 2 }} />
+              <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                <Typography sx={{ fontWeight: 700 }}>סה״כ</Typography>
+                <Typography sx={{ fontWeight: 800, fontSize: 18, color: BRAND.green }}>
+                  {formatPrice(total)}
+                </Typography>
+              </Stack>
+              <Button component={Link} href="/checkout" variant="contained" fullWidth size="large">
+                המשך לתשלום
+              </Button>
+            </Paper>
+          </Stack>
+        )}
+      </Container>
+      <Footer />
+    </>
   );
 }

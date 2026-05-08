@@ -1,313 +1,138 @@
 'use client';
-import { useState } from 'react';
-import Link from 'next/link';
-import { useCompact } from '@/hooks/use-compact';
-import { Fruit, type FruitKind } from '@/components/fruits/Fruit';
-import { Sticker } from '@/components/brand/Sticker';
-import { PriceTag } from '@/components/brand/PriceTag';
-import { SectionTag } from '@/components/brand/SectionTag';
-import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
-import { MobileBuyBar } from '@/components/mobile/MobileBuyBar';
-import { useCart } from '@/store/cart';
-import { formatPrice } from '@/lib/utils';
-import type { Product, Review } from '@/types/db';
+import {
+  Box,
+  Container,
+  Stack,
+  Typography,
+  Button,
+  Paper,
+  Chip,
+} from '@mui/material';
+import AddIcon from '@mui/icons-material/Add';
+import RemoveIcon from '@mui/icons-material/Remove';
+import { useAppDispatch, useAppSelector } from '@/store';
+import { addItem, decrementAmount, incrementAmount } from '@/store/slices/cartSlice';
+import { BRAND } from '@/lib/theme';
+import type { Product } from '@/types/shop';
 
-type Props = { product: Product; reviews: Review[] };
+const KIND_EMOJI: Record<string, string> = {
+  tomato: '🍅',
+  cucumber: '🥒',
+  pepper: '🌶️',
+  pumpkin: '🎃',
+  artichoke: '🌿',
+  asparagus: '🌱',
+  pineapple: '🍍',
+  watermelon: '🍉',
+  melon: '🍈',
+  mango: '🥭',
+};
 
-export function ProductDetail({ product, reviews }: Props) {
-  const m = useCompact();
-  const [qty, setQty] = useState(1);
-  const [added, setAdded] = useState(false);
-  const add = useCart((s) => s.add);
+const UNIT_LABEL: Record<string, string> = {
+  kg: 'ק״ג',
+  unit: 'יח׳',
+  bunch: 'צרור',
+};
 
-  function handleAdd() {
-    add({
-      product_id: product.id,
-      slug: product.slug,
-      qty,
-      price_cents: product.price_cents,
-      name_he: product.name_he,
-      weight: product.weight,
-      kind: product.kind,
-    });
-    setAdded(true);
-    setTimeout(() => setAdded(false), 1400);
-  }
+export function ProductDetail({ product }: { product: Product }) {
+  const dispatch = useAppDispatch();
+  const cartItem = useAppSelector((s) => s.cart.items.find((i) => i.productId === product.id));
+  const inCart = !!cartItem;
 
-  const accent = 'var(--watermelon)';
+  const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
+  const unitLabel = UNIT_LABEL[product.unit] ?? product.weight ?? '';
+
+  const discountPct =
+    product.originalPriceCents && product.originalPriceCents > product.priceCents
+      ? Math.round((1 - product.priceCents / product.originalPriceCents) * 100)
+      : 0;
 
   return (
-    <main
-      style={{
-        flex: 1,
-        maxWidth: 1100,
-        margin: '0 auto',
-        width: '100%',
-        padding: m ? '70px 20px 120px' : '100px clamp(20px,5vw,60px) 80px',
-      }}
-    >
-      {/* Breadcrumb */}
-      <div
-        style={{
-          fontFamily: 'var(--mono)',
-          fontSize: 11,
-          letterSpacing: '0.08em',
-          opacity: 0.5,
-          marginBottom: m ? 20 : 32,
-        }}
-      >
-        <Link href="/shop" style={{ color: 'inherit', textDecoration: 'none' }}>
-          ← חזרה לקטלוג
-        </Link>
-      </div>
-
-      <div
-        style={{
-          display: 'grid',
-          gridTemplateColumns: m ? '1fr' : '1fr 1fr',
-          gap: m ? 32 : 60,
-          alignItems: 'start',
-        }}
-      >
-        {/* Fruit visual */}
-        <div
-          style={{
+    <Container maxWidth="lg" sx={{ py: 4 }}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
+        <Paper
+          sx={{
+            flex: 1,
+            aspectRatio: '1',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            padding: m ? '40px 20px' : '60px 40px',
-            border: '2px solid var(--ink)',
-            boxShadow: '8px 8px 0 var(--ink)',
-            position: 'relative',
-            background: 'var(--paper-2)',
+            fontSize: { xs: 120, md: 200 },
+            bgcolor: BRAND.greenLight,
           }}
         >
-          {product.tag && (
-            <div style={{ position: 'absolute', top: 16, right: 16 }}>
-              <Sticker
-                color={product.tag === 'חדש' ? 'var(--leaf)' : 'var(--citrus)'}
-                rotate={-8}
-                dark={product.tag === 'חדש'}
+          {KIND_EMOJI[product.kind] ?? '🍎'}
+        </Paper>
+
+        <Stack spacing={2} sx={{ flex: 1 }}>
+          {product.quality === 'premium' && (
+            <Box>
+              <Chip
+                label="פרימיום"
+                sx={{ bgcolor: BRAND.brown, color: '#fff', fontWeight: 700 }}
+              />
+            </Box>
+          )}
+          <Typography variant="h1" sx={{ fontSize: 32, fontWeight: 800 }}>
+            {product.name}
+          </Typography>
+          {product.fullName && (
+            <Typography sx={{ color: 'text.secondary' }}>{product.fullName}</Typography>
+          )}
+
+          <Stack direction="row" spacing={2} alignItems="baseline">
+            <Typography sx={{ fontSize: 36, fontWeight: 800, color: BRAND.green }}>
+              {formatPrice(product.priceCents)}
+            </Typography>
+            <Typography sx={{ fontSize: 16, color: 'text.secondary' }}>/ {unitLabel}</Typography>
+            {discountPct > 0 && product.originalPriceCents && (
+              <Typography sx={{ fontSize: 14, color: 'text.secondary', textDecoration: 'line-through' }}>
+                {formatPrice(product.originalPriceCents)}
+              </Typography>
+            )}
+          </Stack>
+
+          {discountPct > 0 && (
+            <Chip
+              label={`חיסכון ${discountPct}%`}
+              sx={{ bgcolor: BRAND.green, color: '#fff', fontWeight: 700, alignSelf: 'flex-start' }}
+            />
+          )}
+
+          <Box sx={{ pt: 2 }}>
+            {inCart ? (
+              <Stack direction="row" spacing={2} alignItems="center">
+                <Button
+                  variant="outlined"
+                  onClick={() => dispatch(decrementAmount(product.id))}
+                  startIcon={<RemoveIcon />}
+                >
+                  הפחת
+                </Button>
+                <Typography sx={{ fontSize: 18, fontWeight: 700, minWidth: 80, textAlign: 'center' }}>
+                  {cartItem!.amount} {unitLabel}
+                </Typography>
+                <Button
+                  variant="contained"
+                  onClick={() => dispatch(incrementAmount(product.id))}
+                  startIcon={<AddIcon />}
+                >
+                  הוסף
+                </Button>
+              </Stack>
+            ) : (
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<AddIcon />}
+                onClick={() => dispatch(addItem({ product }))}
               >
-                {product.tag}
-              </Sticker>
-            </div>
-          )}
-          <div
-            style={{
-              position: 'absolute',
-              width: m ? 240 : 340,
-              height: m ? 240 : 340,
-              background: `radial-gradient(circle, ${accent} 0%, transparent 60%)`,
-              opacity: 0.25,
-              filter: 'blur(40px)',
-            }}
-          />
-          <div style={{ position: 'relative', zIndex: 1 }}>
-            <Fruit kind={product.kind as FruitKind} size={m ? 220 : 320} alt={product.name_he} priority />
-          </div>
-        </div>
-
-        {/* Info panel */}
-        <div>
-          <SectionTag num="02" label="מוצר" />
-          <h1
-            className="display"
-            style={{
-              fontSize: m ? 'clamp(44px,12vw,72px)' : 'clamp(52px,6vw,90px)',
-              lineHeight: 0.9,
-              letterSpacing: '-0.04em',
-              margin: '16px 0 20px',
-            }}
-          >
-            {product.name_he}
-            <span style={{ color: accent }}>.</span>
-          </h1>
-
-          {product.rating != null && (
-            <div style={{ display: 'flex', alignItems: 'center', gap: 8, marginBottom: 20 }}>
-              {[1, 2, 3, 4, 5].map((s) => (
-                <span
-                  key={s}
-                  style={{
-                    color: s <= Math.round(product.rating ?? 0) ? 'var(--citrus)' : 'rgba(245,240,232,0.25)',
-                    fontSize: 20,
-                  }}
-                >
-                  ★
-                </span>
-              ))}
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, marginRight: 4 }}>
-                {product.rating.toFixed(1)}
-              </span>
-              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.45 }}>
-                ({product.reviews_count} ביקורות)
-              </span>
-            </div>
-          )}
-
-          {product.description_he && (
-            <p
-              style={{
-                fontFamily: 'var(--serif)',
-                fontSize: m ? 17 : 20,
-                lineHeight: 1.6,
-                opacity: 0.8,
-                marginBottom: 28,
-              }}
-            >
-              {product.description_he}
-            </p>
-          )}
-
-          <div
-            style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 12,
-              padding: '16px 0',
-              borderTop: '1.5px dashed rgba(245,240,232,0.18)',
-              borderBottom: '1.5px dashed rgba(245,240,232,0.18)',
-              marginBottom: 28,
-            }}
-          >
-            <span style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.06em' }}>
-              משקל:
-            </span>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 700 }}>{product.weight}</span>
-          </div>
-
-          {/* Price + qty + add to cart */}
-          {!m && (
-            <div style={{ display: 'flex', flexDirection: 'column', gap: 20 }}>
-              <PriceTag variant="accent" size={28} style={{ alignSelf: 'flex-start', padding: '8px 18px' }}>
-                {formatPrice(product.price_cents)}
-              </PriceTag>
-
-              <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-                <div
-                  style={{
-                    display: 'flex',
-                    border: '2px solid var(--ink)',
-                    overflow: 'hidden',
-                  }}
-                >
-                  <button
-                    onClick={() => setQty((q) => Math.max(1, q - 1))}
-                    style={{
-                      width: 40,
-                      height: 48,
-                      background: 'var(--paper)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontFamily: 'var(--mono)',
-                      fontSize: 20,
-                      fontWeight: 700,
-                    }}
-                  >
-                    −
-                  </button>
-                  <div
-                    style={{
-                      width: 44,
-                      display: 'flex',
-                      alignItems: 'center',
-                      justifyContent: 'center',
-                      fontFamily: 'var(--mono)',
-                      fontSize: 16,
-                      fontWeight: 700,
-                      borderInline: '2px solid var(--ink)',
-                    }}
-                  >
-                    {qty}
-                  </div>
-                  <button
-                    onClick={() => setQty((q) => q + 1)}
-                    style={{
-                      width: 40,
-                      height: 48,
-                      background: 'var(--paper)',
-                      border: 'none',
-                      cursor: 'pointer',
-                      fontFamily: 'var(--mono)',
-                      fontSize: 20,
-                      fontWeight: 700,
-                    }}
-                  >
-                    +
-                  </button>
-                </div>
-
-                <button
-                  onClick={handleAdd}
-                  style={{
-                    flex: 1,
-                    padding: '14px 24px',
-                    background: added ? 'var(--leaf)' : 'var(--ink)',
-                    color: 'var(--paper)',
-                    border: '2px solid var(--ink)',
-                    fontFamily: 'var(--mono)',
-                    fontSize: 14,
-                    fontWeight: 700,
-                    letterSpacing: '0.06em',
-                    cursor: 'pointer',
-                    boxShadow: '5px 5px 0 var(--watermelon)',
-                    transition: 'all 240ms var(--easing)',
-                  }}
-                >
-                  {added ? '✓ נוסף לסל!' : 'הוסף לסל →'}
-                </button>
-              </div>
-            </div>
-          )}
-        </div>
-      </div>
-
-      {/* Reviews */}
-      {reviews.length > 0 && (
-        <section style={{ marginTop: m ? 48 : 72 }}>
-          <h2
-            className="display"
-            style={{ fontSize: m ? 36 : 52, letterSpacing: '-0.04em', marginBottom: 28 }}
-          >
-            ביקורות
-          </h2>
-          <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
-            {reviews.map((r) => (
-              <div
-                key={r.id}
-                style={{
-                  padding: m ? '16px 18px' : '20px 24px',
-                  border: '1.5px solid var(--ink)',
-                  background: 'var(--paper-2)',
-                }}
-              >
-                <div style={{ display: 'flex', gap: 4, marginBottom: 8 }}>
-                  {[1, 2, 3, 4, 5].map((s) => (
-                    <span key={s} style={{ color: s <= r.rating ? 'var(--citrus)' : 'rgba(245,240,232,0.25)', fontSize: 16 }}>
-                      ★
-                    </span>
-                  ))}
-                </div>
-                {r.body_he && (
-                  <p style={{ fontFamily: 'var(--serif)', fontSize: m ? 15 : 17, lineHeight: 1.5, margin: 0 }}>
-                    {r.body_he}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        </section>
-      )}
-
-      {m && <MobileBottomNav active="shop" />}
-      {m && (
-        <MobileBuyBar
-          priceCents={product.price_cents}
-          weight={product.weight}
-          onAdd={handleAdd}
-        />
-      )}
-    </main>
+                הוספה לסל
+              </Button>
+            )}
+          </Box>
+        </Stack>
+      </Stack>
+    </Container>
   );
 }

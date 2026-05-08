@@ -1,9 +1,9 @@
-'use client';
-import { SiteHeader } from './SiteHeader';
-import { SiteFooter } from './SiteFooter';
-import { SectionTag } from '@/components/brand/SectionTag';
-import { MobileBottomNav } from '@/components/mobile/MobileBottomNav';
-import { useCompact } from '@/hooks/use-compact';
+import Link from 'next/link';
+import { Box, Container, Stack, Typography, Button, Chip } from '@mui/material';
+import ArrowBackIcon from '@mui/icons-material/ArrowBack';
+import { Header } from './Header';
+import { Footer } from './Footer';
+import { BRAND } from '@/lib/theme';
 
 type Props = {
   title: string;
@@ -14,85 +14,36 @@ type Props = {
   accent?: string;
 };
 
-/** Reusable "coming next phase" stub for routes that will be implemented later. */
-export function PlaceholderPage({
-  title,
-  subtitle,
-  phase,
-  active,
-  navActive,
-  accent = 'var(--watermelon)',
-}: Props) {
-  const m = useCompact();
+export function PlaceholderPage({ title, subtitle, phase }: Props) {
   return (
-    <div style={{ background: 'var(--paper)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
-      <SiteHeader active={active} />
-
-      <main
-        style={{
-          flex: 1,
-          padding: m ? '60px 20px 80px' : '120px 40px',
-          display: 'flex',
-          flexDirection: 'column',
-          alignItems: 'flex-start',
-          justifyContent: 'center',
-          maxWidth: 1200,
-          margin: '0 auto',
-          width: '100%',
-          position: 'relative',
-        }}
-      >
-        <div className="watermark" style={{ top: 40, left: -40, fontSize: m ? '160px' : '320px', opacity: 0.05 }}>
-          {phase}
-        </div>
-
-        <div style={{ position: 'relative', zIndex: 1 }}>
-          <SectionTag num={phase} label="בקרוב" />
-          <h1
-            className="display"
-            style={{
-              fontSize: m ? 'clamp(60px, 18vw, 100px)' : 'clamp(90px, 11vw, 180px)',
-              margin: m ? '16px 0 0' : '24px 0 0',
-              lineHeight: 0.85,
-              letterSpacing: '-0.05em',
-            }}
-          >
+    <>
+      <Header />
+      <Container maxWidth="md" sx={{ py: { xs: 6, md: 10 }, minHeight: '60vh', textAlign: 'center' }}>
+        <Stack spacing={3} alignItems="center">
+          <Chip
+            label={`Phase ${phase}`}
+            sx={{ bgcolor: BRAND.brown, color: '#fff', fontWeight: 700 }}
+          />
+          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 56 }, fontWeight: 800, lineHeight: 1.1 }}>
             {title}
-            <span style={{ color: accent }}>.</span>
-          </h1>
-          <p
-            style={{
-              fontFamily: 'var(--serif)',
-              fontSize: m ? 18 : 24,
-              lineHeight: 1.5,
-              maxWidth: 640,
-              marginTop: m ? 16 : 24,
-              opacity: 0.8,
-            }}
-          >
+          </Typography>
+          <Typography sx={{ fontSize: 16, color: 'text.secondary', maxWidth: 600 }}>
             {subtitle}
-          </p>
-          <div
-            style={{
-              marginTop: m ? 24 : 36,
-              padding: '14px 18px',
-              border: '2px solid var(--ink)',
-              boxShadow: '5px 5px 0 var(--ink)',
-              background: 'var(--paper-2)',
-              fontFamily: 'var(--mono)',
-              fontSize: 12,
-              letterSpacing: '0.08em',
-              maxWidth: 480,
-              textTransform: 'uppercase',
-            }}
-          >
-            עמוד זה נבנה כעת בשלב הבא של המיגרציה לְ-Next.js + Supabase.
-          </div>
-        </div>
-      </main>
-
-      <SiteFooter />
-      {m && <MobileBottomNav active={navActive} accent={accent} />}
-    </div>
+          </Typography>
+          <Box>
+            <Link href="/shop">
+              <Button
+                variant="contained"
+                size="large"
+                startIcon={<ArrowBackIcon sx={{ transform: 'scaleX(-1)' }} />}
+              >
+                לקטלוג
+              </Button>
+            </Link>
+          </Box>
+        </Stack>
+      </Container>
+      <Footer />
+    </>
   );
 }
