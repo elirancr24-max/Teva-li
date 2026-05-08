@@ -1,0 +1,46 @@
+name: Run Supabase Migrations
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install Supabase CLI
+        run: |
+          curl -sSL https://github.com/supabase/cli/releases/download/v2.22.6/supabase_linux_amd64.deb -o supabase.deb
+          sudo dpkg -i supabase.deb
+          supabase --version
+
+      - name: Link project and push migrations
+        env:
+          SUPABASE_ACCESS_TOKEN: placeholder
+        run: |
+          cd apps/web
+          # Link using DB password directly (no dashboard auth needed)
+          supabase link \
+            --project-ref iyjxsdxebxmbrrquxbnw \
+            --password IHuRNqhaZ87zaAab \
+            --debug 2>&1 || true
+
+          # Push via direct DB connection
+          supabase db push \
+            --db-url "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            2>&1 || true
+
+          # Fallback: raw psql
+          echo "--- Fallback: direct psql ---"
+          sudo apt-get install -y postgresql-client -qq
+          psql "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -f supabase/migrations/001_initial_schema.sql 2>&1
+          psql "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -f supabase/migrations/002_seed.sql 2>&1
+
+      - name: Verify
+        run: |
+          sudo apt-get install -y postgresql-client -qq 2>/dev/null
+          psql "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -c "SELECT COUNT(*) FROM products;" 2>&1
