@@ -3,9 +3,9 @@ import { Suspense } from 'react';
 import { createClient } from '@/lib/supabase/server';
 import { SiteHeader } from '@/components/layout/SiteHeader';
 import { SiteFooter } from '@/components/layout/SiteFooter';
-import { SectionTag } from '@/components/brand/SectionTag';
-import { FilterChips } from '@/components/shop/FilterChips';
+import { CategoryNav } from '@/components/shop/CategoryNav';
 import { CatalogGrid } from '@/components/shop/CatalogGrid';
+import { CartSidebar } from '@/components/shop/CartSidebar';
 import type { Category, Product } from '@/types/db';
 
 export const metadata: Metadata = {
@@ -25,7 +25,6 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
     .order('sort_order');
   const categories = rawCategories as Category[] | null;
 
-  // Resolve category slug → id safely (no raw SQL injection)
   let categoryId: string | null = null;
   if (cat && categories) {
     categoryId = categories.find((c) => c.slug === cat)?.id ?? null;
@@ -46,50 +45,94 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
     <div style={{ background: 'var(--paper)', minHeight: '100vh', display: 'flex', flexDirection: 'column' }}>
       <SiteHeader active="shop" />
 
-      <main
+      {/* Category navigation bar — sticky below header */}
+      <Suspense>
+        <CategoryNav categories={categories ?? []} activeSlug={cat ?? null} />
+      </Suspense>
+
+      {/* Shop hero strip */}
+      <div
+        style={{
+          background: '#0a0a0a',
+          borderBottom: '1px solid rgba(245,240,232,0.1)',
+          padding: '20px clamp(20px,4vw,40px)',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'space-between',
+          gap: 16,
+        }}
+      >
+        <div>
+          <h1
+            className="display"
+            style={{ fontSize: 'clamp(28px,5vw,48px)', lineHeight: 1, letterSpacing: '-0.04em', margin: 0 }}
+          >
+            כל המוצרים<span style={{ color: 'var(--citrus)' }}>.</span>
+          </h1>
+          <p
+            style={{
+              fontFamily: 'var(--mono)',
+              fontSize: 12,
+              opacity: 0.5,
+              margin: '6px 0 0',
+              letterSpacing: '0.06em',
+            }}
+          >
+            {products?.length ?? 0} מוצרים · נחתכו הבוקר
+          </p>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <span className="pulse-dot" />
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, letterSpacing: '0.1em' }}>
+            זמין עכשיו
+          </span>
+        </div>
+      </div>
+
+      {/* Main content: sidebar + grid */}
+      <div
         style={{
           flex: 1,
           maxWidth: 1280,
           margin: '0 auto',
           width: '100%',
-          padding: 'clamp(80px,8vw,120px) clamp(20px,5vw,60px) 80px',
+          padding: '24px clamp(12px,3vw,32px) 48px',
+          display: 'flex',
+          gap: 24,
+          alignItems: 'flex-start',
         }}
       >
-        <div style={{ marginBottom: 'clamp(32px,5vw,56px)' }}>
-          <SectionTag num="02" label="הקטלוג" />
-          <h1
-            className="display"
+        {/* Product grid — first in DOM = right side in RTL */}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          {/* Sort bar */}
+          <div
             style={{
-              fontSize: 'clamp(64px,10vw,140px)',
-              lineHeight: 0.85,
-              letterSpacing: '-0.05em',
-              margin: '16px 0 24px',
+              display: 'flex',
+              justifyContent: 'space-between',
+              alignItems: 'center',
+              marginBottom: 20,
+              paddingBottom: 16,
+              borderBottom: '1px solid rgba(245,240,232,0.1)',
             }}
           >
-            פירות
-            <span style={{ color: 'var(--watermelon)' }}>.</span>
-            <br />
-            <span style={{ fontStyle: 'italic' }}>טריים</span>
-          </h1>
-          <p
-            style={{
-              fontFamily: 'var(--serif)',
-              fontSize: 'clamp(16px,2vw,22px)',
-              maxWidth: 480,
-              opacity: 0.75,
-              lineHeight: 1.5,
-            }}
-          >
-            נחתכו הבוקר. נארזו בקירור. מגיעים אליך תוך שעתיים.
-          </p>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.06em' }}>
+              {cat ? `קטגוריה: ${categories?.find((c) => c.slug === cat)?.name_he ?? cat}` : 'כל הקטגוריות'}
+            </div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5 }}>
+              {products?.length ?? 0} מוצרים
+            </div>
+          </div>
+
+          <CatalogGrid products={products ?? []} />
         </div>
 
-        <Suspense>
-          <FilterChips categories={categories ?? []} activeSlug={cat ?? null} />
-        </Suspense>
-
-        <CatalogGrid products={products ?? []} />
-      </main>
+        {/* Cart sidebar — second in DOM = left side in RTL — hidden on mobile */}
+        <div className="cart-sidebar-wrapper">
+          <Suspense>
+            <CartSidebar />
+          </Suspense>
+        </div>
+      </div>
 
       <SiteFooter />
     </div>

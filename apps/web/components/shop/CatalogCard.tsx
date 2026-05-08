@@ -2,8 +2,6 @@
 import { useState } from 'react';
 import Link from 'next/link';
 import { Fruit, type FruitKind } from '@/components/fruits/Fruit';
-import { Sticker } from '@/components/brand/Sticker';
-import { PriceTag } from '@/components/brand/PriceTag';
 import { formatPrice } from '@/lib/utils';
 import { useCart } from '@/store/cart';
 import type { Product } from '@/types/db';
@@ -17,6 +15,7 @@ export function CatalogCard({ product, compact: m = false }: Props) {
 
   function handleAdd(e: React.MouseEvent) {
     e.preventDefault();
+    e.stopPropagation();
     add({
       product_id: product.id,
       slug: product.slug,
@@ -30,137 +29,174 @@ export function CatalogCard({ product, compact: m = false }: Props) {
     setTimeout(() => setAdded(false), 1400);
   }
 
-  const accent = 'var(--watermelon)';
-
   return (
     <Link href={`/shop/${product.slug}`} style={{ textDecoration: 'none', color: 'inherit' }}>
       <div
         onMouseEnter={() => setHover(true)}
         onMouseLeave={() => setHover(false)}
         style={{
-          padding: m ? '20px 18px 16px' : '28px 26px 22px',
-          border: '1.5px solid var(--ink)',
+          background: hover ? '#1c1c1c' : '#161616',
+          border: `1px solid ${hover ? 'rgba(245,240,232,0.22)' : 'rgba(245,240,232,0.08)'}`,
           position: 'relative',
-          background: hover ? 'var(--paper-2)' : 'var(--paper)',
           cursor: 'pointer',
-          transition: 'all 240ms var(--easing)',
-          transform: hover ? 'translate(-4px, -4px)' : 'translate(0, 0)',
-          boxShadow: hover ? '8px 8px 0 var(--ink)' : '0 0 0 var(--ink)',
+          transition: 'all 200ms ease',
+          transform: hover ? 'translateY(-3px)' : 'translateY(0)',
+          boxShadow: hover ? '0 8px 24px rgba(0,0,0,0.5)' : 'none',
+          overflow: 'hidden',
         }}
       >
+        {/* Discount/tag badge */}
         {product.tag && (
-          <div style={{ position: 'absolute', top: m ? 10 : 14, right: m ? 10 : 14, zIndex: 2 }}>
-            <Sticker
-              color={product.tag === 'חדש' ? 'var(--leaf)' : product.tag === 'פרמיום' || product.tag === 'גורמה' ? 'var(--watermelon)' : 'var(--citrus)'}
-              rotate={-6}
-              dark={product.tag === 'חדש' || product.tag === 'פרמיום' || product.tag === 'גורמה'}
-            >
-              {product.tag}
-            </Sticker>
+          <div
+            style={{
+              position: 'absolute',
+              top: 10,
+              right: 10,
+              zIndex: 3,
+              background: product.tag === 'חדש' ? 'var(--leaf)' : 'var(--watermelon)',
+              color: '#fff',
+              padding: '3px 9px',
+              fontFamily: 'var(--mono)',
+              fontSize: 10,
+              fontWeight: 700,
+              letterSpacing: '0.06em',
+            }}
+          >
+            {product.tag}
           </div>
         )}
 
+        {/* Delivery badge */}
         <div
           style={{
-            height: m ? 170 : 240,
+            position: 'absolute',
+            top: 10,
+            left: 10,
+            zIndex: 3,
+            background: 'rgba(0,0,0,0.6)',
+            borderRadius: 4,
+            padding: '3px 6px',
+            fontSize: 14,
+          }}
+          title="משלוח מהיר"
+        >
+          🚀
+        </div>
+
+        {/* Image area */}
+        <div
+          style={{
+            height: m ? 130 : 170,
+            background: '#0f0f0f',
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
             position: 'relative',
+            overflow: 'hidden',
           }}
         >
+          {/* Glow */}
           <div
             style={{
               position: 'absolute',
-              width: m ? 160 : 220,
-              height: m ? 160 : 220,
-              background: `radial-gradient(circle, ${accent} 0%, transparent 65%)`,
-              opacity: hover ? 0.32 : 0.18,
-              filter: 'blur(20px)',
-              transition: 'opacity 240ms',
+              inset: 0,
+              background: `radial-gradient(circle at 50% 60%, ${
+                product.kind === 'watermelon' ? 'rgba(201,24,74,0.18)' :
+                product.kind === 'pineapple' ? 'rgba(255,214,10,0.15)' :
+                product.kind === 'mango' ? 'rgba(255,122,26,0.15)' :
+                'rgba(139,195,74,0.12)'
+              } 0%, transparent 70%)`,
+              transition: 'opacity 200ms',
+              opacity: hover ? 1 : 0.6,
             }}
           />
           <div
             style={{
               position: 'relative',
               zIndex: 1,
-              transition: 'transform 320ms var(--easing)',
-              transform: hover ? 'scale(1.06) rotate(-2deg)' : 'scale(1)',
+              transform: hover ? 'scale(1.08)' : 'scale(1)',
+              transition: 'transform 320ms ease',
             }}
           >
-            <Fruit kind={product.kind as FruitKind} size={m ? 150 : 210} alt={product.name_he} />
+            <Fruit kind={product.kind as FruitKind} size={m ? 100 : 135} alt={product.name_he} />
           </div>
         </div>
 
-        {product.rating != null && (
+        {/* Info */}
+        <div style={{ padding: m ? '12px 14px 14px' : '14px 16px 16px' }}>
+          {/* Rating */}
+          {product.rating != null && (
+            <div style={{ display: 'flex', alignItems: 'center', gap: 4, marginBottom: 6 }}>
+              <span style={{ color: 'var(--citrus)', fontSize: 11 }}>★</span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700 }}>
+                {product.rating.toFixed(1)}
+              </span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.4 }}>
+                ({product.reviews_count})
+              </span>
+            </div>
+          )}
+
+          {/* Name */}
           <div
             style={{
-              display: 'flex',
-              alignItems: 'center',
-              gap: 6,
-              marginBottom: m ? 8 : 10,
+              fontFamily: 'var(--display)',
+              fontSize: m ? 15 : 17,
+              fontWeight: 700,
+              lineHeight: 1.25,
+              marginBottom: 4,
+              letterSpacing: '-0.02em',
             }}
           >
-            <span style={{ color: 'var(--citrus)', fontSize: m ? 13 : 14 }}>★</span>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: m ? 11 : 12, fontWeight: 700 }}>
-              {product.rating.toFixed(1)}
-            </span>
-            <span style={{ fontFamily: 'var(--mono)', fontSize: m ? 10 : 11, opacity: 0.45 }}>
-              ({product.reviews_count})
-            </span>
-          </div>
-        )}
-
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'baseline',
-            paddingTop: m ? 10 : 14,
-            borderTop: '1px dashed rgba(245,240,232,0.18)',
-          }}
-        >
-          <div className="display" style={{ fontSize: m ? 20 : 26, lineHeight: 1, letterSpacing: '-0.03em' }}>
             {product.name_he}
           </div>
-          <div style={{ fontFamily: 'var(--mono)', fontSize: m ? 10 : 11, opacity: 0.55, letterSpacing: '0.06em' }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.4, marginBottom: 12 }}>
             {product.weight}
           </div>
-        </div>
 
-        <div
-          style={{
-            display: 'flex',
-            justifyContent: 'space-between',
-            alignItems: 'center',
-            marginTop: m ? 10 : 14,
-          }}
-        >
-          <PriceTag
-            variant={hover ? 'accent' : 'ink'}
-            size={m ? 15 : 17}
-            style={{ padding: m ? '4px 9px' : '5px 11px' }}
-          >
-            {formatPrice(product.price_cents)}
-          </PriceTag>
-          <button
-            onClick={handleAdd}
-            style={{
-              background: added ? 'var(--leaf)' : hover ? accent : 'var(--ink)',
-              color: 'var(--paper)',
-              border: '2px solid var(--ink)',
-              padding: m ? '8px 12px' : '10px 16px',
-              fontFamily: 'var(--mono)',
-              fontSize: m ? 11 : 12,
-              fontWeight: 700,
-              cursor: 'pointer',
-              boxShadow: hover ? '3px 3px 0 var(--ink)' : '0 0 0 var(--ink)',
-              transition: 'all 240ms var(--easing)',
-              letterSpacing: '0.04em',
-            }}
-          >
-            {added ? '✓ נוסף!' : m ? '+ סל' : 'הוסף לסל +'}
-          </button>
+          {/* Price row */}
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 8 }}>
+            <div>
+              <span
+                style={{
+                  fontFamily: 'var(--display)',
+                  fontWeight: 900,
+                  fontSize: m ? 19 : 22,
+                  color: 'var(--citrus)',
+                  letterSpacing: '-0.03em',
+                  lineHeight: 1,
+                }}
+              >
+                {formatPrice(product.price_cents)}
+              </span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.5, marginRight: 3 }}>
+                /{product.weight}
+              </span>
+            </div>
+
+            <button
+              onClick={handleAdd}
+              style={{
+                background: added ? 'var(--leaf)' : hover ? 'var(--watermelon)' : 'rgba(245,240,232,0.1)',
+                color: added || hover ? '#fff' : 'var(--ink)',
+                border: 'none',
+                width: m ? 32 : 36,
+                height: m ? 32 : 36,
+                borderRadius: '50%',
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                cursor: 'pointer',
+                fontSize: m ? 17 : 20,
+                fontWeight: 900,
+                transition: 'all 200ms ease',
+                flexShrink: 0,
+              }}
+              aria-label="הוסף לסל"
+            >
+              {added ? '✓' : '+'}
+            </button>
+          </div>
         </div>
       </div>
     </Link>

@@ -13,14 +13,18 @@ export function CatalogGrid({ products }: Props) {
     return (
       <div
         style={{
-          padding: '80px 0',
+          padding: '80px 20px',
           textAlign: 'center',
-          fontFamily: 'var(--serif)',
-          fontSize: 22,
-          opacity: 0.6,
+          opacity: 0.5,
         }}
       >
-        אין מוצרים בקטגוריה זו כרגע.
+        <div style={{ fontSize: 48, marginBottom: 16 }}>🍽️</div>
+        <div style={{ fontFamily: 'var(--display)', fontSize: 22, marginBottom: 8 }}>
+          אין מוצרים בקטגוריה זו כרגע
+        </div>
+        <div style={{ fontFamily: 'var(--serif)', fontSize: 15 }}>
+          נסה קטגוריה אחרת או חזור מחר
+        </div>
       </div>
     );
   }
@@ -32,8 +36,8 @@ export function CatalogGrid({ products }: Props) {
           display: 'grid',
           gridTemplateColumns: m
             ? 'repeat(2, 1fr)'
-            : 'repeat(auto-fill, minmax(280px, 1fr))',
-          gap: m ? 16 : 24,
+            : 'repeat(4, 1fr)',
+          gap: m ? 10 : 14,
         }}
       >
         {products.map((p) => (

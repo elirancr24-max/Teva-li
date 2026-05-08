@@ -53,6 +53,10 @@
 
 * { box-sizing: border-box; }
 
+/* Shop layout helpers */
+.cart-sidebar-wrapper { display: block; }
+@media (max-width: 768px) { .cart-sidebar-wrapper { display: none; } }
+
 html, body {
   margin: 0;
   padding: 0;
