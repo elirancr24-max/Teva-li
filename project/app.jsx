@@ -9,7 +9,7 @@ const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
 }/*EDITMODE-END*/;
 
 const PALETTES = {
-  watermelon: { accent: '#FF4D6D', label: 'אבטיח' },
+  watermelon: { accent: '#C9184A', label: 'ברי' },
   citrus:     { accent: '#FFD60A', label: 'הדרים' },
   leaf:       { accent: '#1F8A5B', label: 'עלה' },
   berry:      { accent: '#6B1F3A', label: 'יער' },
@@ -38,7 +38,9 @@ const SCREENS = [
   { id: 'admin-dash', label: 'אדמין · בקרה', sub: 'KPI + מכירות' },
   { id: 'admin-products', label: 'אדמין · מוצרים', sub: 'הוסף / ערוך' },
   { id: 'admin-kayaks', label: 'אדמין · קיאקים', sub: 'אישור הזמנות' },
-  { id: 'mobile', label: 'מובייל', sub: 'iPhone' },
+  { id: 'mobile', label: 'מובייל · בית', sub: 'iPhone · דף בית' },
+  { id: 'mobile-shop', label: 'מובייל · קטלוג', sub: 'iPhone · חנות' },
+  { id: 'mobile-product', label: 'מובייל · מוצר', sub: 'iPhone · אננס' },
   { id: 'brand', label: 'מערכת עיצוב', sub: 'מותג + טוקנים' },
 ];
 
@@ -158,7 +160,7 @@ function PreviewBar({ screen, setScreen }) {
 
 /* Frame for each screen — gives padding + label */
 function ScreenFrame({ screen, children }) {
-  if (screen === 'mobile') {
+  if (screen === 'mobile' || screen === 'mobile-shop' || screen === 'mobile-product') {
     return (
       <div style={{ padding: '40px 0', display: 'flex', justifyContent: 'center' }}>
         <IOSDevice width={402} height={874}>
@@ -189,7 +191,9 @@ function renderScreen(screen, accent, t) {
     case 'admin-dash':      return <AdminDashboardWrap tab="dashboard" accent={accent} />;
     case 'admin-products':  return <AdminDashboardWrap tab="products" accent={accent} />;
     case 'admin-kayaks':    return <AdminDashboardWrap tab="kayaks" accent={accent} />;
-    case 'mobile':          return <MobileScreen accent={accent} />;
+    case 'mobile':          return <HomePage accent={accent} heroVariant={t.heroVariant} compact />;
+    case 'mobile-shop':     return <ShopPage accent={accent} compact />;
+    case 'mobile-product':  return <ProductPage accent={accent} compact />;
     case 'brand':           return <BrandBoard accent={accent} />;
     default:                return <HomePage accent={accent} heroVariant={t.heroVariant} />;
   }
