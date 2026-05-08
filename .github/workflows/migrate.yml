@@ -12,21 +12,36 @@ jobs:
       - name: Install psql
         run: sudo apt-get install -y postgresql-client
 
-      - name: Run migrations (direct connection)
+      - name: Test basic write
         run: |
           DB="postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require"
-          echo "=== Schema migration ==="
-          psql "$DB" -f apps/web/supabase/migrations/001_initial_schema.sql 2>&1
-          echo "=== Seed migration ==="
-          psql "$DB" -f apps/web/supabase/migrations/002_seed.sql 2>&1
+          psql "$DB" -c "SELECT version(); SELECT current_user; SELECT pg_postmaster_start_time();" 2>&1
+          psql "$DB" -c "SELECT gen_random_uuid();" 2>&1
+          psql "$DB" -c "SELECT table_name FROM information_schema.tables WHERE table_schema='public' ORDER BY table_name;" 2>&1
 
-      - name: Verify tables and data
+      - name: Run schema migration with output
+        run: |
+          DB="postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require"
+          echo "--- 001_initial_schema.sql ---"
+          psql "$DB" \
+            --set ON_ERROR_STOP=0 \
+            -f apps/web/supabase/migrations/001_initial_schema.sql 2>&1 | tee /tmp/schema_out.txt
+          echo "--- Exit code: $? ---"
+
+      - name: Run seed with output
+        run: |
+          DB="postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require"
+          echo "--- 002_seed.sql ---"
+          psql "$DB" \
+            --set ON_ERROR_STOP=0 \
+            -f apps/web/supabase/migrations/002_seed.sql 2>&1 | tee /tmp/seed_out.txt
+          echo "--- Exit code: $? ---"
+
+      - name: Verify final state
         run: |
           DB="postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require"
           psql "$DB" -c "
-            SELECT 'products' AS tbl, COUNT(*) FROM products
-            UNION ALL
-            SELECT 'categories', COUNT(*) FROM categories
-            UNION ALL
-            SELECT 'kayak_sizes', COUNT(*) FROM kayak_sizes;
+            SELECT 'products'   AS tbl, COUNT(*) FROM products   UNION ALL
+            SELECT 'categories'       , COUNT(*) FROM categories UNION ALL
+            SELECT 'kayak_sizes'      , COUNT(*) FROM kayak_sizes;
           " 2>&1
