@@ -6,7 +6,7 @@ type Props = { size?: number };
 export function Logo({ size = 44 }: Props) {
   return (
     <Image
-      src="/logo.svg"
+      src="/logo.png"
       alt="פרי לי"
       width={size}
       height={size}
