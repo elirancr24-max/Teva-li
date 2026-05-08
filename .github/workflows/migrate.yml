@@ -1,0 +1,27 @@
+name: Run Supabase Migrations
+
+on:
+  workflow_dispatch:
+
+jobs:
+  migrate:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Install psql
+        run: sudo apt-get install -y postgresql-client
+
+      - name: Run schema migration
+        env:
+          PGPASSWORD: ${{ secrets.SUPABASE_DB_URL }}
+        run: |
+          psql "${{ secrets.SUPABASE_DB_URL }}" \
+            -f apps/web/supabase/migrations/001_initial_schema.sql \
+            -v ON_ERROR_STOP=1
+
+      - name: Run seed migration
+        run: |
+          psql "${{ secrets.SUPABASE_DB_URL }}" \
+            -f apps/web/supabase/migrations/002_seed.sql \
+            -v ON_ERROR_STOP=1
