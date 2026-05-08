@@ -1,0 +1,3510 @@
+<!DOCTYPE html>
+<html lang="he" dir="rtl">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>פרי לי · פירות קלופים · קיאקי אירועים · דימונה</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Heebo:wght@400;500;700;800;900&family=Assistant:wght@400;500;700;800&family=Anek+Hebrew:wght@400;700;900&family=Rubik:wght@400;700;900&family=Frank+Ruhl+Libre:wght@400;500;700;900&family=David+Libre:wght@400;500;700&family=Noto+Serif+Hebrew:wght@400;700;900&family=JetBrains+Mono:wght@400;700&display=swap" rel="stylesheet">
+<script src="https://unpkg.com/react@18.3.1/umd/react.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/react-dom@18.3.1/umd/react-dom.development.js" crossorigin="anonymous"></script>
+<script src="https://unpkg.com/@babel/standalone@7.29.0/babel.min.js" crossorigin="anonymous"></script>
+<style>
+/* פרי לי — Design System */
+
+:root {
+  /* Core palette */
+  --ink: #0a0a0a;
+  --paper: #fdfbf5;
+  --paper-2: #f4efe2;
+  --line: #1a1a1a;
+
+  /* Fruit accents — saturated, bold */
+  --citrus: #FFD60A;       /* lemon / pineapple */
+  --watermelon: #FF4D6D;   /* watermelon pink */
+  --leaf: #1F8A5B;         /* fresh green */
+  --berry: #6B1F3A;        /* deep berry */
+  --tangerine: #FF7A1A;    /* mango / orange */
+
+  /* Typography stacks */
+  --display: "Heebo", "Assistant", system-ui, sans-serif;
+  --serif: "Frank Ruhl Libre", "David Libre", Georgia, serif;
+  --mono: "JetBrains Mono", "IBM Plex Mono", ui-monospace, monospace;
+  --body: "Assistant", "Heebo", system-ui, sans-serif;
+
+  --radius: 0px;
+  --radius-soft: 8px;
+
+  --easing: cubic-bezier(.2,.7,.2,1);
+}
+
+* { box-sizing: border-box; }
+
+html, body {
+  margin: 0;
+  padding: 0;
+  background: var(--paper);
+  color: var(--ink);
+  font-family: var(--body);
+  direction: rtl;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button { font-family: inherit; cursor: pointer; }
+
+/* Utility */
+.mono { font-family: var(--mono); letter-spacing: -0.01em; }
+.serif { font-family: var(--serif); }
+.display { font-family: var(--display); font-weight: 900; letter-spacing: -0.04em; line-height: 0.9; }
+
+/* Generic grid line */
+.hairline { border-top: 1px solid var(--ink); }
+
+/* Sticker / label like the shop labels */
+.sticker {
+  display: inline-flex;
+  align-items: center;
+  gap: 6px;
+  padding: 4px 10px;
+  background: var(--citrus);
+  color: var(--ink);
+  font-family: var(--mono);
+  font-size: 11px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 0.08em;
+  border-radius: 999px;
+}
+
+/* Big square button */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  padding: 16px 28px;
+  background: var(--ink);
+  color: var(--paper);
+  font-family: var(--display);
+  font-weight: 800;
+  font-size: 16px;
+  border: 2px solid var(--ink);
+  text-decoration: none;
+  transition: transform 120ms var(--easing), background 120ms;
+}
+.btn:hover { transform: translate(-2px, -2px); box-shadow: 4px 4px 0 var(--ink); }
+.btn.primary { background: var(--watermelon); color: var(--ink); border-color: var(--ink); }
+.btn.citrus { background: var(--citrus); color: var(--ink); }
+.btn.outline { background: transparent; color: var(--ink); }
+
+/* Fruit illustrations (CSS shapes, no SVG hand-drawing) */
+.fruit-blob {
+  width: 100%;
+  height: 100%;
+  background:
+    radial-gradient(circle at 30% 30%, rgba(255,255,255,.3), transparent 50%),
+    var(--blob-color, var(--watermelon));
+  border-radius: 50%;
+}
+
+/* Striped placeholder for product photos */
+.photo-placeholder {
+  background:
+    repeating-linear-gradient(135deg, var(--paper-2), var(--paper-2) 8px, var(--paper) 8px, var(--paper) 16px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: var(--mono);
+  font-size: 11px;
+  color: var(--ink);
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  position: relative;
+  overflow: hidden;
+}
+
+/* Marquee */
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to { transform: translateX(50%); }
+}
+.marquee {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee 40s linear infinite;
+}
+@keyframes marquee-reverse {
+  from { transform: translateX(0); }
+  to { transform: translateX(-50%); }
+}
+.marquee-rev {
+  display: flex;
+  white-space: nowrap;
+  animation: marquee-reverse 50s linear infinite;
+}
+
+/* Grain overlay texture */
+.grain {
+  position: relative;
+}
+.grain::after {
+  content: '';
+  position: absolute; inset: 0;
+  pointer-events: none;
+  opacity: 0.06;
+  mix-blend-mode: multiply;
+  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2'/></filter><rect width='100%' height='100%' filter='url(%23n)'/></svg>");
+}
+
+/* Halftone dot pattern */
+.halftone {
+  background-image: radial-gradient(circle, var(--ink) 1px, transparent 1.5px);
+  background-size: 8px 8px;
+}
+
+/* Pulse dot */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.4); }
+}
+.pulse-dot {
+  display: inline-block;
+  width: 8px; height: 8px;
+  border-radius: 50%;
+  background: #1F8A5B;
+  animation: pulse-dot 1.6s ease-in-out infinite;
+}
+
+/* Slow rotate for fruit-around-circle */
+@keyframes spin-slow {
+  from { transform: rotate(0); }
+  to { transform: rotate(360deg); }
+}
+.spin-slow { animation: spin-slow 60s linear infinite; }
+
+/* Hover lift */
+.lift { transition: transform 200ms var(--easing), box-shadow 200ms; }
+.lift:hover { transform: translate(-3px, -3px); box-shadow: 6px 6px 0 var(--ink); }
+
+/* Underline draw */
+.underline-draw {
+  background: linear-gradient(currentColor, currentColor) no-repeat;
+  background-size: 0% 2px;
+  background-position: 0 100%;
+  transition: background-size 300ms var(--easing);
+}
+.underline-draw:hover { background-size: 100% 2px; }
+
+/* Text outline */
+.outline-text {
+  -webkit-text-stroke: 2px var(--ink);
+  color: transparent;
+}
+
+/* Scrollbar inside artboards */
+.artboard-scroll {
+  overflow: hidden;
+}
+</style>
+</head>
+<body>
+<div id="root"></div>
+
+<script type="text/babel">
+
+// tweaks-panel.jsx
+// Reusable Tweaks shell + form-control helpers.
+//
+// Owns the host protocol (listens for __activate_edit_mode / __deactivate_edit_mode,
+// posts __edit_mode_available / __edit_mode_set_keys / __edit_mode_dismissed) so
+// individual prototypes don't re-roll it. Ships a consistent set of controls so you
+// don't hand-draw <input type="range">, segmented radios, steppers, etc.
+//
+// Usage (in an HTML file that loads React + Babel):
+//
+//   const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+//     "primaryColor": "#D97757",
+//     "palette": ["#D97757", "#29261b", "#f6f4ef"],
+//     "fontSize": 16,
+//     "density": "regular",
+//     "dark": false
+//   }/*EDITMODE-END*/;
+//
+//   function App() {
+//     const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+//     return (
+//       <div style={{ fontSize: t.fontSize, color: t.primaryColor }}>
+//         Hello
+//         <TweaksPanel>
+//           <TweakSection label="Typography" />
+//           <TweakSlider label="Font size" value={t.fontSize} min={10} max={32} unit="px"
+//                        onChange={(v) => setTweak('fontSize', v)} />
+//           <TweakRadio  label="Density" value={t.density}
+//                        options={['compact', 'regular', 'comfy']}
+//                        onChange={(v) => setTweak('density', v)} />
+//           <TweakSection label="Theme" />
+//           <TweakColor  label="Primary" value={t.primaryColor}
+//                        options={['#D97757', '#2A6FDB', '#1F8A5B', '#7A5AE0']}
+//                        onChange={(v) => setTweak('primaryColor', v)} />
+//           <TweakColor  label="Palette" value={t.palette}
+//                        options={[['#D97757', '#29261b', '#f6f4ef'],
+//                                  ['#475569', '#0f172a', '#f1f5f9']]}
+//                        onChange={(v) => setTweak('palette', v)} />
+//           <TweakToggle label="Dark mode" value={t.dark}
+//                        onChange={(v) => setTweak('dark', v)} />
+//         </TweaksPanel>
+//       </div>
+//     );
+//   }
+//
+// ─────────────────────────────────────────────────────────────────────────────
+
+const __TWEAKS_STYLE = `
+  .twk-panel{position:fixed;right:16px;bottom:16px;z-index:2147483646;width:280px;
+    max-height:calc(100vh - 32px);display:flex;flex-direction:column;
+    transform:scale(var(--dc-inv-zoom,1));transform-origin:bottom right;
+    background:rgba(250,249,247,.78);color:#29261b;
+    -webkit-backdrop-filter:blur(24px) saturate(160%);backdrop-filter:blur(24px) saturate(160%);
+    border:.5px solid rgba(255,255,255,.6);border-radius:14px;
+    box-shadow:0 1px 0 rgba(255,255,255,.5) inset,0 12px 40px rgba(0,0,0,.18);
+    font:11.5px/1.4 ui-sans-serif,system-ui,-apple-system,sans-serif;overflow:hidden}
+  .twk-hd{display:flex;align-items:center;justify-content:space-between;
+    padding:10px 8px 10px 14px;cursor:move;user-select:none}
+  .twk-hd b{font-size:12px;font-weight:600;letter-spacing:.01em}
+  .twk-x{appearance:none;border:0;background:transparent;color:rgba(41,38,27,.55);
+    width:22px;height:22px;border-radius:6px;cursor:default;font-size:13px;line-height:1}
+  .twk-x:hover{background:rgba(0,0,0,.06);color:#29261b}
+  .twk-body{padding:2px 14px 14px;display:flex;flex-direction:column;gap:10px;
+    overflow-y:auto;overflow-x:hidden;min-height:0;
+    scrollbar-width:thin;scrollbar-color:rgba(0,0,0,.15) transparent}
+  .twk-body::-webkit-scrollbar{width:8px}
+  .twk-body::-webkit-scrollbar-track{background:transparent;margin:2px}
+  .twk-body::-webkit-scrollbar-thumb{background:rgba(0,0,0,.15);border-radius:4px;
+    border:2px solid transparent;background-clip:content-box}
+  .twk-body::-webkit-scrollbar-thumb:hover{background:rgba(0,0,0,.25);
+    border:2px solid transparent;background-clip:content-box}
+  .twk-row{display:flex;flex-direction:column;gap:5px}
+  .twk-row-h{flex-direction:row;align-items:center;justify-content:space-between;gap:10px}
+  .twk-lbl{display:flex;justify-content:space-between;align-items:baseline;
+    color:rgba(41,38,27,.72)}
+  .twk-lbl>span:first-child{font-weight:500}
+  .twk-val{color:rgba(41,38,27,.5);font-variant-numeric:tabular-nums}
+
+  .twk-sect{font-size:10px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;
+    color:rgba(41,38,27,.45);padding:10px 0 0}
+  .twk-sect:first-child{padding-top:0}
+
+  .twk-field{appearance:none;width:100%;height:26px;padding:0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;
+    background:rgba(255,255,255,.6);color:inherit;font:inherit;outline:none}
+  .twk-field:focus{border-color:rgba(0,0,0,.25);background:rgba(255,255,255,.85)}
+  select.twk-field{padding-right:22px;
+    background-image:url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='10' height='6' viewBox='0 0 10 6'><path fill='rgba(0,0,0,.5)' d='M0 0h10L5 6z'/></svg>");
+    background-repeat:no-repeat;background-position:right 8px center}
+
+  .twk-slider{appearance:none;-webkit-appearance:none;width:100%;height:4px;margin:6px 0;
+    border-radius:999px;background:rgba(0,0,0,.12);outline:none}
+  .twk-slider::-webkit-slider-thumb{-webkit-appearance:none;appearance:none;
+    width:14px;height:14px;border-radius:50%;background:#fff;
+    border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+  .twk-slider::-moz-range-thumb{width:14px;height:14px;border-radius:50%;
+    background:#fff;border:.5px solid rgba(0,0,0,.12);box-shadow:0 1px 3px rgba(0,0,0,.2);cursor:default}
+
+  .twk-seg{position:relative;display:flex;padding:2px;border-radius:8px;
+    background:rgba(0,0,0,.06);user-select:none}
+  .twk-seg-thumb{position:absolute;top:2px;bottom:2px;border-radius:6px;
+    background:rgba(255,255,255,.9);box-shadow:0 1px 2px rgba(0,0,0,.12);
+    transition:left .15s cubic-bezier(.3,.7,.4,1),width .15s}
+  .twk-seg.dragging .twk-seg-thumb{transition:none}
+  .twk-seg button{appearance:none;position:relative;z-index:1;flex:1;border:0;
+    background:transparent;color:inherit;font:inherit;font-weight:500;min-height:22px;
+    border-radius:6px;cursor:default;padding:4px 6px;line-height:1.2;
+    overflow-wrap:anywhere}
+
+  .twk-toggle{position:relative;width:32px;height:18px;border:0;border-radius:999px;
+    background:rgba(0,0,0,.15);transition:background .15s;cursor:default;padding:0}
+  .twk-toggle[data-on="1"]{background:#34c759}
+  .twk-toggle i{position:absolute;top:2px;left:2px;width:14px;height:14px;border-radius:50%;
+    background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.25);transition:transform .15s}
+  .twk-toggle[data-on="1"] i{transform:translateX(14px)}
+
+  .twk-num{display:flex;align-items:center;height:26px;padding:0 0 0 8px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:7px;background:rgba(255,255,255,.6)}
+  .twk-num-lbl{font-weight:500;color:rgba(41,38,27,.6);cursor:ew-resize;
+    user-select:none;padding-right:8px}
+  .twk-num input{flex:1;min-width:0;height:100%;border:0;background:transparent;
+    font:inherit;font-variant-numeric:tabular-nums;text-align:right;padding:0 8px 0 0;
+    outline:none;color:inherit;-moz-appearance:textfield}
+  .twk-num input::-webkit-inner-spin-button,.twk-num input::-webkit-outer-spin-button{
+    -webkit-appearance:none;margin:0}
+  .twk-num-unit{padding-right:8px;color:rgba(41,38,27,.45)}
+
+  .twk-btn{appearance:none;height:26px;padding:0 12px;border:0;border-radius:7px;
+    background:rgba(0,0,0,.78);color:#fff;font:inherit;font-weight:500;cursor:default}
+  .twk-btn:hover{background:rgba(0,0,0,.88)}
+  .twk-btn.secondary{background:rgba(0,0,0,.06);color:inherit}
+  .twk-btn.secondary:hover{background:rgba(0,0,0,.1)}
+
+  .twk-swatch{appearance:none;-webkit-appearance:none;width:56px;height:22px;
+    border:.5px solid rgba(0,0,0,.1);border-radius:6px;padding:0;cursor:default;
+    background:transparent;flex-shrink:0}
+  .twk-swatch::-webkit-color-swatch-wrapper{padding:0}
+  .twk-swatch::-webkit-color-swatch{border:0;border-radius:5.5px}
+  .twk-swatch::-moz-color-swatch{border:0;border-radius:5.5px}
+
+  .twk-chips{display:flex;gap:6px}
+  .twk-chip{position:relative;appearance:none;flex:1;min-width:0;height:46px;
+    padding:0;border:0;border-radius:6px;overflow:hidden;cursor:default;
+    box-shadow:0 0 0 .5px rgba(0,0,0,.12),0 1px 2px rgba(0,0,0,.06);
+    transition:transform .12s cubic-bezier(.3,.7,.4,1),box-shadow .12s}
+  .twk-chip:hover{transform:translateY(-1px);
+    box-shadow:0 0 0 .5px rgba(0,0,0,.18),0 4px 10px rgba(0,0,0,.12)}
+  .twk-chip[data-on="1"]{box-shadow:0 0 0 1.5px rgba(0,0,0,.85),
+    0 2px 6px rgba(0,0,0,.15)}
+  .twk-chip>span{position:absolute;top:0;bottom:0;right:0;width:34%;
+    display:flex;flex-direction:column;box-shadow:-1px 0 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i{flex:1;box-shadow:0 -1px 0 rgba(0,0,0,.1)}
+  .twk-chip>span>i:first-child{box-shadow:none}
+  .twk-chip svg{position:absolute;top:6px;left:6px;width:13px;height:13px;
+    filter:drop-shadow(0 1px 1px rgba(0,0,0,.3))}
+`;
+
+// ── useTweaks ───────────────────────────────────────────────────────────────
+// Single source of truth for tweak values. setTweak persists via the host
+// (__edit_mode_set_keys → host rewrites the EDITMODE block on disk).
+function useTweaks(defaults) {
+  const [values, setValues] = React.useState(defaults);
+  // Accepts either setTweak('key', value) or setTweak({ key: value, ... }) so a
+  // useState-style call doesn't write a "[object Object]" key into the persisted
+  // JSON block.
+  const setTweak = React.useCallback((keyOrEdits, val) => {
+    const edits = typeof keyOrEdits === 'object' && keyOrEdits !== null
+      ? keyOrEdits : { [keyOrEdits]: val };
+    setValues((prev) => ({ ...prev, ...edits }));
+    window.parent.postMessage({ type: '__edit_mode_set_keys', edits }, '*');
+    // Same-window signal so in-page listeners (deck-stage rail thumbnails)
+    // can react — the parent message only reaches the host, not peers.
+    window.dispatchEvent(new CustomEvent('tweakchange', { detail: edits }));
+  }, []);
+  return [values, setTweak];
+}
+
+// ── TweaksPanel ─────────────────────────────────────────────────────────────
+// Floating shell. Registers the protocol listener BEFORE announcing
+// availability — if the announce ran first, the host's activate could land
+// before our handler exists and the toolbar toggle would silently no-op.
+// The close button posts __edit_mode_dismissed so the host's toolbar toggle
+// flips off in lockstep; the host echoes __deactivate_edit_mode back which
+// is what actually hides the panel.
+function TweaksPanel({ title = 'Tweaks', noDeckControls = false, children }) {
+  const [open, setOpen] = React.useState(false);
+  const dragRef = React.useRef(null);
+  // Auto-inject a rail toggle when a <deck-stage> is on the page. The
+  // toggle drives the deck's per-viewer _railVisible via window message;
+  // state is mirrored from the same localStorage key the deck reads so
+  // the control reflects reality across reloads. The mechanism is the
+  // message — authors who want custom placement can post it directly
+  // and pass noDeckControls to suppress this one.
+  const hasDeckStage = React.useMemo(
+    () => typeof document !== 'undefined' && !!document.querySelector('deck-stage'),
+    [],
+  );
+  // Hide the toggle until the host has actually enabled the rail (the
+  // __omelette_rail_enabled window message, posted only when the
+  // omelette_deck_rail_enabled flag is on for this user). The initial read
+  // covers TweaksPanel mounting after the message already arrived; the
+  // listener covers the common case of mounting first.
+  const [railEnabled, setRailEnabled] = React.useState(
+    () => hasDeckStage && !!document.querySelector('deck-stage')?._railEnabled,
+  );
+  React.useEffect(() => {
+    if (!hasDeckStage || railEnabled) return undefined;
+    const onMsg = (e) => {
+      if (e.data && e.data.type === '__omelette_rail_enabled') setRailEnabled(true);
+    };
+    window.addEventListener('message', onMsg);
+    return () => window.removeEventListener('message', onMsg);
+  }, [hasDeckStage, railEnabled]);
+  const [railVisible, setRailVisible] = React.useState(() => {
+    try { return localStorage.getItem('deck-stage.railVisible') !== '0'; } catch (e) { return true; }
+  });
+  const toggleRail = (on) => {
+    setRailVisible(on);
+    window.postMessage({ type: '__deck_rail_visible', on }, '*');
+  };
+  const offsetRef = React.useRef({ x: 16, y: 16 });
+  const PAD = 16;
+
+  const clampToViewport = React.useCallback(() => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const w = panel.offsetWidth, h = panel.offsetHeight;
+    const maxRight = Math.max(PAD, window.innerWidth - w - PAD);
+    const maxBottom = Math.max(PAD, window.innerHeight - h - PAD);
+    offsetRef.current = {
+      x: Math.min(maxRight, Math.max(PAD, offsetRef.current.x)),
+      y: Math.min(maxBottom, Math.max(PAD, offsetRef.current.y)),
+    };
+    panel.style.right = offsetRef.current.x + 'px';
+    panel.style.bottom = offsetRef.current.y + 'px';
+  }, []);
+
+  React.useEffect(() => {
+    if (!open) return;
+    clampToViewport();
+    if (typeof ResizeObserver === 'undefined') {
+      window.addEventListener('resize', clampToViewport);
+      return () => window.removeEventListener('resize', clampToViewport);
+    }
+    const ro = new ResizeObserver(clampToViewport);
+    ro.observe(document.documentElement);
+    return () => ro.disconnect();
+  }, [open, clampToViewport]);
+
+  React.useEffect(() => {
+    const onMsg = (e) => {
+      const t = e?.data?.type;
+      if (t === '__activate_edit_mode') setOpen(true);
+      else if (t === '__deactivate_edit_mode') setOpen(false);
+    };
+    window.addEventListener('message', onMsg);
+    window.parent.postMessage({ type: '__edit_mode_available' }, '*');
+    return () => window.removeEventListener('message', onMsg);
+  }, []);
+
+  const dismiss = () => {
+    setOpen(false);
+    window.parent.postMessage({ type: '__edit_mode_dismissed' }, '*');
+  };
+
+  const onDragStart = (e) => {
+    const panel = dragRef.current;
+    if (!panel) return;
+    const r = panel.getBoundingClientRect();
+    const sx = e.clientX, sy = e.clientY;
+    const startRight = window.innerWidth - r.right;
+    const startBottom = window.innerHeight - r.bottom;
+    const move = (ev) => {
+      offsetRef.current = {
+        x: startRight - (ev.clientX - sx),
+        y: startBottom - (ev.clientY - sy),
+      };
+      clampToViewport();
+    };
+    const up = () => {
+      window.removeEventListener('mousemove', move);
+      window.removeEventListener('mouseup', up);
+    };
+    window.addEventListener('mousemove', move);
+    window.addEventListener('mouseup', up);
+  };
+
+  if (!open) return null;
+  return (
+    <>
+      <style>{__TWEAKS_STYLE}</style>
+      <div ref={dragRef} className="twk-panel" data-noncommentable=""
+           style={{ right: offsetRef.current.x, bottom: offsetRef.current.y }}>
+        <div className="twk-hd" onMouseDown={onDragStart}>
+          <b>{title}</b>
+          <button className="twk-x" aria-label="Close tweaks"
+                  onMouseDown={(e) => e.stopPropagation()}
+                  onClick={dismiss}>✕</button>
+        </div>
+        <div className="twk-body">
+          {children}
+          {hasDeckStage && railEnabled && !noDeckControls && (
+            <TweakSection label="Deck">
+              <TweakToggle label="Thumbnail rail" value={railVisible} onChange={toggleRail} />
+            </TweakSection>
+          )}
+        </div>
+      </div>
+    </>
+  );
+}
+
+// ── Layout helpers ──────────────────────────────────────────────────────────
+
+function TweakSection({ label, children }) {
+  return (
+    <>
+      <div className="twk-sect">{label}</div>
+      {children}
+    </>
+  );
+}
+
+function TweakRow({ label, value, children, inline = false }) {
+  return (
+    <div className={inline ? 'twk-row twk-row-h' : 'twk-row'}>
+      <div className="twk-lbl">
+        <span>{label}</span>
+        {value != null && <span className="twk-val">{value}</span>}
+      </div>
+      {children}
+    </div>
+  );
+}
+
+// ── Controls ────────────────────────────────────────────────────────────────
+
+function TweakSlider({ label, value, min = 0, max = 100, step = 1, unit = '', onChange }) {
+  return (
+    <TweakRow label={label} value={`${value}${unit}`}>
+      <input type="range" className="twk-slider" min={min} max={max} step={step}
+             value={value} onChange={(e) => onChange(Number(e.target.value))} />
+    </TweakRow>
+  );
+}
+
+function TweakToggle({ label, value, onChange }) {
+  return (
+    <div className="twk-row twk-row-h">
+      <div className="twk-lbl"><span>{label}</span></div>
+      <button type="button" className="twk-toggle" data-on={value ? '1' : '0'}
+              role="switch" aria-checked={!!value}
+              onClick={() => onChange(!value)}><i /></button>
+    </div>
+  );
+}
+
+function TweakRadio({ label, value, options, onChange }) {
+  const trackRef = React.useRef(null);
+  const [dragging, setDragging] = React.useState(false);
+  // The active value is read by pointer-move handlers attached for the lifetime
+  // of a drag — ref it so a stale closure doesn't fire onChange for every move.
+  const valueRef = React.useRef(value);
+  valueRef.current = value;
+
+  // Segments wrap mid-word once per-segment width runs out. The track is
+  // ~248px (280 panel − 28 body pad − 4 seg pad), each button loses 12px
+  // to its own padding, and 11.5px system-ui averages ~6.3px/char — so 2
+  // options fit ~16 chars each, 3 fit ~10. Past that (or >3 options), fall
+  // back to a dropdown rather than wrap.
+  const labelLen = (o) => String(typeof o === 'object' ? o.label : o).length;
+  const maxLen = options.reduce((m, o) => Math.max(m, labelLen(o)), 0);
+  const fitsAsSegments = maxLen <= ({ 2: 16, 3: 10 }[options.length] ?? 0);
+  if (!fitsAsSegments) {
+    // <select> emits strings — map back to the original option value so the
+    // fallback stays type-preserving (numbers, booleans) like the segment path.
+    const resolve = (s) => {
+      const m = options.find((o) => String(typeof o === 'object' ? o.value : o) === s);
+      return m === undefined ? s : typeof m === 'object' ? m.value : m;
+    };
+    return <TweakSelect label={label} value={value} options={options}
+                        onChange={(s) => onChange(resolve(s))} />;
+  }
+  const opts = options.map((o) => (typeof o === 'object' ? o : { value: o, label: o }));
+  const idx = Math.max(0, opts.findIndex((o) => o.value === value));
+  const n = opts.length;
+
+  const segAt = (clientX) => {
+    const r = trackRef.current.getBoundingClientRect();
+    const inner = r.width - 4;
+    const i = Math.floor(((clientX - r.left - 2) / inner) * n);
+    return opts[Math.max(0, Math.min(n - 1, i))].value;
+  };
+
+  const onPointerDown = (e) => {
+    setDragging(true);
+    const v0 = segAt(e.clientX);
+    if (v0 !== valueRef.current) onChange(v0);
+    const move = (ev) => {
+      if (!trackRef.current) return;
+      const v = segAt(ev.clientX);
+      if (v !== valueRef.current) onChange(v);
+    };
+    const up = () => {
+      setDragging(false);
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+
+  return (
+    <TweakRow label={label}>
+      <div ref={trackRef} role="radiogroup" onPointerDown={onPointerDown}
+           className={dragging ? 'twk-seg dragging' : 'twk-seg'}>
+        <div className="twk-seg-thumb"
+             style={{ left: `calc(2px + ${idx} * (100% - 4px) / ${n})`,
+                      width: `calc((100% - 4px) / ${n})` }} />
+        {opts.map((o) => (
+          <button key={o.value} type="button" role="radio" aria-checked={o.value === value}>
+            {o.label}
+          </button>
+        ))}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakSelect({ label, value, options, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <select className="twk-field" value={value} onChange={(e) => onChange(e.target.value)}>
+        {options.map((o) => {
+          const v = typeof o === 'object' ? o.value : o;
+          const l = typeof o === 'object' ? o.label : o;
+          return <option key={v} value={v}>{l}</option>;
+        })}
+      </select>
+    </TweakRow>
+  );
+}
+
+function TweakText({ label, value, placeholder, onChange }) {
+  return (
+    <TweakRow label={label}>
+      <input className="twk-field" type="text" value={value} placeholder={placeholder}
+             onChange={(e) => onChange(e.target.value)} />
+    </TweakRow>
+  );
+}
+
+function TweakNumber({ label, value, min, max, step = 1, unit = '', onChange }) {
+  const clamp = (n) => {
+    if (min != null && n < min) return min;
+    if (max != null && n > max) return max;
+    return n;
+  };
+  const startRef = React.useRef({ x: 0, val: 0 });
+  const onScrubStart = (e) => {
+    e.preventDefault();
+    startRef.current = { x: e.clientX, val: value };
+    const decimals = (String(step).split('.')[1] || '').length;
+    const move = (ev) => {
+      const dx = ev.clientX - startRef.current.x;
+      const raw = startRef.current.val + dx * step;
+      const snapped = Math.round(raw / step) * step;
+      onChange(clamp(Number(snapped.toFixed(decimals))));
+    };
+    const up = () => {
+      window.removeEventListener('pointermove', move);
+      window.removeEventListener('pointerup', up);
+    };
+    window.addEventListener('pointermove', move);
+    window.addEventListener('pointerup', up);
+  };
+  return (
+    <div className="twk-num">
+      <span className="twk-num-lbl" onPointerDown={onScrubStart}>{label}</span>
+      <input type="number" value={value} min={min} max={max} step={step}
+             onChange={(e) => onChange(clamp(Number(e.target.value)))} />
+      {unit && <span className="twk-num-unit">{unit}</span>}
+    </div>
+  );
+}
+
+// Relative-luminance contrast pick — checkmarks drawn over a swatch need to
+// read on both #111 and #fafafa without per-option configuration. Hex input
+// only (#rgb / #rrggbb); named or rgb()/hsl() colors fall through to "light".
+function __twkIsLight(hex) {
+  const h = String(hex).replace('#', '');
+  const x = h.length === 3 ? h.replace(/./g, (c) => c + c) : h.padEnd(6, '0');
+  const n = parseInt(x.slice(0, 6), 16);
+  if (Number.isNaN(n)) return true;
+  const r = (n >> 16) & 255, g = (n >> 8) & 255, b = n & 255;
+  return r * 299 + g * 587 + b * 114 > 148000;
+}
+
+const __TwkCheck = ({ light }) => (
+  <svg viewBox="0 0 14 14" aria-hidden="true">
+    <path d="M3 7.2 5.8 10 11 4.2" fill="none" strokeWidth="2.2"
+          strokeLinecap="round" strokeLinejoin="round"
+          stroke={light ? 'rgba(0,0,0,.78)' : '#fff'} />
+  </svg>
+);
+
+// TweakColor — curated color/palette picker. Each option is either a single
+// hex string or an array of 1-5 hex strings; the card adapts — a lone color
+// renders solid, a palette renders colors[0] as the hero (left ~2/3) with the
+// rest stacked in a sharp column on the right. onChange emits the
+// option in the shape it was passed (string stays string, array stays array).
+// Without options it falls back to the native color input for back-compat.
+function TweakColor({ label, value, options, onChange }) {
+  if (!options || !options.length) {
+    return (
+      <div className="twk-row twk-row-h">
+        <div className="twk-lbl"><span>{label}</span></div>
+        <input type="color" className="twk-swatch" value={value}
+               onChange={(e) => onChange(e.target.value)} />
+      </div>
+    );
+  }
+  // Native <input type=color> emits lowercase hex per the HTML spec, so
+  // compare case-insensitively. String() guards JSON.stringify(undefined),
+  // which returns the primitive undefined (no .toLowerCase).
+  const key = (o) => String(JSON.stringify(o)).toLowerCase();
+  const cur = key(value);
+  return (
+    <TweakRow label={label}>
+      <div className="twk-chips" role="radiogroup">
+        {options.map((o, i) => {
+          const colors = Array.isArray(o) ? o : [o];
+          const [hero, ...rest] = colors;
+          const sup = rest.slice(0, 4);
+          const on = key(o) === cur;
+          return (
+            <button key={i} type="button" className="twk-chip" role="radio"
+                    aria-checked={on} data-on={on ? '1' : '0'}
+                    aria-label={colors.join(', ')} title={colors.join(' · ')}
+                    style={{ background: hero }}
+                    onClick={() => onChange(o)}>
+              {sup.length > 0 && (
+                <span>
+                  {sup.map((c, j) => <i key={j} style={{ background: c }} />)}
+                </span>
+              )}
+              {on && <__TwkCheck light={__twkIsLight(hero)} />}
+            </button>
+          );
+        })}
+      </div>
+    </TweakRow>
+  );
+}
+
+function TweakButton({ label, onClick, secondary = false }) {
+  return (
+    <button type="button" className={secondary ? 'twk-btn secondary' : 'twk-btn'}
+            onClick={onClick}>{label}</button>
+  );
+}
+
+Object.assign(window, {
+  useTweaks, TweaksPanel, TweakSection, TweakRow,
+  TweakSlider, TweakToggle, TweakRadio, TweakSelect,
+  TweakText, TweakNumber, TweakColor, TweakButton,
+});
+</script>
+
+<script type="text/babel">
+
+// iOS.jsx — Simplified iOS 26 (Liquid Glass) device frame
+// Based on the iOS 26 UI Kit + Figma status bar spec. No assets, no deps.
+// Exports: IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard
+
+// ─────────────────────────────────────────────────────────────
+// Status bar
+// ─────────────────────────────────────────────────────────────
+function IOSStatusBar({ dark = false, time = '9:41' }) {
+  const c = dark ? '#fff' : '#000';
+  return (
+    <div style={{
+      display: 'flex', gap: 154, alignItems: 'center', justifyContent: 'center',
+      padding: '21px 24px 19px', boxSizing: 'border-box',
+      position: 'relative', zIndex: 20, width: '100%',
+    }}>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', paddingTop: 1.5 }}>
+        <span style={{
+          fontFamily: '-apple-system, "SF Pro", system-ui', fontWeight: 590,
+          fontSize: 17, lineHeight: '22px', color: c,
+        }}>{time}</span>
+      </div>
+      <div style={{ flex: 1, height: 22, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 7, paddingTop: 1, paddingRight: 1 }}>
+        <svg width="19" height="12" viewBox="0 0 19 12">
+          <rect x="0" y="7.5" width="3.2" height="4.5" rx="0.7" fill={c}/>
+          <rect x="4.8" y="5" width="3.2" height="7" rx="0.7" fill={c}/>
+          <rect x="9.6" y="2.5" width="3.2" height="9.5" rx="0.7" fill={c}/>
+          <rect x="14.4" y="0" width="3.2" height="12" rx="0.7" fill={c}/>
+        </svg>
+        <svg width="17" height="12" viewBox="0 0 17 12">
+          <path d="M8.5 3.2C10.8 3.2 12.9 4.1 14.4 5.6L15.5 4.5C13.7 2.7 11.2 1.5 8.5 1.5C5.8 1.5 3.3 2.7 1.5 4.5L2.6 5.6C4.1 4.1 6.2 3.2 8.5 3.2Z" fill={c}/>
+          <path d="M8.5 6.8C9.9 6.8 11.1 7.3 12 8.2L13.1 7.1C11.8 5.9 10.2 5.1 8.5 5.1C6.8 5.1 5.2 5.9 3.9 7.1L5 8.2C5.9 7.3 7.1 6.8 8.5 6.8Z" fill={c}/>
+          <circle cx="8.5" cy="10.5" r="1.5" fill={c}/>
+        </svg>
+        <svg width="27" height="13" viewBox="0 0 27 13">
+          <rect x="0.5" y="0.5" width="23" height="12" rx="3.5" stroke={c} strokeOpacity="0.35" fill="none"/>
+          <rect x="2" y="2" width="20" height="9" rx="2" fill={c}/>
+          <path d="M25 4.5V8.5C25.8 8.2 26.5 7.2 26.5 6.5C26.5 5.8 25.8 4.8 25 4.5Z" fill={c} fillOpacity="0.4"/>
+        </svg>
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Liquid glass pill — blur + tint + shine
+// ─────────────────────────────────────────────────────────────
+function IOSGlassPill({ children, dark = false, style = {} }) {
+  return (
+    <div style={{
+      height: 44, minWidth: 44, borderRadius: 9999,
+      position: 'relative', overflow: 'hidden',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      boxShadow: dark
+        ? '0 2px 6px rgba(0,0,0,0.35), 0 6px 16px rgba(0,0,0,0.2)'
+        : '0 1px 3px rgba(0,0,0,0.07), 0 3px 10px rgba(0,0,0,0.06)',
+      ...style,
+    }}>
+      {/* blur + tint */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.28)' : 'rgba(255,255,255,0.5)',
+      }} />
+      {/* shine */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 9999,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15), inset -1px -1px 1px rgba(255,255,255,0.08)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+      }} />
+      <div style={{ position: 'relative', zIndex: 1, display: 'flex', alignItems: 'center', padding: '0 4px' }}>
+        {children}
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Navigation bar — glass pills + large title
+// ─────────────────────────────────────────────────────────────
+function IOSNavBar({ title = 'Title', dark = false, trailingIcon = true }) {
+  const muted = dark ? 'rgba(255,255,255,0.6)' : '#404040';
+  const text = dark ? '#fff' : '#000';
+  const pillIcon = (content) => (
+    <IOSGlassPill dark={dark}>
+      <div style={{ width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        {content}
+      </div>
+    </IOSGlassPill>
+  );
+  return (
+    <div style={{
+      display: 'flex', flexDirection: 'column', gap: 10,
+      paddingTop: 62, paddingBottom: 10, position: 'relative', zIndex: 5,
+    }}>
+      <div style={{
+        display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+        padding: '0 16px',
+      }}>
+        {/* back chevron */}
+        {pillIcon(
+          <svg width="12" height="20" viewBox="0 0 12 20" fill="none" style={{ marginLeft: -1 }}>
+            <path d="M10 2L2 10l8 8" stroke={muted} strokeWidth="2.5" strokeLinecap="round" strokeLinejoin="round"/>
+          </svg>
+        )}
+        {/* trailing ellipsis */}
+        {trailingIcon && pillIcon(
+          <svg width="22" height="6" viewBox="0 0 22 6">
+            <circle cx="3" cy="3" r="2.5" fill={muted}/>
+            <circle cx="11" cy="3" r="2.5" fill={muted}/>
+            <circle cx="19" cy="3" r="2.5" fill={muted}/>
+          </svg>
+        )}
+      </div>
+      {/* large title */}
+      <div style={{
+        padding: '0 16px',
+        fontFamily: '-apple-system, system-ui',
+        fontSize: 34, fontWeight: 700, lineHeight: '41px',
+        color: text, letterSpacing: 0.4,
+      }}>{title}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Grouped list (inset card, r:26) + row (52px)
+// ─────────────────────────────────────────────────────────────
+function IOSListRow({ title, detail, icon, chevron = true, isLast = false, dark = false }) {
+  const text = dark ? '#fff' : '#000';
+  const sec = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const ter = dark ? 'rgba(235,235,245,0.3)' : 'rgba(60,60,67,0.3)';
+  const sep = dark ? 'rgba(84,84,88,0.65)' : 'rgba(60,60,67,0.12)';
+  return (
+    <div style={{
+      display: 'flex', alignItems: 'center', minHeight: 52,
+      padding: '0 16px', position: 'relative',
+      fontFamily: '-apple-system, system-ui', fontSize: 17,
+      letterSpacing: -0.43,
+    }}>
+      {icon && (
+        <div style={{
+          width: 30, height: 30, borderRadius: 7, background: icon,
+          marginRight: 12, flexShrink: 0,
+        }} />
+      )}
+      <div style={{ flex: 1, color: text }}>{title}</div>
+      {detail && <span style={{ color: sec, marginRight: 6 }}>{detail}</span>}
+      {chevron && (
+        <svg width="8" height="14" viewBox="0 0 8 14" style={{ flexShrink: 0 }}>
+          <path d="M1 1l6 6-6 6" stroke={ter} strokeWidth="2" fill="none" strokeLinecap="round" strokeLinejoin="round"/>
+        </svg>
+      )}
+      {!isLast && (
+        <div style={{
+          position: 'absolute', bottom: 0, right: 0,
+          left: icon ? 58 : 16, height: 0.5, background: sep,
+        }} />
+      )}
+    </div>
+  );
+}
+
+function IOSList({ header, children, dark = false }) {
+  const hc = dark ? 'rgba(235,235,245,0.6)' : 'rgba(60,60,67,0.6)';
+  const bg = dark ? '#1C1C1E' : '#fff';
+  return (
+    <div>
+      {header && (
+        <div style={{
+          fontFamily: '-apple-system, system-ui', fontSize: 13,
+          color: hc, textTransform: 'uppercase',
+          padding: '8px 36px 6px', letterSpacing: -0.08,
+        }}>{header}</div>
+      )}
+      <div style={{
+        background: bg, borderRadius: 26,
+        margin: '0 16px', overflow: 'hidden',
+      }}>{children}</div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Device frame
+// ─────────────────────────────────────────────────────────────
+function IOSDevice({
+  children, width = 402, height = 874, dark = false,
+  title, keyboard = false,
+}) {
+  return (
+    <div style={{
+      width, height, borderRadius: 48, overflow: 'hidden',
+      position: 'relative', background: dark ? '#000' : '#F2F2F7',
+      boxShadow: '0 40px 80px rgba(0,0,0,0.18), 0 0 0 1px rgba(0,0,0,0.12)',
+      fontFamily: '-apple-system, system-ui, sans-serif',
+      WebkitFontSmoothing: 'antialiased',
+    }}>
+      {/* dynamic island */}
+      <div style={{
+        position: 'absolute', top: 11, left: '50%', transform: 'translateX(-50%)',
+        width: 126, height: 37, borderRadius: 24, background: '#000', zIndex: 50,
+      }} />
+      {/* status bar (absolute) */}
+      <div style={{ position: 'absolute', top: 0, left: 0, right: 0, zIndex: 10 }}>
+        <IOSStatusBar dark={dark} />
+      </div>
+      {/* nav + content */}
+      <div style={{ height: '100%', display: 'flex', flexDirection: 'column' }}>
+        {title !== undefined && <IOSNavBar title={title} dark={dark} />}
+        <div style={{ flex: 1, overflow: 'auto' }}>{children}</div>
+        {keyboard && <IOSKeyboard dark={dark} />}
+      </div>
+      {/* home indicator — always on top */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0, right: 0, zIndex: 60,
+        height: 34, display: 'flex', justifyContent: 'center', alignItems: 'flex-end',
+        paddingBottom: 8, pointerEvents: 'none',
+      }}>
+        <div style={{
+          width: 139, height: 5, borderRadius: 100,
+          background: dark ? 'rgba(255,255,255,0.7)' : 'rgba(0,0,0,0.25)',
+        }} />
+      </div>
+    </div>
+  );
+}
+
+// ─────────────────────────────────────────────────────────────
+// Keyboard — iOS 26 liquid glass
+// ─────────────────────────────────────────────────────────────
+function IOSKeyboard({ dark = false }) {
+  const glyph = dark ? 'rgba(255,255,255,0.7)' : '#595959';
+  const sugg = dark ? 'rgba(255,255,255,0.6)' : '#333';
+  const keyBg = dark ? 'rgba(255,255,255,0.22)' : 'rgba(255,255,255,0.85)';
+
+  // special-key icons
+  const icons = {
+    shift: <svg width="19" height="17" viewBox="0 0 19 17"><path d="M9.5 1L1 9.5h4.5V16h8V9.5H18L9.5 1z" fill={glyph}/></svg>,
+    del: <svg width="23" height="17" viewBox="0 0 23 17"><path d="M7 1h13a2 2 0 012 2v11a2 2 0 01-2 2H7l-6-7.5L7 1z" fill="none" stroke={glyph} strokeWidth="1.6" strokeLinejoin="round"/><path d="M10 5l7 7M17 5l-7 7" stroke={glyph} strokeWidth="1.6" strokeLinecap="round"/></svg>,
+    ret: <svg width="20" height="14" viewBox="0 0 20 14"><path d="M18 1v6H4m0 0l4-4M4 7l4 4" fill="none" stroke="#fff" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round"/></svg>,
+  };
+
+  const key = (content, { w, flex, ret, fs = 25, k } = {}) => (
+    <div key={k} style={{
+      height: 42, borderRadius: 8.5,
+      flex: flex ? 1 : undefined, width: w, minWidth: 0,
+      background: ret ? '#08f' : keyBg,
+      boxShadow: '0 1px 0 rgba(0,0,0,0.075)',
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      fontFamily: '-apple-system, "SF Compact", system-ui',
+      fontSize: fs, fontWeight: 458, color: ret ? '#fff' : glyph,
+    }}>{content}</div>
+  );
+
+  const row = (keys, pad = 0) => (
+    <div style={{ display: 'flex', gap: 6.5, justifyContent: 'center', padding: `0 ${pad}px` }}>
+      {keys.map(l => key(l, { flex: true, k: l }))}
+    </div>
+  );
+
+  return (
+    <div style={{
+      position: 'relative', zIndex: 15, borderRadius: 27, overflow: 'hidden',
+      padding: '11px 0 2px',
+      display: 'flex', flexDirection: 'column', alignItems: 'center',
+      boxShadow: dark
+        ? '0 -2px 20px rgba(0,0,0,0.09)'
+        : '0 -1px 6px rgba(0,0,0,0.018), 0 -3px 20px rgba(0,0,0,0.012)',
+    }}>
+      {/* liquid glass bg — same recipe as nav pills */}
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        backdropFilter: 'blur(12px) saturate(180%)',
+        WebkitBackdropFilter: 'blur(12px) saturate(180%)',
+        background: dark ? 'rgba(120,120,128,0.14)' : 'rgba(255,255,255,0.25)',
+      }} />
+      <div style={{
+        position: 'absolute', inset: 0, borderRadius: 27,
+        boxShadow: dark
+          ? 'inset 1.5px 1.5px 1px rgba(255,255,255,0.15)'
+          : 'inset 1.5px 1.5px 1px rgba(255,255,255,0.7), inset -1px -1px 1px rgba(255,255,255,0.4)',
+        border: dark ? '0.5px solid rgba(255,255,255,0.15)' : '0.5px solid rgba(0,0,0,0.06)',
+        pointerEvents: 'none',
+      }} />
+
+      {/* autocorrect bar */}
+      <div style={{
+        display: 'flex', gap: 20, alignItems: 'center',
+        padding: '8px 22px 13px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {['"The"', 'the', 'to'].map((w, i) => (
+          <React.Fragment key={i}>
+            {i > 0 && <div style={{ width: 1, height: 25, background: '#ccc', opacity: 0.3 }} />}
+            <div style={{
+              flex: 1, textAlign: 'center',
+              fontFamily: '-apple-system, system-ui', fontSize: 17,
+              color: sugg, letterSpacing: -0.43, lineHeight: '22px',
+            }}>{w}</div>
+          </React.Fragment>
+        ))}
+      </div>
+
+      {/* key layout */}
+      <div style={{
+        display: 'flex', flexDirection: 'column', gap: 13,
+        padding: '0 6.5px', width: '100%', boxSizing: 'border-box',
+        position: 'relative',
+      }}>
+        {row(['q','w','e','r','t','y','u','i','o','p'])}
+        {row(['a','s','d','f','g','h','j','k','l'], 20)}
+        <div style={{ display: 'flex', gap: 14.25, alignItems: 'center' }}>
+          {key(icons.shift, { w: 45, k: 'shift' })}
+          <div style={{ display: 'flex', gap: 6.5, flex: 1 }}>
+            {['z','x','c','v','b','n','m'].map(l => key(l, { flex: true, k: l }))}
+          </div>
+          {key(icons.del, { w: 45, k: 'del' })}
+        </div>
+        <div style={{ display: 'flex', gap: 6, alignItems: 'center' }}>
+          {key('ABC', { w: 92.25, fs: 18, k: 'abc' })}
+          {key('', { flex: true, k: 'space' })}
+          {key(icons.ret, { w: 92.25, ret: true, k: 'ret' })}
+        </div>
+      </div>
+
+      {/* bottom spacer (emoji+mic area, icons omitted) */}
+      <div style={{ height: 56, width: '100%', position: 'relative' }} />
+    </div>
+  );
+}
+
+Object.assign(window, {
+  IOSDevice, IOSStatusBar, IOSNavBar, IOSGlassPill, IOSList, IOSListRow, IOSKeyboard,
+});
+</script>
+
+<script type="text/babel">
+/* shared.jsx — common pieces: fruits (CSS art), header, footer, sticker */
+const { useState, useEffect, useMemo, useRef } = React;
+
+/* ---------- Fruit illustrations (CSS only) ---------- */
+
+function PineappleArt({ size = 120 }) {
+  return (
+    <div style={{ width: size, height: size * 1.3, position: 'relative' }}>
+      {/* leaves */}
+      <div style={{
+        position: 'absolute', top: 0, left: '50%', transform: 'translateX(-50%)',
+        width: size * 0.7, height: size * 0.5,
+      }}>
+        {[-30, -10, 10, 30].map((rot, i) => (
+          <div key={i} style={{
+            position: 'absolute', left: '50%', bottom: 0,
+            transform: `translateX(-50%) rotate(${rot}deg)`,
+            transformOrigin: 'bottom center',
+            width: size * 0.12, height: size * 0.45,
+            background: 'var(--leaf)',
+            clipPath: 'polygon(50% 0, 100% 100%, 0 100%)',
+          }} />
+        ))}
+      </div>
+      {/* body */}
+      <div style={{
+        position: 'absolute', bottom: 0, left: 0,
+        width: size, height: size * 0.85,
+        background: 'var(--citrus)',
+        borderRadius: '40% 40% 45% 45%',
+        backgroundImage: 'repeating-linear-gradient(45deg, rgba(0,0,0,.18) 0 2px, transparent 2px 14px), repeating-linear-gradient(-45deg, rgba(0,0,0,.18) 0 2px, transparent 2px 14px)',
+      }} />
+    </div>
+  );
+}
+
+function WatermelonArt({ size = 120 }) {
+  return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: '50%',
+      background: `radial-gradient(circle at 50% 50%, var(--watermelon) 0 55%, #fff 55% 60%, var(--leaf) 60% 78%, #0a3d22 78% 100%)`,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {[...Array(8)].map((_, i) => {
+        const angle = (i / 8) * 360;
+        const r = size * 0.18;
+        const x = 50 + Math.cos(angle * Math.PI / 180) * 25;
+        const y = 50 + Math.sin(angle * Math.PI / 180) * 25;
+        return <div key={i} style={{
+          position: 'absolute', left: `${x}%`, top: `${y}%`,
+          width: 6, height: 10, background: '#0a0a0a',
+          borderRadius: '50%', transform: 'translate(-50%,-50%) rotate(20deg)',
+        }} />;
+      })}
+    </div>
+  );
+}
+
+function StrawberryArt({ size = 120 }) {
+  return (
+    <div style={{ width: size, height: size, position: 'relative' }}>
+      <div style={{
+        position: 'absolute', top: '-5%', left: '50%', transform: 'translateX(-50%)',
+        width: size * 0.7, height: size * 0.3,
+        background: 'var(--leaf)',
+        clipPath: 'polygon(50% 100%, 0 30%, 20% 0, 35% 30%, 50% 0, 65% 30%, 80% 0, 100% 30%)',
+      }} />
+      <div style={{
+        position: 'absolute', top: size * 0.2, left: 0,
+        width: size, height: size * 0.85,
+        background: 'var(--watermelon)',
+        clipPath: 'polygon(0 0, 100% 0, 90% 60%, 50% 100%, 10% 60%)',
+        backgroundImage: 'radial-gradient(circle at 30% 40%, #fff 2px, transparent 3px), radial-gradient(circle at 60% 30%, #fff 2px, transparent 3px), radial-gradient(circle at 50% 60%, #fff 2px, transparent 3px), radial-gradient(circle at 25% 70%, #fff 2px, transparent 3px), radial-gradient(circle at 75% 65%, #fff 2px, transparent 3px), radial-gradient(circle at 45% 30%, #fff 2px, transparent 3px)',
+      }} />
+    </div>
+  );
+}
+
+function GrapeArt({ size = 120 }) {
+  const positions = [
+    [50, 20], [30, 35], [70, 35], [20, 55], [50, 50], [80, 55],
+    [30, 70], [70, 70], [50, 80],
+  ];
+  return (
+    <div style={{ width: size, height: size, position: 'relative' }}>
+      {positions.map(([x, y], i) => (
+        <div key={i} style={{
+          position: 'absolute', left: `${x}%`, top: `${y}%`,
+          width: size * 0.3, height: size * 0.3,
+          background: `radial-gradient(circle at 30% 30%, #b794d4, var(--berry))`,
+          borderRadius: '50%',
+          transform: 'translate(-50%,-50%)',
+        }} />
+      ))}
+      <div style={{
+        position: 'absolute', top: 0, left: '52%',
+        width: 4, height: size * 0.2, background: 'var(--leaf)',
+      }} />
+    </div>
+  );
+}
+
+function MelonArt({ size = 120 }) {
+  return (
+    <div style={{
+      width: size, height: size * 0.7,
+      borderRadius: '50% 50% 50% 50% / 60% 60% 40% 40%',
+      background: 'linear-gradient(180deg, #FFB347 0 40%, var(--tangerine) 40% 100%)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      <div style={{
+        position: 'absolute', inset: 0,
+        backgroundImage: 'repeating-linear-gradient(0deg, transparent 0 8px, rgba(0,0,0,.08) 8px 9px)',
+      }} />
+    </div>
+  );
+}
+
+function KiwiArt({ size = 120 }) {
+  return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: '50%',
+      background: `radial-gradient(circle at 50% 50%, #fff 0 8%, #c9e26b 8% 70%, #8b6f3a 70% 90%, #5c4626 90% 100%)`,
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {[...Array(12)].map((_, i) => {
+        const angle = (i / 12) * 360;
+        const x = 50 + Math.cos(angle * Math.PI / 180) * 22;
+        const y = 50 + Math.sin(angle * Math.PI / 180) * 22;
+        return <div key={i} style={{
+          position: 'absolute', left: `${x}%`, top: `${y}%`,
+          width: 4, height: 6, background: '#0a0a0a',
+          borderRadius: '50%', transform: 'translate(-50%,-50%)',
+        }} />;
+      })}
+    </div>
+  );
+}
+
+const FRUIT_ART = {
+  pineapple: PineappleArt,
+  watermelon: WatermelonArt,
+  strawberry: StrawberryArt,
+  grape: GrapeArt,
+  melon: MelonArt,
+  kiwi: KiwiArt,
+};
+
+/* Real photos — Unsplash direct image URLs */
+const FRUIT_PHOTOS = {
+  pineapple: 'https://images.unsplash.com/photo-1550258987-190a2d41a8ba?w=400&h=400&fit=crop',
+  watermelon: 'https://images.unsplash.com/photo-1587049352846-4a222e784d38?w=400&h=400&fit=crop',
+  strawberry: 'https://images.unsplash.com/photo-1543528176-61b239494933?w=400&h=400&fit=crop',
+  grape: 'https://images.unsplash.com/photo-1599819177626-b06d7e5d80f4?w=400&h=400&fit=crop',
+  melon: 'https://images.unsplash.com/photo-1571575173700-afb9492e6a50?w=400&h=400&fit=crop',
+  kiwi: 'https://images.unsplash.com/photo-1610917040803-1fccf9623064?w=400&h=400&fit=crop',
+};
+
+function Fruit({ kind, size, photo = true }) {
+  if (photo && FRUIT_PHOTOS[kind]) {
+    return (
+      <div style={{
+        width: size, height: size,
+        borderRadius: '50%',
+        overflow: 'hidden',
+        backgroundImage: `url(${FRUIT_PHOTOS[kind]})`,
+        backgroundSize: 'cover',
+        backgroundPosition: 'center',
+        border: '2px solid var(--ink)',
+        boxShadow: '4px 4px 0 var(--ink)',
+      }} />
+    );
+  }
+  const Comp = FRUIT_ART[kind] || WatermelonArt;
+  return <Comp size={size} />;
+}
+
+/* ---------- Sticker (mimics shop label) ---------- */
+function Sticker({ children, color = 'var(--citrus)', rotate = -8 }) {
+  return (
+    <div style={{
+      display: 'inline-flex', alignItems: 'center',
+      padding: '6px 14px',
+      background: color,
+      border: '2px solid var(--ink)',
+      borderRadius: '999px',
+      fontFamily: 'var(--mono)',
+      fontWeight: 700,
+      fontSize: 11,
+      letterSpacing: '0.08em',
+      textTransform: 'uppercase',
+      transform: `rotate(${rotate}deg)`,
+      boxShadow: '3px 3px 0 var(--ink)',
+    }}>{children}</div>
+  );
+}
+
+/* ---------- Top nav (site header) ---------- */
+function SiteHeader({ active = 'home' }) {
+  const items = [
+    { id: 'home', label: 'בית' },
+    { id: 'shop', label: 'פירות קלופים' },
+    { id: 'kayak', label: 'קיאקי פירות' },
+    { id: 'about', label: 'הסיפור' },
+  ];
+  return (
+    <header style={{
+      display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+      padding: '20px 40px',
+      borderBottom: '2px solid var(--ink)',
+      background: 'var(--paper)',
+      position: 'relative', zIndex: 5,
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
+        <Logo size={44} />
+        <div>
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 22, letterSpacing: '-0.04em' }}>פרי לי</div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', opacity: 0.6, marginTop: -2 }}>DIMONA · EST. 2019</div>
+        </div>
+      </div>
+      <nav style={{ display: 'flex', gap: 32 }}>
+        {items.map(it => (
+          <a key={it.id} style={{
+            fontFamily: 'var(--display)', fontWeight: 700, fontSize: 16,
+            color: 'var(--ink)',
+            textDecoration: 'none',
+            borderBottom: active === it.id ? '2px solid var(--watermelon)' : '2px solid transparent',
+            paddingBottom: 4,
+          }}>{it.label}</a>
+        ))}
+      </nav>
+      <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
+        <button style={{
+          background: 'none', border: '2px solid var(--ink)',
+          padding: '10px 16px', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+        }}>חיפוש</button>
+        <button style={{
+          background: 'var(--ink)', color: 'var(--paper)',
+          border: '2px solid var(--ink)',
+          padding: '10px 16px', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+          display: 'flex', gap: 8, alignItems: 'center',
+        }}>
+          סל <span style={{ background: 'var(--citrus)', color: 'var(--ink)', padding: '0 6px', borderRadius: 999 }}>3</span>
+        </button>
+      </div>
+    </header>
+  );
+}
+
+/* Logo: a citrus slice */
+function Logo({ size = 44 }) {
+  return (
+    <div style={{
+      width: size, height: size,
+      borderRadius: '50%',
+      background: 'var(--citrus)',
+      border: '2px solid var(--ink)',
+      position: 'relative',
+      overflow: 'hidden',
+    }}>
+      {[0, 60, 120, 180, 240, 300].map(rot => (
+        <div key={rot} style={{
+          position: 'absolute', top: '50%', left: '50%',
+          width: '50%', height: 2,
+          background: 'var(--ink)',
+          transformOrigin: 'left center',
+          transform: `rotate(${rot}deg)`,
+        }} />
+      ))}
+      <div style={{
+        position: 'absolute', top: '50%', left: '50%',
+        width: 6, height: 6, background: 'var(--ink)',
+        borderRadius: '50%', transform: 'translate(-50%,-50%)',
+      }} />
+    </div>
+  );
+}
+
+function SiteFooter() {
+  return (
+    <footer style={{
+      background: 'var(--ink)', color: 'var(--paper)',
+      padding: '50px 40px 24px', marginTop: 0,
+    }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr 1fr 1fr', gap: 40, marginBottom: 40 }}>
+        <div>
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 64, letterSpacing: '-0.05em', lineHeight: 0.85 }}>פרי לי.</div>
+          <div style={{ fontFamily: 'var(--serif)', fontSize: 16, marginTop: 16, opacity: 0.7, maxWidth: 320 }}>
+            פירות קלופים טריים בכל בוקר, וקיאקי פירות לאירועים שלא שוכחים.
+          </div>
+        </div>
+        <FooterCol title="חנות" items={['פירות קלופים', 'סלטי פירות', 'פירות יער', 'מבצעי השבוע']} />
+        <FooterCol title="קיאקים" items={['בנה קיאק', 'דוגמאות', 'אירוע עסקי', 'חתונות']} />
+        <FooterCol title="צרו קשר" items={['דימונה, רח׳ הדקל 12', '054-000-0000', 'מבזק על וואטסאפ']} />
+      </div>
+      <div style={{ borderTop: '1px solid #333', paddingTop: 16, display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5 }}>
+        <span>© 2026 פרי לי. כל הזכויות שמורות.</span>
+        <span>FRESH · LOCAL · DIMONA</span>
+      </div>
+    </footer>
+  );
+}
+function FooterCol({ title, items }) {
+  return (
+    <div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase', opacity: 0.5, marginBottom: 14 }}>{title}</div>
+      <ul style={{ listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 8 }}>
+        {items.map((x, i) => <li key={i} style={{ fontSize: 14 }}>{x}</li>)}
+      </ul>
+    </div>
+  );
+}
+
+/* ---------- Section divider ---------- */
+function SectionTag({ num, label }) {
+  return (
+    <div style={{ display: 'flex', alignItems: 'baseline', gap: 12, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+      <span style={{ opacity: 0.5 }}>{num}</span>
+      <span style={{ width: 30, height: 1, background: 'var(--ink)', display: 'inline-block' }}></span>
+      <span style={{ fontWeight: 700 }}>{label}</span>
+    </div>
+  );
+}
+
+/* Export to window */
+Object.assign(window, {
+  Fruit, FRUIT_ART, FRUIT_PHOTOS, Sticker, SiteHeader, SiteFooter, Logo, SectionTag,
+  PineappleArt, WatermelonArt, StrawberryArt, GrapeArt, MelonArt, KiwiArt,
+});
+</script>
+
+<script type="text/babel">
+/* home.jsx — דף הבית המשודרג */
+
+const KAYAK_IMG = 'data:image/jpeg;base64,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';
+
+function HomePage({ heroVariant = 'mega', accent = 'var(--watermelon)' }) {
+  return (
+    <div style={{ background: 'var(--paper)' }}>
+      <SiteHeader active="home" />
+      {heroVariant === 'mega' && <HeroMega accent={accent} />}
+      {heroVariant === 'split' && <HeroSplit accent={accent} />}
+      {heroVariant === 'editorial' && <HeroEditorial accent={accent} />}
+      <TickerStrip />
+      <ValuePropsBar />
+      <BestSellersV2 accent={accent} />
+      <KayakHero accent={accent} />
+      <ProcessSection />
+      <FruitMosaic accent={accent} />
+      <Testimonials />
+      <CTASection accent={accent} />
+      <SiteFooter />
+    </div>
+  );
+}
+
+/* ═══════════════════════════════════════════════════
+   HERO 1 — MEGA (default) — אדיטוריאלי, תמונת קיאק
+   ═══════════════════════════════════════════════════ */
+function HeroMega({ accent }) {
+  return (
+    <section style={{
+      position: 'relative',
+      borderBottom: '2px solid var(--ink)',
+      background: 'var(--paper)',
+      overflow: 'hidden',
+    }}>
+      {/* top meta strip */}
+      <div style={{
+        display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+        padding: '18px 40px',
+        borderBottom: '1px solid var(--ink)',
+        fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase',
+      }}>
+        <span>גליון 12 · אביב 2026 · דימונה</span>
+        <span style={{ display: 'flex', gap: 24 }}>
+          <span>● נחתך הבוקר</span>
+          <span>● 22°C</span>
+          <span>● משלוח עד 14:00</span>
+        </span>
+        <span>פרי לי ™ · est. 2018</span>
+      </div>
+
+      {/* main grid */}
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: '1.4fr 1fr',
+        minHeight: 720,
+      }}>
+        {/* LEFT — type */}
+        <div style={{
+          padding: '60px 50px 40px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          borderLeft: '1px solid var(--ink)',
+          position: 'relative',
+        }}>
+          <div>
+            <SectionTag num="01" label="פירות קלופים · קיאקי אירועים" />
+            <h1 className="display" style={{
+              fontSize: 'clamp(110px, 14vw, 240px)',
+              margin: '32px 0 0',
+              lineHeight: 0.82,
+              letterSpacing: '-0.06em',
+            }}>
+              פרי
+              <br />
+              ש<span style={{
+                fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400,
+                color: accent,
+              }}>נחתך</span>
+              <br />
+              עכשיו<span style={{ color: accent }}>.</span>
+            </h1>
+          </div>
+
+          <div style={{ marginTop: 40 }}>
+            <p style={{
+              fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.45, maxWidth: 520,
+              margin: 0, marginBottom: 32,
+            }}>
+              ב-3 בלילה אנחנו בשוק העיר. ב-7 בבוקר זה כבר על המדף —
+              קלוף, חתוך, ארוז. מדימונה, ביד, באותו יום.
+            </p>
+            <div style={{ display: 'flex', gap: 12, flexWrap: 'wrap' }}>
+              <button className="btn primary" style={{ background: accent }}>הזמן עכשיו</button>
+              <button className="btn outline">בנה קיאק לאירוע →</button>
+            </div>
+          </div>
+
+          {/* float sticker */}
+          <div style={{ position: 'absolute', top: 80, left: 40 }}>
+            <Sticker color={accent} rotate={-8}>טרי 100%</Sticker>
+          </div>
+        </div>
+
+        {/* RIGHT — kayak photo block */}
+        <div style={{
+          background: 'var(--ink)',
+          color: 'var(--paper)',
+          borderLeft: '1px solid var(--ink)',
+          position: 'relative',
+          padding: '40px 36px',
+          display: 'flex',
+          flexDirection: 'column',
+          justifyContent: 'space-between',
+          overflow: 'hidden',
+        }}>
+          {/* corner index */}
+          <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.2em', opacity: 0.6 }}>
+            <span>FIG. 01</span>
+            <span>קיאק XL · 50 אורחים</span>
+          </div>
+
+          {/* kayak image */}
+          <div style={{
+            position: 'relative',
+            margin: '40px 0',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+          }}>
+            <img
+              src={KAYAK_IMG}
+              alt="קיאק פירות"
+              style={{
+                width: '100%',
+                maxWidth: 520,
+                filter: 'drop-shadow(8px 12px 0 rgba(0,0,0,0.4))',
+              }}
+            />
+            {/* dimension lines */}
+            <div style={{
+              position: 'absolute', bottom: -16, left: '5%', right: '5%',
+              display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+              fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6,
+              letterSpacing: '0.15em',
+            }}>
+              <span>↤ 90cm ↦</span>
+            </div>
+          </div>
+
+          {/* feature bullets */}
+          <div style={{
+            display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 16,
+            paddingTop: 24, borderTop: '1px solid rgba(253,251,245,.2)',
+          }}>
+            <FeatureItem label="גודל" value="S · M · L · XL" />
+            <FeatureItem label="פירות" value="עד 18 זנים" />
+            <FeatureItem label="הכנה" value="ביום האירוע" />
+            <FeatureItem label="התחלה מ-" value="₪480" />
+          </div>
+        </div>
+      </div>
+
+      {/* bottom stats bar */}
+      <div style={{
+        borderTop: '1px solid var(--ink)',
+        display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)',
+      }}>
+        {[
+          ['450+', 'אירועים השנה'],
+          ['18', 'זני פירות יומי'],
+          ['04:30', 'ניקיון יומי'],
+          ['8 שנים', 'בדימונה'],
+        ].map(([n, l], i) => (
+          <div key={i} style={{
+            padding: '24px 30px',
+            borderRight: i < 3 ? '1px solid var(--ink)' : 'none',
+            display: 'flex', alignItems: 'baseline', gap: 16,
+          }}>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 44, lineHeight: 1, letterSpacing: '-0.04em' }}>{n}</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.6 }}>{l}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function FeatureItem({ label, value }) {
+  return (
+    <div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.2em', textTransform: 'uppercase', opacity: 0.5 }}>{label}</div>
+      <div style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18, marginTop: 4 }}>{value}</div>
+    </div>
+  );
+}
+
+/* HERO 2 — SPLIT */
+function HeroSplit({ accent }) {
+  return (
+    <section style={{
+      display: 'grid', gridTemplateColumns: '1.1fr 1fr',
+      borderBottom: '2px solid var(--ink)',
+      minHeight: 720,
+    }}>
+      <div style={{ padding: '60px 50px', display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+        <SectionTag num="01" label="חנות · אירועים · דימונה" />
+        <div>
+          <h1 className="display" style={{ fontSize: 'clamp(80px, 11vw, 180px)', margin: 0, lineHeight: 0.85 }}>
+            פרי <span style={{ color: accent }}>לי.</span>
+            <br />
+            פרי <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>לכם.</span>
+          </h1>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.45, maxWidth: 520, marginTop: 32 }}>
+            פירות קלופים שנחתכו בבוקר. קיאקי פירות לאירועים שמחים.
+            הכל יוצא מדימונה, מהמקרר שלנו אליכם.
+          </p>
+        </div>
+        <div style={{ display: 'flex', gap: 12 }}>
+          <button className="btn primary" style={{ background: accent }}>קנה פירות</button>
+          <button className="btn outline">בנה קיאק</button>
+        </div>
+      </div>
+      <div style={{
+        background: accent,
+        position: 'relative',
+        borderRight: '2px solid var(--ink)',
+        overflow: 'hidden',
+        display: 'flex', alignItems: 'center', justifyContent: 'center',
+      }}>
+        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '90%', filter: 'drop-shadow(6px 8px 0 rgba(0,0,0,0.25))' }} />
+        <div style={{ position: 'absolute', top: 40, right: 40 }}>
+          <Sticker color="var(--paper)" rotate={-10}>חדש · 2026</Sticker>
+        </div>
+        <div style={{ position: 'absolute', bottom: 40, left: 40, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em' }}>
+          FIG. 01 — KAYAK XL
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* HERO 3 — EDITORIAL */
+function HeroEditorial({ accent }) {
+  return (
+    <section style={{ padding: '40px 40px 60px', borderBottom: '2px solid var(--ink)', textAlign: 'center' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+        <span>גליון 12 · אביב 2026</span>
+        <span>פרי לי ™</span>
+        <span>דימונה</span>
+      </div>
+      <div style={{ marginTop: 50 }}>
+        <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 28, marginBottom: 12 }}>החדש מדימונה</div>
+        <h1 className="display" style={{
+          fontSize: 'clamp(100px, 14vw, 240px)',
+          lineHeight: 0.85, margin: 0,
+        }}>
+          קיאקי
+          <br />
+          <span style={{ color: accent }}>פירות.</span>
+        </h1>
+        <img src={KAYAK_IMG} alt="קיאק" style={{ width: '70%', maxWidth: 800, margin: '32px auto 0', display: 'block' }} />
+        <div style={{ fontFamily: 'var(--serif)', fontSize: 22, marginTop: 24, maxWidth: 600, marginInline: 'auto' }}>
+          מגש בצורת קיאק עמוס פירות חתוכים בעבודת יד. לחתונה, ליום הולדת, לכל אירוע שמגיע לו לזכור.
+        </div>
+        <button className="btn primary" style={{ background: accent, marginTop: 32 }}>בנה את הקיאק שלך →</button>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Ticker ─── */
+function TickerStrip() {
+  const items = ['אננס מתוק', 'מלון אמבוסיה', 'אבטיח אדום', 'תות שדה', 'אוכמניות', 'דובדבנים', 'ענבי קונקורד', 'קיווי זהב', 'מנגו ישראלי', 'פפאיה', 'ליצ׳י', 'משמש'];
+  const repeated = [...items, ...items, ...items];
+  return (
+    <div style={{
+      background: 'var(--ink)', color: 'var(--paper)',
+      padding: '18px 0', overflow: 'hidden',
+      borderBottom: '2px solid var(--ink)',
+    }}>
+      <div className="marquee" style={{ gap: 40, display: 'flex' }}>
+        {repeated.map((x, i) => (
+          <span key={i} style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 28, letterSpacing: '-0.02em', display: 'flex', alignItems: 'center', gap: 40, whiteSpace: 'nowrap' }}>
+            {x} <span style={{ color: 'var(--watermelon)' }}>✺</span>
+          </span>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+/* ─── Value props bar ─── */
+function ValuePropsBar() {
+  const items = [
+    { icon: '✻', t: 'נחתך באותו יום', d: 'אין מלאי לא טרי' },
+    { icon: '↻', t: 'משלוח עד 14:00', d: 'הזמנה עד 11:00' },
+    { icon: '◆', t: 'קיאקים בהתאמה', d: 'גודל, פירות, תוספות' },
+    { icon: '✦', t: 'דרום הארץ', d: 'דימונה, ערד, באר שבע' },
+  ];
+  return (
+    <section style={{
+      padding: '32px 40px', borderBottom: '2px solid var(--ink)',
+      display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0,
+    }}>
+      {items.map((f, i) => (
+        <div key={i} style={{
+          padding: '0 24px',
+          borderRight: i < 3 ? '1px solid rgba(0,0,0,.15)' : 'none',
+          display: 'flex', alignItems: 'center', gap: 16,
+        }}>
+          <div style={{ fontSize: 32, color: 'var(--watermelon)', lineHeight: 1 }}>{f.icon}</div>
+          <div>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18 }}>{f.t}</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, marginTop: 2 }}>{f.d}</div>
+          </div>
+        </div>
+      ))}
+    </section>
+  );
+}
+
+/* ─── Best sellers v2 with category tabs ─── */
+function BestSellersV2({ accent }) {
+  const [active, setActive] = React.useState('all');
+  const categories = [
+    { id: 'all', label: 'הכל' },
+    { id: 'tropical', label: 'טרופי' },
+    { id: 'berries', label: 'פירות יער' },
+    { id: 'melons', label: 'מלונים' },
+    { id: 'citrus', label: 'הדרים' },
+  ];
+  const products = [
+    { name: 'אננס קלוף', kind: 'pineapple', price: 24.90, weight: '500ג׳', cat: 'tropical', tag: 'הכי נמכר' },
+    { name: 'אבטיח חתוך', kind: 'watermelon', price: 19.90, weight: '600ג׳', cat: 'melons' },
+    { name: 'תות שדה', kind: 'strawberry', price: 29.90, weight: '300ג׳', cat: 'berries', tag: 'חדש' },
+    { name: 'ענבי קונקורד', kind: 'grape', price: 26.90, weight: '400ג׳', cat: 'berries' },
+    { name: 'מלון אמבוסיה', kind: 'melon', price: 22.90, weight: '500ג׳', cat: 'melons' },
+    { name: 'קיווי זהב', kind: 'kiwi', price: 27.90, weight: '350ג׳', cat: 'tropical' },
+  ];
+  const filtered = active === 'all' ? products : products.filter(p => p.cat === active);
+
+  return (
+    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end', marginBottom: 40 }}>
+        <div>
+          <SectionTag num="02" label="קטלוג · הכי נמכרים" />
+          <h2 className="display" style={{ fontSize: 'clamp(70px, 9vw, 120px)', margin: '16px 0 0', lineHeight: 0.9 }}>
+            הקלאסיקות<span style={{ color: accent }}>.</span>
+          </h2>
+        </div>
+        <a style={{ fontFamily: 'var(--mono)', fontSize: 13, fontWeight: 700, letterSpacing: '0.1em', textTransform: 'uppercase', textDecoration: 'underline', textUnderlineOffset: 4 }}>כל הקטלוג ↘</a>
+      </div>
+
+      {/* category tabs */}
+      <div style={{
+        display: 'flex', gap: 0, borderTop: '1px solid var(--ink)', borderBottom: '1px solid var(--ink)',
+        marginBottom: 0,
+      }}>
+        {categories.map((c, i) => (
+          <button
+            key={c.id}
+            onClick={() => setActive(c.id)}
+            style={{
+              flex: 1,
+              padding: '18px 20px',
+              background: active === c.id ? 'var(--ink)' : 'transparent',
+              color: active === c.id ? 'var(--paper)' : 'var(--ink)',
+              border: 'none',
+              borderRight: i < categories.length - 1 ? '1px solid var(--ink)' : 'none',
+              fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18,
+              cursor: 'pointer',
+              transition: 'all 0.2s',
+            }}
+          >
+            {c.label}
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 10, marginInlineStart: 8, opacity: 0.6 }}>
+              {c.id === 'all' ? products.length : products.filter(p => p.cat === c.id).length}
+            </span>
+          </button>
+        ))}
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, border: '1px solid var(--ink)', borderTop: 'none' }}>
+        {filtered.map((p, i) => (
+          <ProductCard key={p.name} product={p} index={i} cols={3} total={filtered.length} />
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function ProductCard({ product, index, cols, total }) {
+  const lastRow = index >= total - cols;
+  const lastCol = (index + 1) % cols === 0;
+  return (
+    <div className="product-card" style={{
+      padding: '32px 30px',
+      borderRight: lastCol ? 'none' : '1px solid var(--ink)',
+      borderBottom: lastRow ? 'none' : '1px solid var(--ink)',
+      position: 'relative',
+      background: 'var(--paper)',
+      cursor: 'pointer',
+      transition: 'background 0.2s',
+    }}>
+      {product.tag && (
+        <div style={{ position: 'absolute', top: 16, right: 16, zIndex: 2 }}>
+          <Sticker color={product.tag === 'חדש' ? 'var(--leaf)' : 'var(--watermelon)'} rotate={-6}>{product.tag}</Sticker>
+        </div>
+      )}
+      <div style={{ height: 240, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+        <Fruit kind={product.kind} size={200} />
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginTop: 28 }}>
+        <div className="display" style={{ fontSize: 30, lineHeight: 1 }}>{product.name}</div>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.06em' }}>{product.weight}</div>
+      </div>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 16 }}>
+        <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 26 }}>₪{product.price}</div>
+        <button style={{
+          background: 'var(--ink)', color: 'var(--paper)',
+          border: 'none', padding: '12px 16px',
+          fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+          cursor: 'pointer',
+        }}>הוסף לסל +</button>
+      </div>
+    </div>
+  );
+}
+
+/* ─── Kayak hero — full-bleed dark section ─── */
+function KayakHero({ accent }) {
+  return (
+    <section style={{
+      padding: '90px 40px',
+      background: 'var(--ink)',
+      color: 'var(--paper)',
+      position: 'relative',
+      overflow: 'hidden',
+      borderBottom: '2px solid var(--ink)',
+    }}>
+      <SectionTag num="03" label="קיאקי פירות · בלעדי לאירועים" dark />
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1.3fr', gap: 60, marginTop: 40, alignItems: 'center' }}>
+        <div>
+          <h2 className="display" style={{ fontSize: 'clamp(70px, 10vw, 160px)', margin: 0, lineHeight: 0.85, color: 'var(--paper)' }}>
+            מגש <span style={{ color: accent, fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>בצורת</span>
+            <br />
+            קיאק.
+          </h2>
+          <p style={{ fontFamily: 'var(--serif)', fontSize: 22, lineHeight: 1.5, marginTop: 32, maxWidth: 480 }}>
+            עמוס בפירות חתוכים בעבודת יד, מסודרים כמו ציור.
+            אורחים ניגשים, לוקחים, מתפעלים. מגיע ביום האירוע.
+          </p>
+
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 16, marginTop: 40, maxWidth: 480 }}>
+            {[
+              ['S', '8–12 אורחים', '₪480'],
+              ['M', '15–25 אורחים', '₪780'],
+              ['L', '30–50 אורחים', '₪1,180'],
+              ['XL', '60+ אורחים', '₪1,680'],
+            ].map(([sz, gt, pr], i) => (
+              <div key={i} style={{
+                padding: '16px 18px',
+                border: '1px solid rgba(253,251,245,.25)',
+                display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+              }}>
+                <div>
+                  <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 22 }}>{sz}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.5, letterSpacing: '0.1em' }}>{gt}</div>
+                </div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 700, fontSize: 18 }}>{pr}</div>
+              </div>
+            ))}
+          </div>
+
+          <button className="btn" style={{ background: accent, color: 'var(--ink)', borderColor: accent, marginTop: 32 }}>
+            פתח קונפיגורטור →
+          </button>
+        </div>
+
+        {/* Kayak image */}
+        <div style={{ position: 'relative' }}>
+          <img src={KAYAK_IMG} alt="קיאק פירות" style={{
+            width: '100%',
+            filter: 'drop-shadow(12px 16px 0 rgba(0,0,0,0.5))',
+          }} />
+          <div style={{ position: 'absolute', top: 0, left: 0, transform: 'rotate(-12deg)' }}>
+            <Sticker color={accent} rotate={0}>L · 30 אורחים</Sticker>
+          </div>
+          <div style={{
+            position: 'absolute', bottom: -20, left: '5%', right: '5%',
+            display: 'flex', justifyContent: 'space-between',
+            fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.18em', opacity: 0.6,
+          }}>
+            <span>↤ 90cm ↦</span>
+            <span>FIG. 02 — XL</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  );
+}
+
+/* ─── Process timeline ─── */
+function ProcessSection() {
+  const steps = [
+    { n: '03:00', t: 'שוק העיר', d: 'בוחרים פירות אחד אחד. רק מה שטעים הולך הביתה.' },
+    { n: '06:00', t: 'במטבח', d: 'שוטפים, קולפים, חותכים. הכל בידיים. הכל באותו בוקר.' },
+    { n: '07:30', t: 'במקרר', d: 'אורזים, מתייגים, מסדרים על המדף. מוכנים לכם.' },
+    { n: '11:00', t: 'אצלכם', d: 'משלוח חינם בדימונה. או באים לקחת מהחנות.' },
+  ];
+  return (
+    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)', background: 'var(--paper-2)' }}>
+      <SectionTag num="04" label="היום שלנו" />
+      <h2 className="display" style={{ fontSize: 'clamp(70px, 9vw, 140px)', marginTop: 16, marginBottom: 60, lineHeight: 0.9 }}>
+        איך פרי <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>מגיע</span> אליכם.
+      </h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 0, borderTop: '1px solid var(--ink)' }}>
+        {steps.map((s, i) => (
+          <div key={i} style={{
+            padding: '36px 24px',
+            borderRight: i < 3 ? '1px solid var(--ink)' : 'none',
+            position: 'relative',
+          }}>
+            <div style={{
+              fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5, letterSpacing: '0.18em',
+              marginBottom: 16,
+            }}>STEP 0{i + 1}</div>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 32, marginBottom: 12 }}>{s.n}</div>
+            <div className="display" style={{ fontSize: 36, marginBottom: 12 }}>{s.t}</div>
+            <div style={{ fontFamily: 'var(--serif)', fontSize: 16, lineHeight: 1.45, opacity: 0.75 }}>{s.d}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+/* ─── Mosaic — visual fruit pattern ─── */
+function FruitMosaic({ accent }) {
+  return (
+    <section style={{
+      padding: '90px 40px', borderBottom: '2px solid var(--ink)',
+      display: 'grid', gridTemplateColumns: '1fr 1.4fr', gap: 60, alignItems: 'center',
+    }}>
+      <div>
+        <SectionTag num="05" label="הזנים שלנו" />
+        <h2 className="display" style={{ fontSize: 'clamp(60px, 8vw, 110px)', margin: '16px 0 0', lineHeight: 0.9 }}>
+          18 זנים<span style={{ color: accent }}>.</span>
+          <br />
+          <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, fontSize: '0.7em' }}>מתחלפים יומית.</span>
+        </h2>
+        <p style={{ fontFamily: 'var(--serif)', fontSize: 20, lineHeight: 1.5, maxWidth: 420, marginTop: 24 }}>
+          מה שיש בשוק היום — נמצא אצלנו. אבוקדו, פפאיה, ליצ׳י,
+          תאנים, רימונים, אננס. כל מה שעונתי, כל מה שמבשיל.
+        </p>
+        <div style={{ display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 24 }}>
+          {['אננס', 'אבטיח', 'מלון', 'תות', 'ענבים', 'קיווי', 'מנגו', 'פפאיה', 'ליצ׳י', 'תאנה', 'רימון', 'אבוקדו'].map(t => (
+            <span key={t} style={{
+              padding: '6px 14px',
+              border: '1px solid var(--ink)',
+              borderRadius: 999,
+              fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+            }}>{t}</span>
+          ))}
+        </div>
+      </div>
+      <div style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(4, 1fr)',
+        gap: 12,
+      }}>
+        {['pineapple', 'watermelon', 'strawberry', 'grape', 'melon', 'kiwi', 'pineapple', 'watermelon'].map((k, i) => (
+          <div key={i} style={{
+            aspectRatio: '1',
+            border: '1px solid var(--ink)',
+            background: i % 3 === 0 ? accent : i % 3 === 1 ? 'var(--paper-2)' : 'var(--paper)',
+            display: 'flex', alignItems: 'center', justifyContent: 'center',
+            position: 'relative',
+          }}>
+            <Fruit kind={k} size={140} />
+            <div style={{
+              position: 'absolute', bottom: 8, left: 8,
+              fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700,
+              letterSpacing: '0.1em',
+            }}>0{i + 1}</div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function Testimonials() {
+  const items = [
+    { q: 'הזמנתי קיאק XL לחתונה של אחי. כל האורחים צילמו אותו לפני שאכלו.', a: 'נירית', r: 'חתונה ב-180 איש' },
+    { q: 'אני קונה אצלם פירות קלופים פעמיים בשבוע כבר שנתיים. הילדים אוהבים, אני אוהבת את המחירים.', a: 'תהילה', r: 'דימונה' },
+    { q: 'הקיאק הגיע בדיוק בזמן, נראה כמו תמונה מאינסטגרם. שירות מעולה.', a: 'יוסי', r: 'בר מצווה · ערד' },
+  ];
+  return (
+    <section style={{ padding: '90px 40px', borderBottom: '2px solid var(--ink)' }}>
+      <SectionTag num="06" label="מה אומרים עלינו" />
+      <h2 className="display" style={{ fontSize: 'clamp(60px, 8vw, 110px)', margin: '16px 0 40px', lineHeight: 0.9 }}>
+        לקוחות <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>חוזרים.</span>
+      </h2>
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 0, border: '1px solid var(--ink)' }}>
+        {items.map((t, i) => (
+          <div key={i} style={{
+            padding: 32,
+            borderRight: i < 2 ? '1px solid var(--ink)' : 'none',
+          }}>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 48, lineHeight: 0.7, color: 'var(--watermelon)', marginBottom: 16 }}>"</div>
+            <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, lineHeight: 1.4 }}>{t.q}</div>
+            <div style={{ marginTop: 24, paddingTop: 16, borderTop: '1px solid rgba(0,0,0,.15)', display: 'flex', justifyContent: 'space-between' }}>
+              <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16 }}>{t.a}</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, letterSpacing: '0.1em' }}>{t.r}</div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </section>
+  );
+}
+
+function CTASection({ accent }) {
+  return (
+    <section style={{
+      padding: '120px 40px', background: accent, color: 'var(--ink)',
+      borderBottom: '2px solid var(--ink)',
+      textAlign: 'center', position: 'relative', overflow: 'hidden',
+    }}>
+      <h2 className="display" style={{ fontSize: 'clamp(80px, 12vw, 200px)', margin: 0, lineHeight: 0.85, letterSpacing: '-0.06em' }}>
+        בא לכם <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>פרי?</span>
+      </h2>
+      <div style={{ display: 'flex', gap: 16, justifyContent: 'center', marginTop: 48 }}>
+        <button className="btn" style={{ background: 'var(--ink)', color: accent, borderColor: 'var(--ink)' }}>פתח את הקטלוג</button>
+        <button className="btn outline">בנה קיאק לאירוע</button>
+      </div>
+      <div style={{
+        marginTop: 48, fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase',
+      }}>
+        משלוח חינם בדימונה · הזמנה עד 11:00 = אצלך עד 14:00
+      </div>
+    </section>
+  );
+}
+
+Object.assign(window, { HomePage, HeroMega, HeroSplit, HeroEditorial, ProductCard });
+</script>
+
+<script type="text/babel">
+/* shop.jsx — קטלוג + דף מוצר */
+
+const ALL_PRODUCTS = [
+  { id: 1, name: 'אננס קלוף', kind: 'pineapple', price: 24.90, weight: '500ג׳', category: 'קלופים', tag: 'הכי נמכר' },
+  { id: 2, name: 'אבטיח חתוך', kind: 'watermelon', price: 19.90, weight: '600ג׳', category: 'קלופים' },
+  { id: 3, name: 'תות שדה', kind: 'strawberry', price: 29.90, weight: '300ג׳', category: 'יער', tag: 'חדש' },
+  { id: 4, name: 'ענבי קונקורד', kind: 'grape', price: 26.90, weight: '400ג׳', category: 'יבשים' },
+  { id: 5, name: 'מלון אמבוסיה', kind: 'melon', price: 22.90, weight: '500ג׳', category: 'קלופים' },
+  { id: 6, name: 'קיווי זהב', kind: 'kiwi', price: 27.90, weight: '350ג׳', category: 'יער' },
+  { id: 7, name: 'סלט פירות מעורב', kind: 'strawberry', price: 34.90, weight: '500ג׳', category: 'סלטים', tag: 'מומלץ' },
+  { id: 8, name: 'אוכמניות פרמיום', kind: 'grape', price: 32.90, weight: '250ג׳', category: 'יער' },
+  { id: 9, name: 'דובדבנים', kind: 'strawberry', price: 38.90, weight: '300ג׳', category: 'יער' },
+  { id: 10, name: 'ענבים ירוקים', kind: 'grape', price: 22.90, weight: '500ג׳', category: 'קלופים' },
+  { id: 11, name: 'קוקטייל פירות יער', kind: 'grape', price: 39.90, weight: '400ג׳', category: 'סלטים' },
+  { id: 12, name: 'מנגו ישראלי', kind: 'melon', price: 24.90, weight: '450ג׳', category: 'קלופים', tag: 'בעונה' },
+];
+
+function ShopPage({ accent = 'var(--watermelon)' }) {
+  const [cat, setCat] = useState('הכל');
+  const [sort, setSort] = useState('פופולרי');
+  const cats = ['הכל', 'קלופים', 'סלטים', 'יער', 'יבשים'];
+  const filtered = cat === 'הכל' ? ALL_PRODUCTS : ALL_PRODUCTS.filter(p => p.category === cat);
+
+  return (
+    <div style={{ background: 'var(--paper)' }}>
+      <SiteHeader active="shop" />
+      <section style={{ padding: '40px 40px 0', borderBottom: '2px solid var(--ink)' }}>
+        <SectionTag num="—" label="קטלוג · עודכן 06.05.2026" />
+        <h1 className="display" style={{ fontSize: 'clamp(80px, 11vw, 180px)', margin: '20px 0 30px' }}>
+          הכל <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>טרי.</span> הכל היום.
+        </h1>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', paddingBottom: 16 }}>
+          <div style={{ display: 'flex', gap: 8 }}>
+            {cats.map(c => (
+              <button key={c} onClick={() => setCat(c)} style={{
+                padding: '10px 18px',
+                background: cat === c ? 'var(--ink)' : 'transparent',
+                color: cat === c ? 'var(--paper)' : 'var(--ink)',
+                border: '2px solid var(--ink)',
+                fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+                letterSpacing: '0.06em',
+              }}>{c}</button>
+            ))}
+          </div>
+          <div style={{ display: 'flex', gap: 16, alignItems: 'center', fontFamily: 'var(--mono)', fontSize: 12 }}>
+            <span style={{ opacity: 0.6 }}>{filtered.length} פריטים</span>
+            <select value={sort} onChange={e => setSort(e.target.value)} style={{
+              background: 'transparent', border: '2px solid var(--ink)',
+              padding: '8px 12px', fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700,
+            }}>
+              <option>פופולרי</option>
+              <option>מחיר: עולה</option>
+              <option>מחיר: יורד</option>
+              <option>חדש קודם</option>
+            </select>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: 0, background: 'var(--paper)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderBottom: '2px solid var(--ink)' }}>
+          {filtered.map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} cols={4} total={filtered.length} />
+          ))}
+        </div>
+      </section>
+
+      <section style={{ padding: '60px 40px', background: 'var(--paper-2)', borderBottom: '2px solid var(--ink)' }}>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 40, alignItems: 'center' }}>
+          <div>
+            <SectionTag num="*" label="לאירועים גדולים?" />
+            <h2 className="display" style={{ fontSize: 96, margin: '20px 0' }}>
+              עברו ל<span style={{ color: accent }}>קיאקים</span> →
+            </h2>
+            <p style={{ fontFamily: 'var(--serif)', fontSize: 20, maxWidth: 460 }}>
+              לאירועים מ-8 עד 200 איש. בוחרים גודל ותוכן, מקבלים את הקיאק ביום.
+            </p>
+          </div>
+          <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+            <button className="btn primary" style={{ background: accent }}>פתח קונפיגורטור →</button>
+          </div>
+        </div>
+      </section>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+/* ---------- Single product page ---------- */
+
+function ProductPage({ accent = 'var(--watermelon)' }) {
+  const product = ALL_PRODUCTS[0]; // pineapple
+  const [qty, setQty] = useState(1);
+  return (
+    <div style={{ background: 'var(--paper)' }}>
+      <SiteHeader active="shop" />
+      <section style={{ padding: '24px 40px', borderBottom: '1px solid var(--ink)', fontFamily: 'var(--mono)', fontSize: 12 }}>
+        <span style={{ opacity: 0.5 }}>בית · קטלוג · קלופים ·</span> <strong>{product.name}</strong>
+      </section>
+
+      <section style={{ display: 'grid', gridTemplateColumns: '1.1fr 1fr', borderBottom: '2px solid var(--ink)' }}>
+        <div style={{
+          background: accent,
+          padding: 60,
+          display: 'flex', alignItems: 'center', justifyContent: 'center',
+          position: 'relative',
+          minHeight: 700,
+          borderLeft: '2px solid var(--ink)',
+        }}>
+          <div style={{ position: 'absolute', top: 30, right: 30 }}>
+            <Sticker color="var(--paper)" rotate={-8}>נחתך 06.05 · 06:00</Sticker>
+          </div>
+          <div style={{ position: 'absolute', bottom: 30, left: 30, fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, letterSpacing: '0.16em' }}>SKU · 0001-PA</div>
+          <PineappleArt size={400} />
+        </div>
+        <div style={{ padding: 60, display: 'flex', flexDirection: 'column', justifyContent: 'space-between' }}>
+          <div>
+            <SectionTag num="01" label={product.category} />
+            <h1 className="display" style={{ fontSize: 120, margin: '20px 0 0', lineHeight: 0.9 }}>{product.name}</h1>
+            <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 24, marginTop: 20, opacity: 0.7 }}>
+              קלוף ביד, נחתך לחתיכות נשיכה, ארוז במקרר.
+            </div>
+            <div style={{ display: 'flex', gap: 32, marginTop: 40, paddingTop: 20, borderTop: '1px solid var(--ink)' }}>
+              <Spec label="משקל" value={product.weight} />
+              <Spec label="טריות" value="היום" />
+              <Spec label="ארץ" value="ישראל" />
+              <Spec label="קלוריות" value="180/100ג׳" />
+            </div>
+          </div>
+          <div>
+            <div style={{ display: 'flex', alignItems: 'baseline', gap: 16, marginBottom: 24 }}>
+              <span style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 80 }}>₪{product.price}</span>
+              <span style={{ fontFamily: 'var(--mono)', fontSize: 14, opacity: 0.5 }}>/ {product.weight}</span>
+            </div>
+            <div style={{ display: 'flex', gap: 12, alignItems: 'stretch' }}>
+              <div style={{ display: 'flex', border: '2px solid var(--ink)' }}>
+                <button onClick={() => setQty(Math.max(1, qty - 1))} style={{ background: 'transparent', border: 'none', padding: '0 20px', fontSize: 22, fontWeight: 700 }}>−</button>
+                <div style={{ padding: '14px 24px', minWidth: 60, textAlign: 'center', fontFamily: 'var(--display)', fontWeight: 800, fontSize: 22, borderRight: '2px solid var(--ink)', borderLeft: '2px solid var(--ink)' }}>{qty}</div>
+                <button onClick={() => setQty(qty + 1)} style={{ background: 'transparent', border: 'none', padding: '0 20px', fontSize: 22, fontWeight: 700 }}>+</button>
+              </div>
+              <button className="btn primary" style={{ background: accent, flex: 1 }}>הוסף לסל · ₪{(product.price * qty).toFixed(2)}</button>
+            </div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, marginTop: 16, opacity: 0.6, letterSpacing: '0.06em' }}>
+              ✓ משלוח חינם בדימונה · ✓ איסוף עצמי זמין · ✓ הזמנה עד 11:00 = משלוח היום
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section style={{ padding: '60px 40px', borderBottom: '2px solid var(--ink)' }}>
+        <SectionTag num="02" label="קונים אצלנו גם" />
+        <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', marginTop: 30, border: '1px solid var(--ink)' }}>
+          {ALL_PRODUCTS.slice(1, 5).map((p, i) => (
+            <ProductCard key={p.id} product={p} index={i} cols={4} total={4} />
+          ))}
+        </div>
+      </section>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+function Spec({ label, value }) {
+  return (
+    <div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.5 }}>{label}</div>
+      <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 22, marginTop: 4 }}>{value}</div>
+    </div>
+  );
+}
+
+Object.assign(window, { ShopPage, ProductPage, ALL_PRODUCTS });
+</script>
+
+<script type="text/babel">
+/* kayak.jsx — קונפיגורטור קיאק אינטראקטיבי */
+
+const KAYAK_SIZES = [
+  { id: 'S', label: 'S', guests: '8-12', price: 380, w: 320, h: 100 },
+  { id: 'M', label: 'M', guests: '15-25', price: 620, w: 420, h: 120 },
+  { id: 'L', label: 'L', guests: '30-50', price: 980, w: 540, h: 140 },
+  { id: 'XL', label: 'XL', guests: '60+', price: 1450, w: 660, h: 160 },
+];
+
+const KAYAK_FRUITS = [
+  { id: 'pineapple', name: 'אננס', kind: 'pineapple' },
+  { id: 'watermelon', name: 'אבטיח', kind: 'watermelon' },
+  { id: 'strawberry', name: 'תות', kind: 'strawberry' },
+  { id: 'grape', name: 'ענבים', kind: 'grape' },
+  { id: 'melon', name: 'מלון', kind: 'melon' },
+  { id: 'kiwi', name: 'קיווי', kind: 'kiwi' },
+];
+
+const KAYAK_EXTRAS = [
+  { id: 'choc', name: 'שוקולד מומס', price: 60 },
+  { id: 'gran', name: 'גרנולה ביתית', price: 40 },
+  { id: 'honey', name: 'דבש דימונה', price: 35 },
+  { id: 'mint', name: 'נענע טרייה', price: 15 },
+];
+
+const EVENT_TYPES = ['חתונה', 'יום הולדת', 'בר/בת מצווה', 'אירוע עסקי', 'ברית', 'אחר'];
+
+function KayakConfigurator({ accent = 'var(--watermelon)' }) {
+  const [size, setSize] = useState('M');
+  const [fruits, setFruits] = useState(['pineapple', 'watermelon', 'strawberry', 'grape']);
+  const [extras, setExtras] = useState(['mint']);
+  const [step, setStep] = useState(1);
+  const [eventType, setEventType] = useState('חתונה');
+  const [guests, setGuests] = useState(40);
+
+  const sizeObj = KAYAK_SIZES.find(s => s.id === size);
+  const extrasTotal = extras.reduce((sum, id) => sum + (KAYAK_EXTRAS.find(e => e.id === id)?.price || 0), 0);
+  const total = sizeObj.price + extrasTotal;
+
+  const toggleFruit = (id) => {
+    setFruits(fruits.includes(id) ? fruits.filter(x => x !== id) : [...fruits, id]);
+  };
+  const toggleExtra = (id) => {
+    setExtras(extras.includes(id) ? extras.filter(x => x !== id) : [...extras, id]);
+  };
+
+  return (
+    <div style={{ background: 'var(--paper)', minHeight: '100%' }}>
+      <SiteHeader active="kayak" />
+
+      <section style={{ padding: '40px 40px 20px', borderBottom: '2px solid var(--ink)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+          <div>
+            <SectionTag num="—" label="קונפיגורטור · בנה את הקיאק שלך" />
+            <h1 className="display" style={{ fontSize: 'clamp(80px, 12vw, 200px)', margin: '20px 0 0' }}>
+              בנה <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, color: accent }}>קיאק.</span>
+            </h1>
+          </div>
+          <StepIndicator step={step} />
+        </div>
+      </section>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr', minHeight: 700 }}>
+        {/* Live preview */}
+        <div style={{
+          background: 'var(--paper-2)',
+          borderLeft: '2px solid var(--ink)',
+          padding: 60,
+          display: 'flex', flexDirection: 'column', justifyContent: 'space-between',
+          position: 'relative', overflow: 'hidden',
+        }}>
+          {/* grid pattern */}
+          <div style={{
+            position: 'absolute', inset: 0,
+            backgroundImage: 'linear-gradient(var(--ink) 1px, transparent 1px), linear-gradient(90deg, var(--ink) 1px, transparent 1px)',
+            backgroundSize: '40px 40px',
+            opacity: 0.04,
+          }} />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.6 }}>
+            <span>תצוגה חיה · {size} · {fruits.length} פירות</span>
+            <span>↻ עדכון מיידי</span>
+          </div>
+
+          <KayakPreview size={sizeObj} fruits={fruits} extras={extras} />
+
+          <div style={{ display: 'flex', justifyContent: 'space-between', position: 'relative', fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.16em', opacity: 0.6 }}>
+            <span>↤ {sizeObj.w}MM ↦</span>
+            <span>גובה: {sizeObj.h}MM</span>
+          </div>
+        </div>
+
+        {/* Controls */}
+        <div style={{ padding: '40px 40px 0', display: 'flex', flexDirection: 'column', overflow: 'auto' }}>
+          {/* Step 1: Size */}
+          <ControlBlock num="01" title="גודל" expanded={step >= 1}>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 8, marginTop: 16 }}>
+              {KAYAK_SIZES.map(s => (
+                <button key={s.id} onClick={() => setSize(s.id)} style={{
+                  padding: '20px 12px',
+                  background: size === s.id ? 'var(--ink)' : 'transparent',
+                  color: size === s.id ? 'var(--paper)' : 'var(--ink)',
+                  border: '2px solid var(--ink)',
+                  fontFamily: 'var(--display)',
+                  textAlign: 'center',
+                  cursor: 'pointer',
+                }}>
+                  <div style={{ fontWeight: 900, fontSize: 32, lineHeight: 1 }}>{s.label}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 10, marginTop: 6, opacity: 0.7 }}>{s.guests} אורחים</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, marginTop: 8, fontWeight: 700 }}>₪{s.price}</div>
+                </button>
+              ))}
+            </div>
+          </ControlBlock>
+
+          {/* Step 2: Fruits */}
+          <ControlBlock num="02" title="פירות" expanded={step >= 1}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6, marginBottom: 12, marginTop: 12 }}>
+              נבחרו {fruits.length}/6 · כלולים במחיר
+            </div>
+            <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 8 }}>
+              {KAYAK_FRUITS.map(f => {
+                const active = fruits.includes(f.id);
+                return (
+                  <button key={f.id} onClick={() => toggleFruit(f.id)} style={{
+                    padding: '12px',
+                    background: active ? accent : 'transparent',
+                    border: '2px solid var(--ink)',
+                    cursor: 'pointer',
+                    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
+                    position: 'relative',
+                  }}>
+                    {active && <div style={{ position: 'absolute', top: 6, right: 6, width: 16, height: 16, background: 'var(--ink)', color: 'var(--paper)', fontSize: 11, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', borderRadius: '50%' }}>✓</div>}
+                    <Fruit kind={f.kind} size={50} />
+                    <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14 }}>{f.name}</div>
+                  </button>
+                );
+              })}
+            </div>
+          </ControlBlock>
+
+          {/* Step 3: Extras */}
+          <ControlBlock num="03" title="תוספות" expanded={step >= 1}>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 4, marginTop: 12 }}>
+              {KAYAK_EXTRAS.map(e => {
+                const active = extras.includes(e.id);
+                return (
+                  <button key={e.id} onClick={() => toggleExtra(e.id)} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '14px 16px',
+                    background: active ? 'var(--ink)' : 'transparent',
+                    color: active ? 'var(--paper)' : 'var(--ink)',
+                    border: '2px solid var(--ink)',
+                    cursor: 'pointer',
+                    fontFamily: 'var(--display)', fontWeight: 700,
+                  }}>
+                    <span style={{ display: 'flex', alignItems: 'center', gap: 12 }}>
+                      <span style={{ width: 18, height: 18, border: `2px solid ${active ? 'var(--paper)' : 'var(--ink)'}`, display: 'flex', alignItems: 'center', justifyContent: 'center', fontSize: 11 }}>{active ? '✓' : ''}</span>
+                      {e.name}
+                    </span>
+                    <span style={{ fontFamily: 'var(--mono)', fontSize: 13 }}>+₪{e.price}</span>
+                  </button>
+                );
+              })}
+            </div>
+          </ControlBlock>
+
+          {/* Step 4: Event details */}
+          <ControlBlock num="04" title="פרטי האירוע" expanded={true}>
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8, marginTop: 12 }}>
+              <Field label="סוג">
+                <select value={eventType} onChange={e => setEventType(e.target.value)} style={inputStyle}>
+                  {EVENT_TYPES.map(t => <option key={t}>{t}</option>)}
+                </select>
+              </Field>
+              <Field label="מספר אורחים">
+                <input type="number" value={guests} onChange={e => setGuests(+e.target.value)} style={inputStyle} />
+              </Field>
+              <Field label="תאריך"><input type="date" defaultValue="2026-06-15" style={inputStyle} /></Field>
+              <Field label="שעה"><input type="time" defaultValue="19:00" style={inputStyle} /></Field>
+              <Field label="כתובת" full><input placeholder="רחוב ועיר" style={inputStyle} /></Field>
+              <Field label="הערה לשף" full><textarea placeholder="לדוגמה: בלי דובדבנים, יותר אננס" style={{ ...inputStyle, height: 60, resize: 'none' }} /></Field>
+            </div>
+          </ControlBlock>
+        </div>
+      </div>
+
+      {/* Sticky bottom summary */}
+      <section style={{
+        background: 'var(--ink)', color: 'var(--paper)',
+        padding: '24px 40px',
+        display: 'grid', gridTemplateColumns: '1fr 1fr 1fr 1fr auto',
+        gap: 24, alignItems: 'center',
+      }}>
+        <Summary label="גודל" value={`${size} · ${sizeObj.guests}`} />
+        <Summary label="פירות" value={fruits.length + ' זנים'} />
+        <Summary label="תוספות" value={extras.length ? extras.length + ' פריטים' : 'ללא'} />
+        <Summary label="סה״כ" value={`₪${total}`} big />
+        <button className="btn primary" style={{ background: accent, padding: '18px 40px' }}>
+          המשך לתשלום ←
+        </button>
+      </section>
+
+      <SiteFooter />
+    </div>
+  );
+}
+
+function StepIndicator({ step }) {
+  return (
+    <div style={{ display: 'flex', gap: 8, fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.1em' }}>
+      {['גודל', 'פירות', 'תוספות', 'אירוע', 'תשלום'].map((s, i) => (
+        <div key={i} style={{
+          padding: '6px 12px',
+          background: i + 1 <= step ? 'var(--ink)' : 'transparent',
+          color: i + 1 <= step ? 'var(--paper)' : 'var(--ink)',
+          border: '1.5px solid var(--ink)',
+          fontWeight: 700,
+        }}>{`0${i + 1}`} {s}</div>
+      ))}
+    </div>
+  );
+}
+
+function ControlBlock({ num, title, children, expanded = true }) {
+  return (
+    <div style={{ borderBottom: '1px solid var(--ink)', padding: '24px 0' }}>
+      <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' }}>
+        <div style={{ display: 'flex', alignItems: 'baseline', gap: 12 }}>
+          <span style={{ fontFamily: 'var(--mono)', fontSize: 12, opacity: 0.5 }}>{num}</span>
+          <h3 className="display" style={{ fontSize: 32, margin: 0 }}>{title}</h3>
+        </div>
+      </div>
+      {expanded && children}
+    </div>
+  );
+}
+
+function Field({ label, children, full }) {
+  return (
+    <div style={{ gridColumn: full ? 'span 2' : 'auto' }}>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.14em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 6 }}>{label}</div>
+      {children}
+    </div>
+  );
+}
+
+const inputStyle = {
+  width: '100%',
+  padding: '12px 14px',
+  background: 'transparent',
+  border: '2px solid var(--ink)',
+  fontFamily: 'var(--display)',
+  fontWeight: 600,
+  fontSize: 15,
+  direction: 'rtl',
+};
+
+function Summary({ label, value, big }) {
+  return (
+    <div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.6 }}>{label}</div>
+      <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: big ? 36 : 20, marginTop: 4, letterSpacing: '-0.02em' }}>{value}</div>
+    </div>
+  );
+}
+
+/* ---------- Live preview drawing ---------- */
+function KayakPreview({ size, fruits, extras }) {
+  // hash position based on fruit index, deterministic
+  const positions = useMemo(() => {
+    const w = size.w, h = size.h * 1.4;
+    const pts = [];
+    const fruitCount = Math.max(8, fruits.length * 4);
+    for (let i = 0; i < fruitCount; i++) {
+      const t = i / (fruitCount - 1);
+      // distribute along ellipse interior
+      const angle = (i * 137.5) % 360;
+      const r = 0.3 + (i % 5) * 0.1;
+      const x = 0.5 + Math.cos(angle * Math.PI / 180) * r * 0.4;
+      const y = 0.5 + Math.sin(angle * Math.PI / 180) * r * 0.35;
+      pts.push({
+        x: x * 100,
+        y: y * 100,
+        kind: fruits[i % Math.max(fruits.length, 1)] || 'watermelon',
+        size: 38 + (i % 3) * 8,
+      });
+    }
+    return pts;
+  }, [size.id, fruits.join(',')]);
+
+  return (
+    <div style={{
+      flex: 1,
+      display: 'flex', alignItems: 'center', justifyContent: 'center',
+      position: 'relative',
+      padding: '40px 0',
+    }}>
+      <div style={{
+        width: size.w,
+        height: size.h * 1.6,
+        position: 'relative',
+        transition: 'all 400ms var(--easing)',
+      }}>
+        {/* Outer kayak shape */}
+        <div style={{
+          position: 'absolute', inset: 0,
+          background: '#1a1a1a',
+          borderRadius: '50% / 50%',
+          boxShadow: '0 30px 60px rgba(0,0,0,.25)',
+        }} />
+        {/* Inner tray */}
+        <div style={{
+          position: 'absolute', inset: '8% 4%',
+          background: 'var(--paper)',
+          borderRadius: '50% / 50%',
+          overflow: 'hidden',
+        }}>
+          {fruits.length === 0 && (
+            <div style={{ position: 'absolute', inset: 0, display: 'flex', alignItems: 'center', justifyContent: 'center', fontFamily: 'var(--mono)', fontSize: 12, opacity: 0.4 }}>
+              בחרו פירות →
+            </div>
+          )}
+          {positions.map((p, i) => {
+            const Comp = FRUIT_ART[p.kind] || WatermelonArt;
+            return (
+              <div key={i} style={{
+                position: 'absolute',
+                left: `${p.x}%`, top: `${p.y}%`,
+                transform: 'translate(-50%,-50%)',
+                transition: 'all 500ms var(--easing)',
+              }}>
+                <Comp size={p.size} />
+              </div>
+            );
+          })}
+        </div>
+        {/* Label */}
+        <div style={{ position: 'absolute', bottom: -50, left: 20 }}>
+          <Sticker color="var(--citrus)" rotate={-4}>פרי לי · {size.id}</Sticker>
+        </div>
+        {extras.length > 0 && (
+          <div style={{ position: 'absolute', top: -30, right: 20 }}>
+            <Sticker color="var(--leaf)" rotate={6}>+ {extras.length} תוספות</Sticker>
+          </div>
+        )}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { KayakConfigurator });
+</script>
+
+<script type="text/babel">
+/* admin.jsx — פאנל אדמין: לוח בקרה, מוצרים, הזמנות */
+
+function AdminDashboard({ accent = 'var(--watermelon)' }) {
+  const [tab, setTab] = useState('dashboard');
+  return (
+    <div style={{ background: 'var(--paper)', minHeight: 800, display: 'grid', gridTemplateColumns: '240px 1fr', height: '100%' }}>
+      <AdminSidebar tab={tab} setTab={setTab} />
+      <div style={{ overflow: 'auto' }}>
+        {tab === 'dashboard' && <DashboardView accent={accent} />}
+        {tab === 'products' && <ProductsView accent={accent} />}
+        {tab === 'orders' && <OrdersView accent={accent} />}
+        {tab === 'kayaks' && <KayaksView accent={accent} />}
+      </div>
+    </div>
+  );
+}
+
+function AdminSidebar({ tab, setTab }) {
+  const items = [
+    { id: 'dashboard', label: 'לוח בקרה', icon: '◐' },
+    { id: 'products', label: 'מוצרים', icon: '◇' },
+    { id: 'orders', label: 'הזמנות', icon: '◊' },
+    { id: 'kayaks', label: 'קיאקים', icon: '⬡' },
+    { id: 'customers', label: 'לקוחות', icon: '○' },
+    { id: 'coupons', label: 'קופונים', icon: '✺' },
+    { id: 'settings', label: 'הגדרות', icon: '⚙' },
+  ];
+  return (
+    <aside style={{
+      background: 'var(--ink)', color: 'var(--paper)',
+      padding: '24px 0',
+      display: 'flex', flexDirection: 'column',
+      borderLeft: '2px solid var(--ink)',
+    }}>
+      <div style={{ padding: '0 20px 24px', borderBottom: '1px solid #333' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+          <Logo size={36} />
+          <div>
+            <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 18 }}>פרי לי</div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em', opacity: 0.5 }}>ADMIN</div>
+          </div>
+        </div>
+      </div>
+      <nav style={{ padding: '20px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: 2 }}>
+        {items.map(it => (
+          <button key={it.id} onClick={() => setTab(it.id)} style={{
+            display: 'flex', alignItems: 'center', gap: 12,
+            padding: '12px 14px',
+            background: tab === it.id ? 'var(--paper)' : 'transparent',
+            color: tab === it.id ? 'var(--ink)' : 'var(--paper)',
+            border: 'none',
+            fontFamily: 'var(--display)', fontWeight: 700, fontSize: 14,
+            textAlign: 'right', cursor: 'pointer',
+            borderRadius: 0,
+          }}>
+            <span style={{ fontSize: 16, opacity: 0.7 }}>{it.icon}</span>
+            {it.label}
+          </button>
+        ))}
+      </nav>
+      <div style={{ padding: 20, borderTop: '1px solid #333', display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 36, height: 36, background: 'var(--citrus)', borderRadius: '50%', display: 'flex', alignItems: 'center', justifyContent: 'center', color: 'var(--ink)', fontFamily: 'var(--display)', fontWeight: 900 }}>ל</div>
+        <div>
+          <div style={{ fontSize: 13, fontWeight: 700 }}>ליאור</div>
+          <div style={{ fontSize: 10, opacity: 0.5 }}>בעלים · דימונה</div>
+        </div>
+      </div>
+    </aside>
+  );
+}
+
+/* ---------- Dashboard ---------- */
+function DashboardView({ accent }) {
+  return (
+    <div>
+      <div style={{ padding: '30px 40px 20px', borderBottom: '2px solid var(--ink)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 11, letterSpacing: '0.18em', opacity: 0.5 }}>06.05.2026 · יום רביעי · 09:42</div>
+          <h1 className="display" style={{ fontSize: 64, margin: '10px 0 0' }}>בוקר טוב, ליאור.</h1>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button style={pillBtnStyle()}>היום</button>
+          <button style={pillBtnStyle(true)}>השבוע</button>
+          <button style={pillBtnStyle()}>החודש</button>
+        </div>
+      </div>
+
+      {/* KPI strip */}
+      <div style={{ display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', borderBottom: '2px solid var(--ink)' }}>
+        <KPI label="הכנסות השבוע" value="₪14,820" delta="+18%" big bg={accent} />
+        <KPI label="הזמנות חדשות" value="47" delta="+6" />
+        <KPI label="קיאקים השבוע" value="8" delta="2 מאושרים" />
+        <KPI label="מלאי נמוך" value="3" delta="פריטים" warning />
+      </div>
+
+      <div style={{ display: 'grid', gridTemplateColumns: '2fr 1fr', borderBottom: '2px solid var(--ink)' }}>
+        <div style={{ padding: 30, borderLeft: '1px solid var(--ink)' }}>
+          <SectionTag num="01" label="מכירות 7 ימים" />
+          <SalesChart accent={accent} />
+        </div>
+        <div style={{ padding: 30 }}>
+          <SectionTag num="02" label="מוצרים מובילים" />
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 12, marginTop: 24 }}>
+            {[
+              { name: 'אננס קלוף', units: 184, kind: 'pineapple' },
+              { name: 'אבטיח חתוך', units: 142, kind: 'watermelon' },
+              { name: 'תות שדה', units: 98, kind: 'strawberry' },
+              { name: 'סלט מעורב', units: 76, kind: 'kiwi' },
+            ].map((p, i) => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: 12, border: '1px solid var(--ink)' }}>
+                <div style={{ width: 50, height: 50, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                  <Fruit kind={p.kind} size={42} />
+                </div>
+                <div style={{ flex: 1 }}>
+                  <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16 }}>{p.name}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6 }}>{p.units} יחידות</div>
+                </div>
+                <div style={{ width: 60, height: 6, background: 'var(--paper-2)' }}>
+                  <div style={{ width: `${(p.units / 184) * 100}%`, height: '100%', background: accent }} />
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      </div>
+
+      {/* Recent orders */}
+      <div style={{ padding: 30 }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'baseline', marginBottom: 20 }}>
+          <SectionTag num="03" label="הזמנות אחרונות" />
+          <a style={{ fontFamily: 'var(--mono)', fontSize: 12, fontWeight: 700, letterSpacing: '0.1em' }}>הצג הכל →</a>
+        </div>
+        <RecentOrdersTable />
+      </div>
+    </div>
+  );
+}
+
+function pillBtnStyle(active) {
+  return {
+    padding: '8px 14px',
+    background: active ? 'var(--ink)' : 'transparent',
+    color: active ? 'var(--paper)' : 'var(--ink)',
+    border: '2px solid var(--ink)',
+    fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700,
+    letterSpacing: '0.06em',
+    cursor: 'pointer',
+  };
+}
+
+function KPI({ label, value, delta, big, bg, warning }) {
+  return (
+    <div style={{
+      padding: '24px 24px',
+      borderLeft: '1px solid var(--ink)',
+      background: bg || 'transparent',
+      color: bg ? 'var(--ink)' : 'var(--ink)',
+    }}>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.7 }}>{label}</div>
+      <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: big ? 56 : 44, lineHeight: 1, marginTop: 8, letterSpacing: '-0.04em' }}>{value}</div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700, marginTop: 8, color: warning ? 'var(--watermelon)' : 'inherit', opacity: warning ? 1 : 0.7 }}>{warning ? '⚠ ' : '↗ '}{delta}</div>
+    </div>
+  );
+}
+
+function SalesChart({ accent }) {
+  const data = [820, 1240, 980, 1680, 2100, 2840, 1960];
+  const max = Math.max(...data);
+  const days = ['ש', 'ו', 'ה', 'ד', 'ג', 'ב', 'א'];
+  return (
+    <div style={{ marginTop: 24 }}>
+      <div style={{ display: 'flex', alignItems: 'flex-end', gap: 12, height: 220, paddingBottom: 24, borderBottom: '1px solid var(--ink)' }}>
+        {data.map((v, i) => (
+          <div key={i} style={{ flex: 1, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700 }}>₪{v}</div>
+            <div style={{
+              width: '100%',
+              height: `${(v / max) * 160}px`,
+              background: i === data.length - 2 ? accent : 'var(--ink)',
+              transition: 'all 400ms',
+            }} />
+          </div>
+        ))}
+      </div>
+      <div style={{ display: 'flex', gap: 12, marginTop: 8 }}>
+        {days.map((d, i) => <div key={i} style={{ flex: 1, textAlign: 'center', fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6 }}>{d}</div>)}
+      </div>
+    </div>
+  );
+}
+
+function RecentOrdersTable() {
+  const orders = [
+    { id: '#1284', name: 'מירב כהן', items: '4 פריטים', total: 142, status: 'משלוח', type: 'shop' },
+    { id: '#1283', name: 'נתנאל לוי · חתונה', items: 'קיאק XL + 3 תוספות', total: 1545, status: 'אישור נדרש', type: 'kayak' },
+    { id: '#1282', name: 'תהילה ביטון', items: '2 פריטים', total: 56, status: 'הושלם', type: 'shop' },
+    { id: '#1281', name: 'אריאל זנו · בר מצווה', items: 'קיאק M', total: 620, status: 'אושר', type: 'kayak' },
+    { id: '#1280', name: 'שרה אביטל', items: '6 פריטים', total: 198, status: 'הושלם', type: 'shop' },
+  ];
+  return (
+    <div style={{ border: '2px solid var(--ink)' }}>
+      <div style={{ display: 'grid', gridTemplateColumns: '80px 1fr 1.4fr 100px 140px 60px', padding: '14px 16px', background: 'var(--paper-2)', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase' }}>
+        <div>הזמנה</div><div>לקוח</div><div>פריטים</div><div>סכום</div><div>סטטוס</div><div></div>
+      </div>
+      {orders.map((o, i) => (
+        <div key={i} style={{
+          display: 'grid', gridTemplateColumns: '80px 1fr 1.4fr 100px 140px 60px',
+          padding: '16px 16px', alignItems: 'center',
+          borderTop: '1px solid var(--ink)',
+          fontFamily: 'var(--display)',
+        }}>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 12, opacity: 0.6 }}>{o.id}</div>
+          <div style={{ fontWeight: 700, fontSize: 14 }}>
+            {o.type === 'kayak' && <span style={{ background: 'var(--watermelon)', color: 'var(--ink)', fontFamily: 'var(--mono)', fontSize: 9, padding: '2px 6px', marginLeft: 8, fontWeight: 800 }}>קיאק</span>}
+            {o.name}
+          </div>
+          <div style={{ fontSize: 13, opacity: 0.7 }}>{o.items}</div>
+          <div style={{ fontWeight: 800, fontSize: 15 }}>₪{o.total}</div>
+          <div>
+            <StatusBadge status={o.status} />
+          </div>
+          <div style={{ textAlign: 'left' }}>›</div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
+function StatusBadge({ status }) {
+  const map = {
+    'הושלם': { bg: 'var(--leaf)', fg: 'var(--paper)' },
+    'משלוח': { bg: 'var(--citrus)', fg: 'var(--ink)' },
+    'אושר': { bg: 'var(--ink)', fg: 'var(--paper)' },
+    'אישור נדרש': { bg: 'var(--watermelon)', fg: 'var(--ink)' },
+  };
+  const c = map[status] || { bg: 'var(--paper-2)', fg: 'var(--ink)' };
+  return (
+    <span style={{
+      display: 'inline-block', padding: '5px 10px',
+      background: c.bg, color: c.fg,
+      fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.06em',
+    }}>{status}</span>
+  );
+}
+
+/* ---------- Products view ---------- */
+function ProductsView({ accent }) {
+  return (
+    <div>
+      <div style={{ padding: '30px 40px 20px', borderBottom: '2px solid var(--ink)', display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end' }}>
+        <div>
+          <SectionTag num="—" label="ניהול מלאי · 12 פריטים פעילים" />
+          <h1 className="display" style={{ fontSize: 64, margin: '10px 0 0' }}>מוצרים.</h1>
+        </div>
+        <div style={{ display: 'flex', gap: 8 }}>
+          <button style={pillBtnStyle()}>ייבוא CSV</button>
+          <button className="btn primary" style={{ background: accent, padding: '12px 20px' }}>+ מוצר חדש</button>
+        </div>
+      </div>
+
+      <div style={{ padding: '20px 40px', display: 'flex', gap: 12, borderBottom: '2px solid var(--ink)' }}>
+        <input placeholder="חיפוש מוצר..." style={{ flex: 1, ...inputStyle, padding: '12px 16px' }} />
+        <select style={{ ...inputStyle, padding: '12px 16px', width: 200 }}>
+          <option>כל הקטגוריות</option>
+          <option>קלופים</option><option>סלטים</option><option>יער</option>
+        </select>
+        <select style={{ ...inputStyle, padding: '12px 16px', width: 200 }}>
+          <option>כל הסטטוסים</option>
+          <option>פעיל</option><option>לא פעיל</option><option>מלאי נמוך</option>
+        </select>
+      </div>
+
+      <div style={{ padding: 40 }}>
+        <div style={{ border: '2px solid var(--ink)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '60px 80px 1.4fr 1fr 100px 100px 120px 80px', padding: '14px 16px', background: 'var(--paper-2)', fontFamily: 'var(--mono)', fontSize: 10, fontWeight: 700, letterSpacing: '0.16em', textTransform: 'uppercase', alignItems: 'center' }}>
+            <div><input type="checkbox" /></div>
+            <div>תמונה</div>
+            <div>שם</div>
+            <div>קטגוריה</div>
+            <div>מחיר</div>
+            <div>מלאי</div>
+            <div>סטטוס</div>
+            <div></div>
+          </div>
+          {ALL_PRODUCTS.slice(0, 8).map((p, i) => (
+            <div key={p.id} style={{
+              display: 'grid', gridTemplateColumns: '60px 80px 1.4fr 1fr 100px 100px 120px 80px',
+              padding: '12px 16px', alignItems: 'center',
+              borderTop: '1px solid var(--ink)',
+              fontFamily: 'var(--display)',
+            }}>
+              <div><input type="checkbox" /></div>
+              <div style={{ width: 50, height: 50, background: 'var(--paper-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Fruit kind={p.kind} size={40} />
+              </div>
+              <div>
+                <div style={{ fontWeight: 800, fontSize: 15 }}>{p.name}</div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.5 }}>SKU-000{p.id}</div>
+              </div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 13 }}>{p.category}</div>
+              <div style={{ fontWeight: 800, fontSize: 15 }}>₪{p.price}</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 13, color: i === 2 ? 'var(--watermelon)' : 'inherit', fontWeight: i === 2 ? 800 : 400 }}>{[24, 18, 4, 32, 16, 12, 28, 21][i]}</div>
+              <div><StatusBadge status={i === 2 ? 'אישור נדרש' : 'אושר'} /></div>
+              <div style={{ display: 'flex', gap: 6, justifyContent: 'flex-end' }}>
+                <button style={{ background: 'transparent', border: '1px solid var(--ink)', padding: '4px 8px', fontSize: 11, fontFamily: 'var(--mono)', cursor: 'pointer' }}>ערוך</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Add product modal preview */}
+      <div style={{ padding: '0 40px 40px' }}>
+        <SectionTag num="★" label="טופס הוספה / עריכה" />
+        <div style={{ marginTop: 20, border: '2px solid var(--ink)', padding: 30, background: 'var(--paper-2)' }}>
+          <div style={{ display: 'grid', gridTemplateColumns: '200px 1fr 1fr', gap: 20 }}>
+            <div style={{ aspectRatio: '1', background: 'var(--paper)', border: '2px dashed var(--ink)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexDirection: 'column', gap: 10 }}>
+              <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 24 }}>+</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.1em' }}>העלה תמונה</div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <Field label="שם המוצר"><input placeholder="למשל: אננס קלוף" style={inputStyle} defaultValue="אננס קלוף" /></Field>
+              <Field label="תיאור"><textarea placeholder="קלוף ביד, חתוך גס" style={{ ...inputStyle, height: 70, resize: 'none' }} defaultValue="קלוף ביד, נחתך לחתיכות נשיכה." /></Field>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <Field label="קטגוריה">
+                  <select style={inputStyle}><option>קלופים</option></select>
+                </Field>
+                <Field label="משקל"><input style={inputStyle} defaultValue="500ג׳" /></Field>
+              </div>
+            </div>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 }}>
+                <Field label="מחיר ₪"><input type="number" defaultValue="24.90" style={inputStyle} /></Field>
+                <Field label="מלאי"><input type="number" defaultValue="24" style={inputStyle} /></Field>
+              </div>
+              <Field label="תגית"><input style={inputStyle} placeholder="הכי נמכר / חדש / מבצע" /></Field>
+              <Field label="סטטוס">
+                <div style={{ display: 'flex', gap: 8 }}>
+                  <button style={{ flex: 1, padding: '12px', background: 'var(--ink)', color: 'var(--paper)', border: '2px solid var(--ink)', fontFamily: 'var(--display)', fontWeight: 700 }}>פעיל</button>
+                  <button style={{ flex: 1, padding: '12px', background: 'transparent', color: 'var(--ink)', border: '2px solid var(--ink)', fontFamily: 'var(--display)', fontWeight: 700 }}>טיוטה</button>
+                </div>
+              </Field>
+              <button className="btn primary" style={{ background: accent, marginTop: 8 }}>שמור מוצר</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Orders view ---------- */
+function OrdersView({ accent }) {
+  return (
+    <div>
+      <div style={{ padding: '30px 40px 20px', borderBottom: '2px solid var(--ink)' }}>
+        <SectionTag num="—" label="כל ההזמנות · 47 פעילות" />
+        <h1 className="display" style={{ fontSize: 64, margin: '10px 0 0' }}>הזמנות.</h1>
+      </div>
+      <div style={{ display: 'flex', gap: 0, borderBottom: '2px solid var(--ink)' }}>
+        {['הכל · 47', 'ממתין · 8', 'בהכנה · 12', 'משלוח · 6', 'הושלם · 21'].map((t, i) => (
+          <button key={i} style={{
+            padding: '18px 24px',
+            background: i === 0 ? 'var(--ink)' : 'transparent',
+            color: i === 0 ? 'var(--paper)' : 'var(--ink)',
+            border: 'none',
+            borderLeft: '1px solid var(--ink)',
+            fontFamily: 'var(--display)', fontWeight: 700, fontSize: 15,
+            cursor: 'pointer',
+          }}>{t}</button>
+        ))}
+      </div>
+      <div style={{ padding: 40 }}>
+        <RecentOrdersTable />
+      </div>
+    </div>
+  );
+}
+
+/* ---------- Kayaks view ---------- */
+function KayaksView({ accent }) {
+  const kayaks = [
+    { id: 'KY-2042', name: 'נתנאל לוי', event: 'חתונה', date: '15.06.2026', size: 'XL', guests: 180, status: 'אישור נדרש', total: 1545 },
+    { id: 'KY-2041', name: 'אריאל זנו', event: 'בר מצווה', date: '22.05.2026', size: 'M', guests: 25, status: 'אושר', total: 620 },
+    { id: 'KY-2040', name: 'מאי שלום', event: 'יום הולדת', date: '11.05.2026', size: 'L', guests: 40, status: 'בהכנה', total: 980 },
+    { id: 'KY-2039', name: 'ערן ביטון', event: 'אירוע עסקי', date: '08.05.2026', size: 'L', guests: 35, status: 'הושלם', total: 1015 },
+  ];
+  return (
+    <div>
+      <div style={{ padding: '30px 40px 20px', borderBottom: '2px solid var(--ink)' }}>
+        <SectionTag num="—" label="הזמנות אירועים · 8 פעילות" />
+        <h1 className="display" style={{ fontSize: 64, margin: '10px 0 0' }}>קיאקים.</h1>
+      </div>
+      <div style={{ padding: 40, display: 'grid', gridTemplateColumns: 'repeat(2, 1fr)', gap: 20 }}>
+        {kayaks.map(k => (
+          <div key={k.id} style={{ border: '2px solid var(--ink)' }}>
+            <div style={{ padding: '16px 20px', background: k.status === 'אישור נדרש' ? accent : 'var(--paper-2)', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '2px solid var(--ink)' }}>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.6 }}>{k.id}</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 18 }}>{k.event} · {k.name}</div>
+              </div>
+              <StatusBadge status={k.status} />
+            </div>
+            <div style={{ padding: 20, display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 16, borderBottom: '1px solid var(--ink)' }}>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6, letterSpacing: '0.1em' }}>תאריך</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16, marginTop: 4 }}>{k.date}</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6, letterSpacing: '0.1em' }}>גודל / אורחים</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 16, marginTop: 4 }}>{k.size} · {k.guests}</div>
+              </div>
+              <div>
+                <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.6, letterSpacing: '0.1em' }}>סכום</div>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 18, marginTop: 4 }}>₪{k.total}</div>
+              </div>
+            </div>
+            <div style={{ padding: '12px 20px', display: 'flex', gap: 8, justifyContent: 'flex-end' }}>
+              {k.status === 'אישור נדרש' && (
+                <>
+                  <button style={{ padding: '8px 14px', background: 'var(--leaf)', color: 'var(--paper)', border: 'none', fontFamily: 'var(--display)', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>אשר</button>
+                  <button style={{ padding: '8px 14px', background: 'transparent', color: 'var(--ink)', border: '1px solid var(--ink)', fontFamily: 'var(--display)', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>דחה</button>
+                </>
+              )}
+              <button style={{ padding: '8px 14px', background: 'var(--ink)', color: 'var(--paper)', border: 'none', fontFamily: 'var(--display)', fontWeight: 700, fontSize: 13, cursor: 'pointer' }}>פרטים מלאים →</button>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { AdminDashboard });
+</script>
+
+<script type="text/babel">
+/* mobile.jsx — מסך מובייל באייפון */
+
+function MobileScreen({ accent = 'var(--watermelon)' }) {
+  return (
+    <div style={{ height: '100%', overflow: 'auto', background: 'var(--paper)', fontFamily: 'var(--body)', direction: 'rtl' }}>
+      {/* App header */}
+      <div style={{ padding: '16px 20px', display: 'flex', justifyContent: 'space-between', alignItems: 'center', borderBottom: '1.5px solid var(--ink)' }}>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 8 }}>
+          <Logo size={28} />
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 18 }}>פרי לי</div>
+        </div>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 6, background: 'var(--ink)', color: 'var(--paper)', padding: '6px 10px', fontFamily: 'var(--mono)', fontSize: 11 }}>
+          סל <span style={{ background: 'var(--citrus)', color: 'var(--ink)', padding: '0 5px', borderRadius: 999, fontWeight: 700 }}>3</span>
+        </div>
+      </div>
+
+      {/* Hero */}
+      <div style={{ padding: '20px', borderBottom: '1.5px solid var(--ink)' }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em', opacity: 0.5 }}>טרי הבוקר · 06.05</div>
+        <h1 className="display" style={{ fontSize: 56, margin: '10px 0 0', lineHeight: 0.85 }}>
+          פירות
+          <br />
+          ש<span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400, color: accent }}>נחתכו</span>
+          <br />
+          עכשיו.
+        </h1>
+        <button className="btn primary" style={{ background: accent, marginTop: 20, width: '100%', padding: '14px' }}>הזמן עכשיו →</button>
+      </div>
+
+      {/* Quick actions */}
+      <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', borderBottom: '1.5px solid var(--ink)' }}>
+        <div style={{ padding: 20, borderLeft: '1px solid var(--ink)', textAlign: 'center' }}>
+          <PineappleArt size={50} />
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, marginTop: 8 }}>קלופים</div>
+        </div>
+        <div style={{ padding: 20, textAlign: 'center', background: 'var(--ink)', color: 'var(--paper)' }}>
+          <div style={{ width: 50, height: 28, background: accent, borderRadius: '50%/100%', margin: '0 auto', position: 'relative', top: 6 }} />
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, marginTop: 16 }}>קיאקים</div>
+        </div>
+      </div>
+
+      {/* Categories scroll */}
+      <div style={{ padding: '14px 20px', borderBottom: '1.5px solid var(--ink)', display: 'flex', gap: 6, overflowX: 'auto' }}>
+        {['הכל', 'קלופים', 'סלטים', 'יער'].map((c, i) => (
+          <div key={i} style={{
+            padding: '6px 12px',
+            background: i === 0 ? 'var(--ink)' : 'transparent',
+            color: i === 0 ? 'var(--paper)' : 'var(--ink)',
+            border: '1.5px solid var(--ink)',
+            fontFamily: 'var(--mono)', fontSize: 11, fontWeight: 700,
+            whiteSpace: 'nowrap',
+          }}>{c}</div>
+        ))}
+      </div>
+
+      {/* Products */}
+      <div style={{ padding: 20 }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 10, letterSpacing: '0.16em', textTransform: 'uppercase', opacity: 0.6, marginBottom: 12 }}>הכי נמכרים</div>
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+          {ALL_PRODUCTS.slice(0, 4).map(p => (
+            <div key={p.id} style={{ border: '1.5px solid var(--ink)', padding: 12 }}>
+              <div style={{ height: 90, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
+                <Fruit kind={p.kind} size={70} />
+              </div>
+              <div style={{ fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14, marginTop: 10 }}>{p.name}</div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 6 }}>
+                <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 16 }}>₪{p.price}</div>
+                <button style={{ background: 'var(--ink)', color: 'var(--paper)', border: 'none', width: 24, height: 24, fontFamily: 'var(--display)', fontWeight: 800 }}>+</button>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+
+      {/* Kayak banner */}
+      <div style={{ margin: 20, padding: 20, background: 'var(--ink)', color: 'var(--paper)', borderTop: '2px solid var(--ink)' }}>
+        <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em', opacity: 0.6 }}>חדש · בלעדי</div>
+        <h3 className="display" style={{ fontSize: 32, margin: '8px 0' }}>בנה <span style={{ color: accent }}>קיאק.</span></h3>
+        <div style={{ fontFamily: 'var(--serif)', fontSize: 13, opacity: 0.8, marginBottom: 14 }}>מגש פירות ענק לאירוע. בחר גודל, פירות, תוספות.</div>
+        <button style={{ width: '100%', padding: 12, background: accent, color: 'var(--ink)', border: 'none', fontFamily: 'var(--display)', fontWeight: 800, fontSize: 14 }}>פתח קונפיגורטור →</button>
+      </div>
+
+      {/* Bottom nav */}
+      <div style={{ position: 'sticky', bottom: 0, background: 'var(--paper)', borderTop: '1.5px solid var(--ink)', display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)' }}>
+        {[
+          { l: 'בית', a: true }, { l: 'חנות' }, { l: 'קיאק' }, { l: 'אני' }
+        ].map((it, i) => (
+          <div key={i} style={{
+            padding: '12px 0', textAlign: 'center',
+            background: it.a ? 'var(--ink)' : 'transparent',
+            color: it.a ? 'var(--paper)' : 'var(--ink)',
+            fontFamily: 'var(--display)', fontWeight: 700, fontSize: 13,
+            borderLeft: i > 0 ? '1px solid var(--ink)' : 'none',
+          }}>{it.l}</div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
+Object.assign(window, { MobileScreen });
+</script>
+
+<script type="text/babel">
+/* app.jsx — main shell: top nav + screen switcher + tweaks */
+
+const TWEAK_DEFAULTS = /*EDITMODE-BEGIN*/{
+  "palette": "watermelon",
+  "displayFont": "Heebo",
+  "serifFont": "Frank Ruhl Libre",
+  "btnStyle": "sharp",
+  "heroVariant": "mega"
+}/*EDITMODE-END*/;
+
+const PALETTES = {
+  watermelon: { accent: '#FF4D6D', label: 'אבטיח' },
+  citrus:     { accent: '#FFD60A', label: 'הדרים' },
+  leaf:       { accent: '#1F8A5B', label: 'עלה' },
+  berry:      { accent: '#6B1F3A', label: 'יער' },
+  tangerine:  { accent: '#FF7A1A', label: 'מנגו' },
+};
+
+const FONTS = {
+  display: {
+    Heebo: '"Heebo", system-ui, sans-serif',
+    Assistant: '"Assistant", system-ui, sans-serif',
+    Anek: '"Anek Hebrew", system-ui, sans-serif',
+    Rubik: '"Rubik", system-ui, sans-serif',
+  },
+  serif: {
+    'Frank Ruhl Libre': '"Frank Ruhl Libre", Georgia, serif',
+    'David Libre': '"David Libre", Georgia, serif',
+    'Noto Serif Hebrew': '"Noto Serif Hebrew", Georgia, serif',
+  },
+};
+
+const SCREENS = [
+  { id: 'home', label: 'דף בית', sub: 'דסקטופ' },
+  { id: 'shop', label: 'קטלוג', sub: 'פירות קלופים' },
+  { id: 'product', label: 'מוצר', sub: 'דף בודד' },
+  { id: 'kayak', label: 'קונפיגורטור', sub: 'בנה קיאק' },
+  { id: 'admin-dash', label: 'אדמין · בקרה', sub: 'KPI + מכירות' },
+  { id: 'admin-products', label: 'אדמין · מוצרים', sub: 'הוסף / ערוך' },
+  { id: 'admin-kayaks', label: 'אדמין · קיאקים', sub: 'אישור הזמנות' },
+  { id: 'mobile', label: 'מובייל', sub: 'iPhone' },
+  { id: 'brand', label: 'מערכת עיצוב', sub: 'מותג + טוקנים' },
+];
+
+function App() {
+  const [t, setTweak] = useTweaks(TWEAK_DEFAULTS);
+  const [screen, setScreen] = useState(() => {
+    try { return localStorage.getItem('pl-screen') || 'home'; } catch { return 'home'; }
+  });
+  useEffect(() => { try { localStorage.setItem('pl-screen', screen); } catch {} }, [screen]);
+
+  const palette = PALETTES[t.palette] || PALETTES.watermelon;
+  const accent = palette.accent;
+
+  useEffect(() => {
+    const r = document.documentElement;
+    r.style.setProperty('--display', FONTS.display[t.displayFont] || FONTS.display.Heebo);
+    r.style.setProperty('--serif', FONTS.serif[t.serifFont] || FONTS.serif['Frank Ruhl Libre']);
+    r.style.setProperty('--watermelon', palette.accent);
+  }, [t.displayFont, t.serifFont, t.palette]);
+
+  useEffect(() => {
+    const styleId = '__btn_style';
+    let s = document.getElementById(styleId);
+    if (!s) { s = document.createElement('style'); s.id = styleId; document.head.appendChild(s); }
+    const radius = t.btnStyle === 'pill' ? '999px' : t.btnStyle === 'soft' ? '8px' : '0px';
+    s.textContent = `.btn, button.btn { border-radius: ${radius} !important; }`;
+  }, [t.btnStyle]);
+
+  return (
+    <div style={{ minHeight: '100vh', background: '#1a1a1a' }}>
+      <PreviewBar screen={screen} setScreen={setScreen} />
+      <div style={{
+        padding: '24px',
+        display: 'flex',
+        justifyContent: 'center',
+      }}>
+        <ScreenFrame screen={screen}>
+          {renderScreen(screen, accent, t)}
+        </ScreenFrame>
+      </div>
+
+      <TweaksPanel title="Tweaks · פרי לי">
+        <TweakSection title="פלטת צבעים">
+          <TweakColor
+            label="צבע ראשי"
+            value={t.palette}
+            options={Object.keys(PALETTES).map(k => ({ value: k, color: PALETTES[k].accent, label: PALETTES[k].label }))}
+            onChange={(v) => setTweak('palette', v)}
+          />
+        </TweakSection>
+        <TweakSection title="טיפוגרפיה">
+          <TweakSelect label="גופן ראשי" value={t.displayFont} options={Object.keys(FONTS.display)} onChange={(v) => setTweak('displayFont', v)} />
+          <TweakSelect label="גופן סריף" value={t.serifFont} options={Object.keys(FONTS.serif)} onChange={(v) => setTweak('serifFont', v)} />
+        </TweakSection>
+        <TweakSection title="כפתורים">
+          <TweakRadio label="סגנון" value={t.btnStyle} options={[{value:'sharp',label:'חד'},{value:'soft',label:'רך'},{value:'pill',label:'גלולה'}]} onChange={(v) => setTweak('btnStyle', v)} />
+        </TweakSection>
+        <TweakSection title="הירו (דף בית)">
+          <TweakRadio label="וריאציה" value={t.heroVariant} options={[{value:'mega',label:'ענק'},{value:'split',label:'מפוצל'},{value:'editorial',label:'מגזין'}]} onChange={(v) => setTweak('heroVariant', v)} />
+        </TweakSection>
+      </TweaksPanel>
+    </div>
+  );
+}
+
+/* Top nav bar — outside the design preview */
+function PreviewBar({ screen, setScreen }) {
+  const current = SCREENS.find(s => s.id === screen) || SCREENS[0];
+  return (
+    <div style={{
+      background: '#0a0a0a', color: '#fdfbf5',
+      padding: '14px 24px',
+      display: 'flex', alignItems: 'center', gap: 24,
+      borderBottom: '1px solid #2a2a2a',
+      position: 'sticky', top: 0, zIndex: 100,
+      direction: 'rtl',
+    }}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+        <div style={{ width: 28, height: 28, borderRadius: '50%', background: '#FFD60A', position: 'relative', overflow: 'hidden', border: '1.5px solid #0a0a0a' }}>
+          {[0, 60, 120].map(rot => (
+            <div key={rot} style={{ position: 'absolute', top: '50%', left: '50%', width: '50%', height: 1.5, background: '#0a0a0a', transformOrigin: 'left center', transform: `rotate(${rot}deg)` }} />
+          ))}
+        </div>
+        <div>
+          <div style={{ fontFamily: 'var(--display)', fontWeight: 900, fontSize: 14, letterSpacing: '-0.02em' }}>פרי לי</div>
+          <div style={{ fontFamily: 'var(--mono)', fontSize: 9, letterSpacing: '0.16em', opacity: 0.5 }}>PREVIEW</div>
+        </div>
+      </div>
+      <div style={{ width: 1, height: 28, background: '#2a2a2a' }} />
+      <div style={{
+        display: 'flex', gap: 4, overflowX: 'auto', flex: 1,
+        scrollbarWidth: 'none',
+      }}>
+        {SCREENS.map(s => (
+          <button key={s.id} onClick={() => setScreen(s.id)} style={{
+            padding: '8px 14px',
+            background: screen === s.id ? '#fdfbf5' : 'transparent',
+            color: screen === s.id ? '#0a0a0a' : '#fdfbf5',
+            border: '1px solid ' + (screen === s.id ? '#fdfbf5' : '#2a2a2a'),
+            fontFamily: 'var(--display)', fontWeight: 700, fontSize: 12,
+            cursor: 'pointer',
+            whiteSpace: 'nowrap',
+            display: 'flex', flexDirection: 'column', alignItems: 'flex-start',
+            lineHeight: 1.2,
+          }}>
+            <span>{s.label}</span>
+            <span style={{ fontFamily: 'var(--mono)', fontSize: 9, opacity: 0.5, fontWeight: 400 }}>{s.sub}</span>
+          </button>
+        ))}
+      </div>
+      <div style={{ fontFamily: 'var(--mono)', fontSize: 10, opacity: 0.5, letterSpacing: '0.1em' }}>
+        {current.label.toUpperCase()}
+      </div>
+    </div>
+  );
+}
+
+/* Frame for each screen — gives padding + label */
+function ScreenFrame({ screen, children }) {
+  if (screen === 'mobile') {
+    return (
+      <div style={{ padding: '40px 0', display: 'flex', justifyContent: 'center' }}>
+        <IOSDevice width={402} height={874}>
+          {children}
+        </IOSDevice>
+      </div>
+    );
+  }
+  // Desktop frame
+  return (
+    <div style={{
+      width: '100%', maxWidth: 1440,
+      background: 'var(--paper)',
+      boxShadow: '0 30px 80px rgba(0,0,0,.4), 0 0 0 1px rgba(255,255,255,.05)',
+      overflow: 'hidden',
+    }}>
+      {children}
+    </div>
+  );
+}
+
+function renderScreen(screen, accent, t) {
+  switch (screen) {
+    case 'home':            return <HomePage accent={accent} heroVariant={t.heroVariant} />;
+    case 'shop':            return <ShopPage accent={accent} />;
+    case 'product':         return <ProductPage accent={accent} />;
+    case 'kayak':           return <KayakConfigurator accent={accent} />;
+    case 'admin-dash':      return <AdminDashboardWrap tab="dashboard" accent={accent} />;
+    case 'admin-products':  return <AdminDashboardWrap tab="products" accent={accent} />;
+    case 'admin-kayaks':    return <AdminDashboardWrap tab="kayaks" accent={accent} />;
+    case 'mobile':          return <MobileScreen accent={accent} />;
+    case 'brand':           return <BrandBoard accent={accent} />;
+    default:                return <HomePage accent={accent} heroVariant={t.heroVariant} />;
+  }
+}
+
+/* Admin wrapper with tab control */
+function AdminDashboardWrap({ tab, accent }) {
+  const [t, setT] = useState(tab);
+  useEffect(() => setT(tab), [tab]);
+  return (
+    <div style={{ background: 'var(--paper)', minHeight: 900, display: 'grid', gridTemplateColumns: '240px 1fr' }}>
+      <AdminSidebar tab={t} setTab={setT} />
+      <div style={{ overflow: 'auto' }}>
+        {t === 'dashboard' && <DashboardView accent={accent} />}
+        {t === 'products' && <ProductsView accent={accent} />}
+        {t === 'orders' && <OrdersView accent={accent} />}
+        {t === 'kayaks' && <KayaksView accent={accent} />}
+      </div>
+    </div>
+  );
+}
+
+/* Brand / design system board */
+function BrandBoard({ accent }) {
+  return (
+    <div style={{ background: 'var(--paper)' }}>
+      {/* Cover */}
+      <div style={{ height: 680, background: accent, padding: 60, position: 'relative', overflow: 'hidden', color: 'var(--ink)', borderBottom: '2px solid var(--ink)' }}>
+        <div style={{ display: 'flex', justifyContent: 'space-between', fontFamily: 'var(--mono)', fontSize: 12, letterSpacing: '0.18em', textTransform: 'uppercase' }}>
+          <span>פרי לי · מערכת עיצוב</span>
+          <span>2026 · גליון 01</span>
+        </div>
+        <div style={{ position: 'absolute', top: '50%', left: 60, right: 60, transform: 'translateY(-50%)' }}>
+          <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 32, marginBottom: 12 }}>פירות קלופים · קיאקי אירועים</div>
+          <h1 className="display" style={{ fontSize: 260, lineHeight: 0.82, margin: 0, letterSpacing: '-0.06em' }}>
+            פרי
+            <br />
+            <span style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontWeight: 400 }}>לי.</span>
+          </h1>
+        </div>
+        <div style={{ position: 'absolute', top: 80, right: 80, transform: 'rotate(15deg)' }}><WatermelonArt size={140} /></div>
+        <div style={{ position: 'absolute', bottom: 80, left: 80, transform: 'rotate(-12deg)' }}><PineappleArt size={120} /></div>
+        <div style={{ position: 'absolute', top: 240, right: 240 }}><Sticker color="var(--ink)" rotate={-8}><span style={{ color: 'var(--paper)' }}>טרי 100%</span></Sticker></div>
+        <div style={{ position: 'absolute', bottom: 60, right: 60, fontFamily: 'var(--mono)', fontSize: 11, opacity: 0.7 }}>DIMONA · ISRAEL · EST. 2019</div>
+      </div>
+
+      {/* Tokens */}
+      <div style={{ padding: 60 }}>
+        <SectionTag num="—" label="טוקני העיצוב" />
+        <h2 className="display" style={{ fontSize: 96, margin: '12px 0 40px' }}>הכללים.</h2>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1.4fr 1fr 1fr', gap: 24, marginBottom: 24 }}>
+          <div style={{ border: '2px solid var(--ink)', padding: 24 }}>
+            <SectionTag num="01" label="צבעים" />
+            <div style={{ marginTop: 16, display: 'grid', gridTemplateColumns: 'repeat(5, 1fr)', gap: 0 }}>
+              {[
+                { c: '#0a0a0a', n: 'דיו' },
+                { c: '#fdfbf5', n: 'נייר' },
+                { c: accent, n: 'ראשי' },
+                { c: '#FFD60A', n: 'הדר' },
+                { c: '#1F8A5B', n: 'עלה' },
+              ].map((s, i) => (
+                <div key={i} style={{ aspectRatio: '1', background: s.c, border: '1px solid var(--ink)', display: 'flex', flexDirection: 'column', justifyContent: 'flex-end', padding: 8, color: ['#0a0a0a','#6B1F3A'].includes(s.c) ? '#fdfbf5' : '#0a0a0a' }}>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 9, fontWeight: 700 }}>{s.n}</div>
+                  <div style={{ fontFamily: 'var(--mono)', fontSize: 8, opacity: 0.6 }}>{s.c.toUpperCase()}</div>
+                </div>
+              ))}
+            </div>
+          </div>
+          <div style={{ border: '2px solid var(--ink)', padding: 24 }}>
+            <SectionTag num="02" label="טיפוגרפיה" />
+            <div style={{ marginTop: 12 }}>
+              <div className="display" style={{ fontSize: 72, lineHeight: 0.9 }}>פרי</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 9, opacity: 0.6 }}>HEEBO BLACK · 900</div>
+            </div>
+            <div style={{ marginTop: 16 }}>
+              <div style={{ fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 40 }}>טרי.</div>
+              <div style={{ fontFamily: 'var(--mono)', fontSize: 9, opacity: 0.6 }}>FRANK RUHL · ITALIC</div>
+            </div>
+          </div>
+          <div style={{ border: '2px solid var(--ink)', padding: 24 }}>
+            <SectionTag num="03" label="סטיקרים" />
+            <div style={{ marginTop: 24, display: 'flex', flexDirection: 'column', gap: 14, alignItems: 'flex-start' }}>
+              <Sticker color="var(--citrus)" rotate={-6}>טרי 100%</Sticker>
+              <Sticker color={accent} rotate={4}>הכי נמכר</Sticker>
+              <Sticker color="var(--leaf)" rotate={-4}><span style={{ color: 'var(--paper)' }}>חדש</span></Sticker>
+            </div>
+          </div>
+        </div>
+
+        <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr 1fr', gap: 24 }}>
+          <div style={{ border: '2px solid var(--ink)', padding: 24 }}>
+            <SectionTag num="04" label="כפתורים" />
+            <div style={{ marginTop: 20, display: 'flex', flexDirection: 'column', gap: 12, alignItems: 'flex-start' }}>
+              <button className="btn primary" style={{ background: accent }}>הזמן עכשיו</button>
+              <button className="btn">בנה קיאק</button>
+              <button className="btn outline">קרא עוד →</button>
+            </div>
+          </div>
+          <div style={{ border: '2px solid var(--ink)', padding: 24 }}>
+            <SectionTag num="05" label="איקונים · פירות" />
+            <div style={{ marginTop: 20, display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 16, justifyItems: 'center' }}>
+              <PineappleArt size={60} />
+              <WatermelonArt size={60} />
+              <StrawberryArt size={60} />
+              <GrapeArt size={60} />
+              <MelonArt size={60} />
+              <KiwiArt size={60} />
+            </div>
+          </div>
+          <div style={{ border: '2px solid var(--ink)', padding: 24, background: 'var(--ink)', color: 'var(--paper)' }}>
+            <SectionTag num="06" label="טון דיבור" />
+            <div style={{ marginTop: 20, fontFamily: 'var(--serif)', fontStyle: 'italic', fontSize: 22, lineHeight: 1.3 }}>
+              "ב-3 בלילה אנחנו כבר בשוק. ב-7 בבוקר זה כבר על המדף."
+            </div>
+            <div style={{ fontFamily: 'var(--mono)', fontSize: 10, marginTop: 16, opacity: 0.5, letterSpacing: '0.1em' }}>ישיר · גאה · דימונאי</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+ReactDOM.createRoot(document.getElementById('root')).render(<App />);
+</script>
+
+</body>
+</html>
