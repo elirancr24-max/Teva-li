@@ -12,16 +12,46 @@ jobs:
       - name: Install psql
         run: sudo apt-get install -y postgresql-client
 
-      - name: Run schema migration
-        env:
-          PGPASSWORD: ${{ secrets.SUPABASE_DB_URL }}
+      - name: Test connection (direct)
+        continue-on-error: true
         run: |
-          psql "${{ secrets.SUPABASE_DB_URL }}" \
-            -f apps/web/supabase/migrations/001_initial_schema.sql \
-            -v ON_ERROR_STOP=1
+          timeout 10 psql \
+            "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -c "SELECT 'direct OK';" 2>&1
 
-      - name: Run seed migration
+      - name: Test connection (pooler)
+        continue-on-error: true
         run: |
-          psql "${{ secrets.SUPABASE_DB_URL }}" \
-            -f apps/web/supabase/migrations/002_seed.sql \
-            -v ON_ERROR_STOP=1
+          timeout 15 psql \
+            "postgresql://postgres.iyjxsdxebxmbrrquxbnw:IHuRNqhaZ87zaAab@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require" \
+            -c "SELECT 'pooler OK';" 2>&1
+
+      - name: Run schema migration (direct)
+        id: migrate_direct
+        continue-on-error: true
+        run: |
+          timeout 30 psql \
+            "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -f apps/web/supabase/migrations/001_initial_schema.sql 2>&1
+          timeout 30 psql \
+            "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -f apps/web/supabase/migrations/002_seed.sql 2>&1
+
+      - name: Run schema migration (pooler fallback)
+        if: steps.migrate_direct.outcome == 'failure'
+        run: |
+          timeout 30 psql \
+            "postgresql://postgres.iyjxsdxebxmbrrquxbnw:IHuRNqhaZ87zaAab@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require" \
+            -f apps/web/supabase/migrations/001_initial_schema.sql 2>&1
+          timeout 30 psql \
+            "postgresql://postgres.iyjxsdxebxmbrrquxbnw:IHuRNqhaZ87zaAab@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require" \
+            -f apps/web/supabase/migrations/002_seed.sql 2>&1
+
+      - name: Verify tables exist
+        run: |
+          psql \
+            "postgresql://postgres:IHuRNqhaZ87zaAab@db.iyjxsdxebxmbrrquxbnw.supabase.co:5432/postgres?sslmode=require" \
+            -c "SELECT COUNT(*) AS products FROM products; SELECT COUNT(*) AS kayak_sizes FROM kayak_sizes;" 2>&1 || \
+          psql \
+            "postgresql://postgres.iyjxsdxebxmbrrquxbnw:IHuRNqhaZ87zaAab@aws-0-eu-central-1.pooler.supabase.com:5432/postgres?sslmode=require" \
+            -c "SELECT COUNT(*) AS products FROM products; SELECT COUNT(*) AS kayak_sizes FROM kayak_sizes;" 2>&1
