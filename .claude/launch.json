@@ -1,0 +1,12 @@
+{
+  "version": "0.0.1",
+  "configurations": [
+    {
+      "name": "peri-li-web",
+      "runtimeExecutable": "pnpm",
+      "runtimeArgs": ["--filter", "peri-li-web", "dev"],
+      "port": 3000,
+      "autoPort": false
+    }
+  ]
+}
