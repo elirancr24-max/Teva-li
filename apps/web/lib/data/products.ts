@@ -2,6 +2,19 @@ import { createClient } from '@/lib/supabase/server';
 import type { Category, Product } from '@/types/shop';
 import { mockCategories, mockProducts } from './mock-products';
 
+// Known supplier placeholder images ("משק דהן" wooden crate, etc) — swap to our brand logo
+// so products without a real photo show טבע-לי, not another company.
+const PLACEHOLDER_IMAGE_URLS = new Set<string>([
+  'https://iyjxsdxebxmbrrquxbnw.supabase.co/storage/v1/object/public/product-images/meshek/65fcc5fafc5906b55e045940a9cdb4c0.jpg',
+]);
+const BRAND_LOGO_URL = '/logo-teva-trans.png';
+
+function resolveImageUrl(raw: string | null | undefined): string | null {
+  if (!raw) return null;
+  if (PLACEHOLDER_IMAGE_URLS.has(raw)) return BRAND_LOGO_URL;
+  return raw;
+}
+
 function resolveUnit(weight: string | undefined): { unit: Product['unit']; step: number } {
   const w = (weight ?? '').toString();
   // Weight-based (per kilo) — 'ק"ג', 'ק״ג', 'קג', 'קילו'
@@ -37,7 +50,7 @@ function dbProductToProduct(p: {
     kind: p.kind,
     weight: p.weight,
     tag: p.tag,
-    imageUrl: p.image_url ?? null,
+    imageUrl: resolveImageUrl(p.image_url),
   };
 }
 
