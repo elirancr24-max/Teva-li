@@ -573,7 +573,7 @@ export function KayakConfigurator({ sizes }: Props) {
         <Typography
           sx={{ mt: 1.5, fontSize: 13, color: 'text.secondary', textAlign: 'center' }}
         >
-          זוהי בקשת הזמנה ראשונית — ניצור איתך קשר לאישור הפרטים והתשלום.
+          זוהי בקשת הזמנה ראשונית. ניצור איתכם קשר לאישור הפרטים והתשלום.
         </Typography>
       </Section>
     </Container>

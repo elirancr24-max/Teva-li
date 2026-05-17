@@ -7,7 +7,7 @@ import { KayakConfigurator, type SizeRow } from './KayakConfigurator';
 export const metadata: Metadata = {
   title: 'בנה קיאק · פירות לאירוע',
   description:
-    'בחר גודל, פירות ותוספות לקיאק הפירות שלך. החוויה הקולינרית לאירוע — חתונות, בר/בת מצווה, ימי הולדת ואירועים עסקיים.',
+    'בחרו גודל, פירות ותוספות לקיאק הפירות שלכם. החוויה הקולינרית לאירוע: חתונות, בר/בת מצווה, ימי הולדת ואירועים עסקיים.',
 };
 
 // Hardcoded fallback if kayak_sizes table is empty or unreachable.

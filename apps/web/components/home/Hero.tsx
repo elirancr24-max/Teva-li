@@ -15,8 +15,8 @@ interface HeroProps {
  * two-column layout: text + floating stats card with floating logo.
  */
 export function Hero({
-  title = 'פירות וירקות טריים — ישר מהשדה אליכם',
-  subtitle = 'משלוח עד הדלת בדימונה והסביבה. קיאקי פירות מעוצבים לאירועים, קופסאות בריאות, ופירות מקולפים מוכנים.',
+  title = 'פירות וירקות טריים במשלוח חינם לדימונה',
+  subtitle = 'נקטף בבוקר, אצלכם עד הצהריים. קיאקי פירות לאירועים, קופסאות בריאות, פירות מקולפים ופחיות פירות מוכנות. משלוח חינם בדימונה מעל ₪150.',
   imageSrc = '/hero-tropical.jpg',
   ctaHref = '/shop',
   ctaLabel = 'לקנייה בחנות',
@@ -70,7 +70,7 @@ export function Hero({
           }}
         >
           {/* Text column */}
-          <Stack spacing={{ xs: 2.5, md: 3 }}>
+          <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
             <Box
               sx={{
                 alignSelf: 'flex-start',

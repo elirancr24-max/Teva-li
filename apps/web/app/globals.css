@@ -2,3 +2,61 @@ html, body { margin: 0; padding: 0; direction: rtl; background: #F0EFEC; }
 * { box-sizing: border-box; }
 a { color: inherit; text-decoration: none; }
 img { max-width: 100%; height: auto; }
+
+/* Skip-to-content link — visible on focus only */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  right: 16px;
+  z-index: 9999;
+  background: #0F2818;
+  color: #fff;
+  padding: 12px 20px;
+  font-weight: 800;
+  border-radius: 8px;
+  text-decoration: none;
+  transition: top 200ms ease;
+}
+.skip-link:focus {
+  top: 16px;
+  outline: 3px solid #FFD9A8;
+}
+
+/* High contrast mode */
+html.a11y-contrast {
+  filter: contrast(1.35) saturate(1.15);
+}
+html.a11y-contrast body {
+  background: #fff !important;
+}
+
+/* Highlight links */
+html.a11y-links a {
+  text-decoration: underline !important;
+  text-underline-offset: 2px;
+  text-decoration-thickness: 2px !important;
+}
+
+/* Reduce motion */
+html.a11y-motion *,
+html.a11y-motion *::before,
+html.a11y-motion *::after {
+  animation-duration: 0.001ms !important;
+  animation-iteration-count: 1 !important;
+  transition-duration: 0.001ms !important;
+  scroll-behavior: auto !important;
+}
+
+/* Respect OS preference */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    transition-duration: 0.001ms !important;
+  }
+}
+
+/* Focus visible everywhere */
+:focus-visible {
+  outline: 3px solid #4F8C2E;
+  outline-offset: 2px;
+}

@@ -123,7 +123,7 @@ export function CategoryGrid({ products: _products = [] }: CategoryGridProps) {
                   maxWidth: 720,
                 }}
               >
-                כל מה שצריך — נקטף בבוקר, אצלכם עד הצהריים
+                כל מה שצריך. נקטף בבוקר, אצלכם עד הצהריים
               </Typography>
             </Box>
             <Typography

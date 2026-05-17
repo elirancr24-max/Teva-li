@@ -60,13 +60,13 @@ export function CTABanner({ whatsappHref, phone }: CTABannerProps) {
                 color: '#fff',
               }}
             >
-              יש לך שאלה?
+              יש לכם שאלה?
               <Box component="span" sx={{ display: 'block', color: BRAND.goldLight }}>
                 דברו איתנו בוואטסאפ.
               </Box>
             </Typography>
             <Typography sx={{ fontSize: { xs: 14, md: 16 }, opacity: 0.92, fontWeight: 500, maxWidth: 600 }}>
-              עונים אישית, כל יום, גם בסופ&quot;ש. הזמנות, התאמות אישיות לאירועים — אנחנו פה לכל שאלה.
+              עונים אישית, כל יום, גם בסופ&quot;ש. הזמנות, התאמות אישיות לאירועים, אנחנו פה לכל שאלה.
             </Typography>
           </Stack>
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ flexShrink: 0 }}>

@@ -1,10 +1,12 @@
 import type { MetadataRoute } from 'next';
 
 export default function robots(): MetadataRoute.Robots {
+  const base = process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teva-li.com';
   return {
     rules: [
-      { userAgent: '*', allow: '/', disallow: ['/admin/', '/admin-login', '/api/'] },
+      { userAgent: '*', allow: '/', disallow: ['/admin', '/admin-login', '/api', '/checkout'] },
     ],
-    sitemap: `${process.env.NEXT_PUBLIC_SITE_URL ?? 'https://teva-li.com'}/sitemap.xml`,
+    sitemap: `${base}/sitemap.xml`,
+    host: base,
   };
 }

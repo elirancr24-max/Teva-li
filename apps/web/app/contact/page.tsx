@@ -9,7 +9,7 @@ import { BRAND } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'צור קשר',
-  description: 'דברו איתנו — WhatsApp, טלפון, אימייל, או בואו לבקר בדימונה.',
+  description: 'דברו איתנו ב-WhatsApp, טלפון, אימייל, או בואו לבקר בדימונה.',
 };
 
 const LABEL_SX = {
