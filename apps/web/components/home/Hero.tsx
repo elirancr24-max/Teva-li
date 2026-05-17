@@ -1,126 +1,261 @@
-import Link from 'next/link';
-import { Box, Button, Stack, Typography } from '@mui/material';
+import { Box, Container, Stack, Typography, Button } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
-import { BRAND } from '@/lib/theme';
+import { BRAND, MESH } from '@/lib/brand';
 
 interface HeroProps {
-  /** Optional title override (default: brand line). */
   title?: string;
-  /** Optional subtitle override (default: brand tagline). */
   subtitle?: string;
-  /** Image path under /public. Falls back to /kayak-real.jpg, then solid brand color. */
   imageSrc?: string;
-  /** Optional CTA href (default /shop). */
   ctaHref?: string;
-  /** Optional CTA label (default "הזמן עכשיו"). */
   ctaLabel?: string;
 }
 
 /**
- * Full-width hero banner — single image (1920×300-ish), dark overlay, centered title + CTA.
- * Graceful image fallback: tries /hero-banner.jpg, then /kayak-real.jpg, then BRAND.green.
- * Renders as a server component (no client state needed).
+ * Tropical hero — full-bleed photo background with warm overlay + mesh gradient,
+ * two-column layout: text + floating stats card with floating logo.
  */
 export function Hero({
-  title = 'טבע לי — קיאקי פירות לאירועים',
-  subtitle = 'פירות וירקות טריים — ישר אליכם הביתה',
-  imageSrc = '/hero-banner.jpg',
+  title = 'פירות וירקות טריים — ישר מהשדה אליכם',
+  subtitle = 'משלוח עד הדלת בדימונה והסביבה. קיאקי פירות מעוצבים לאירועים, קופסאות בריאות, ופירות מקולפים מוכנים.',
+  imageSrc = '/hero-tropical.jpg',
   ctaHref = '/shop',
-  ctaLabel = 'הזמן עכשיו',
+  ctaLabel = 'לקנייה בחנות',
 }: HeroProps) {
-  // Layered backgrounds: primary image, then fallback image, then brand color base.
-  // CSS quietly skips a missing image and falls through to the next layer.
-  const backgroundImage = `url(${imageSrc}), url(/kayak-real.jpg)`;
-
   return (
     <Box
       component="section"
       sx={{
         position: 'relative',
-        width: '100%',
-        height: { xs: 250, md: 400 },
-        backgroundColor: BRAND.green,
-        backgroundImage,
+        overflow: 'hidden',
+        minHeight: { xs: 600, md: 820 },
+        display: 'flex',
+        alignItems: 'center',
+        // Full-bleed photo
+        backgroundImage: `url(${imageSrc})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
         backgroundRepeat: 'no-repeat',
-        overflow: 'hidden',
-        borderBottom: `2px solid ${BRAND.ink}`,
       }}
     >
-      {/* Dark overlay for text contrast */}
+      {/* Warm overlay: keeps text readable while preserving the tropical feel */}
       <Box
         aria-hidden
         sx={{
           position: 'absolute',
           inset: 0,
-          bgcolor: 'rgba(0,0,0,0.35)',
+          background:
+            'linear-gradient(110deg, rgba(42,24,16,0.55) 0%, rgba(42,24,16,0.25) 45%, rgba(42,24,16,0.15) 100%)',
+        }}
+      />
+      {/* Tropical mesh accent — adds vivid color pops at corners */}
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          backgroundImage: MESH.sunset,
+          mixBlendMode: 'soft-light',
+          opacity: 0.65,
+          pointerEvents: 'none',
         }}
       />
 
-      {/* Centered content */}
-      <Stack
-        spacing={{ xs: 1.5, md: 2.5 }}
-        alignItems="center"
-        justifyContent="center"
-        sx={{
-          position: 'relative',
-          height: '100%',
-          textAlign: 'center',
-          px: 2,
-          zIndex: 1,
-        }}
-      >
-        <Typography
-          component="h1"
+      <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1, py: { xs: 6, md: 10 } }}>
+        <Box
           sx={{
-            fontFamily: 'var(--font-heebo), Heebo, system-ui, sans-serif',
-            color: '#fff',
-            fontWeight: 800,
-            fontSize: { xs: 32, sm: 44, md: 64, lg: 72 },
-            lineHeight: 1.05,
-            letterSpacing: '-0.02em',
-            textShadow: '0 2px 12px rgba(0,0,0,0.45)',
-            maxWidth: 1000,
+            display: 'grid',
+            gap: { xs: 4, md: 6 },
+            alignItems: 'center',
+            gridTemplateColumns: { xs: '1fr', md: '1.15fr 0.85fr' },
           }}
         >
-          {title}
-        </Typography>
-        <Typography
-          sx={{
-            color: '#fff',
-            opacity: 0.95,
-            fontSize: { xs: 14, md: 18 },
-            fontWeight: 500,
-            textShadow: '0 1px 8px rgba(0,0,0,0.45)',
-            maxWidth: 720,
-          }}
-        >
-          {subtitle}
-        </Typography>
-        <Box sx={{ pt: { xs: 0.5, md: 1 } }}>
-          <Button
-            href={ctaHref}
-            variant="contained"
-            size="large"
-            endIcon={<ArrowBackIcon />}
+          {/* Text column */}
+          <Stack spacing={{ xs: 2.5, md: 3 }}>
+            <Box
+              sx={{
+                alignSelf: 'flex-start',
+                bgcolor: 'rgba(255,255,255,0.95)',
+                backdropFilter: 'blur(8px)',
+                border: '1px solid rgba(255,255,255,0.6)',
+                color: BRAND.brown,
+                fontWeight: 800,
+                fontSize: 12,
+                letterSpacing: '0.05em',
+                height: 34,
+                display: 'inline-flex',
+                alignItems: 'center',
+                px: 2,
+                gap: 1,
+                borderRadius: 999,
+                boxShadow: '0 4px 14px rgba(0,0,0,0.15)',
+              }}
+            >
+              <Box sx={{ width: 8, height: 8, borderRadius: '50%', bgcolor: BRAND.gold }} />
+              טבע לי · דימונה · משלוח עד חצי שעה!
+            </Box>
+            <Typography
+              component="h1"
+              sx={{
+                fontFamily: 'var(--font-heebo), Heebo, system-ui, sans-serif',
+                color: '#fff',
+                fontWeight: 900,
+                fontSize: { xs: 38, sm: 52, md: 68, lg: 80 },
+                lineHeight: 1.02,
+                letterSpacing: '-0.025em',
+                textShadow: '0 2px 18px rgba(0,0,0,0.35)',
+              }}
+            >
+              {title}
+            </Typography>
+            <Typography
+              sx={{
+                color: 'rgba(255,255,255,0.92)',
+                fontSize: { xs: 15, md: 18 },
+                fontWeight: 500,
+                lineHeight: 1.55,
+                maxWidth: 540,
+                textShadow: '0 1px 6px rgba(0,0,0,0.3)',
+              }}
+            >
+              {subtitle}
+            </Typography>
+            <Stack direction="row" spacing={1.5} sx={{ pt: 1, flexWrap: 'wrap', gap: 1.5 }}>
+              <Button
+                href={ctaHref}
+                variant="contained"
+                size="large"
+                endIcon={<ArrowBackIcon />}
+                sx={{
+                  bgcolor: BRAND.green,
+                  color: '#fff',
+                  fontSize: 16,
+                  fontWeight: 900,
+                  px: 4,
+                  py: 1.75,
+                  borderRadius: 999,
+                  letterSpacing: '0.02em',
+                  '&:hover': { bgcolor: BRAND.greenDark },
+                }}
+              >
+                {ctaLabel}
+              </Button>
+              <Button
+                href="/kayak"
+                variant="outlined"
+                size="large"
+                sx={{
+                  bgcolor: 'rgba(255,255,255,0.96)',
+                  color: BRAND.brown,
+                  borderColor: 'transparent',
+                  fontSize: 16,
+                  fontWeight: 900,
+                  px: 4,
+                  py: 1.75,
+                  borderRadius: 999,
+                  backdropFilter: 'blur(6px)',
+                  '&:hover': { bgcolor: '#fff', borderColor: 'transparent' },
+                }}
+              >
+                קיאק פירות לאירוע
+              </Button>
+            </Stack>
+            {/* Mini-stats */}
+            <Stack
+              direction="row"
+              divider={
+                <Box
+                  sx={{
+                    width: '1px',
+                    alignSelf: 'stretch',
+                    bgcolor: 'rgba(255,255,255,0.28)',
+                  }}
+                />
+              }
+              spacing={{ xs: 3, md: 4 }}
+              sx={{ pt: { xs: 1.5, md: 2 } }}
+            >
+              <Stat value="180+" label="מוצרים בקטלוג" />
+              <Stat value="30׳" label="זמן משלוח" />
+              <Stat value="24/7" label="שירות לקוחות" />
+            </Stack>
+          </Stack>
+
+          {/* Logo + price tag card */}
+          <Box
             sx={{
-              bgcolor: BRAND.green,
-              color: '#fff',
-              fontSize: { xs: 16, md: 18 },
-              fontWeight: 800,
-              px: { xs: 3, md: 4 },
-              py: { xs: 1.25, md: 1.5 },
-              borderRadius: 999,
-              boxShadow: '0 4px 18px rgba(0,0,0,0.25)',
-              letterSpacing: '0.02em',
-              '&:hover': { bgcolor: BRAND.greenDark },
+              display: { xs: 'none', md: 'flex' },
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: 2,
+              position: 'relative',
             }}
           >
-            {ctaLabel}
-          </Button>
+            <Box
+              component="img"
+              src="/logo-teva-trans.png"
+              alt="טבע לי"
+              sx={{
+                width: { md: 340, lg: 420 },
+                height: 'auto',
+                filter:
+                  'drop-shadow(0 0 12px rgba(255,255,255,0.95)) drop-shadow(0 0 40px rgba(255,255,255,0.7)) drop-shadow(0 18px 36px rgba(0,0,0,0.45))',
+              }}
+            />
+            {/* Floating price tag */}
+            <Box
+              sx={{
+                bgcolor: 'rgba(255,255,255,0.97)',
+                backdropFilter: 'blur(12px)',
+                borderRadius: 3,
+                px: 3,
+                py: 2,
+                boxShadow: '0 10px 30px rgba(0,0,0,0.18)',
+                textAlign: 'center',
+                border: `2px solid ${BRAND.gold}`,
+              }}
+            >
+              <Typography sx={{ fontSize: 11, color: BRAND.goldDark, fontWeight: 900, letterSpacing: '0.14em' }}>
+                קיאק פירות החל מ
+              </Typography>
+              <Typography sx={{ fontSize: 32, fontWeight: 900, color: BRAND.brown, lineHeight: 1, mt: 0.5 }}>
+                ₪599
+              </Typography>
+              <Typography sx={{ fontSize: 11, color: BRAND.brownLight, mt: 0.5 }}>
+                לאירוע · מקיף לכל סגנון
+              </Typography>
+            </Box>
+          </Box>
         </Box>
-      </Stack>
+      </Container>
+    </Box>
+  );
+}
+
+function Stat({ value, label }: { value: string; label: string }) {
+  return (
+    <Box>
+      <Typography
+        sx={{
+          fontSize: { xs: 24, md: 30 },
+          fontWeight: 900,
+          color: '#fff',
+          lineHeight: 1,
+          textShadow: '0 2px 10px rgba(0,0,0,0.35)',
+        }}
+      >
+        {value}
+      </Typography>
+      <Typography
+        sx={{
+          fontSize: 12,
+          color: 'rgba(255,255,255,0.88)',
+          mt: 0.5,
+          letterSpacing: '0.03em',
+          textShadow: '0 1px 4px rgba(0,0,0,0.3)',
+        }}
+      >
+        {label}
+      </Typography>
     </Box>
   );
 }

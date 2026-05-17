@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { useTransition } from 'react';
 import { Box, Button } from '@mui/material';
 import { deleteProduct } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 type Props = {
   productId: string;

@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Box, Typography } from '@mui/material';
 import { getSettings } from '@/lib/settings';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { SettingsForm } from './SettingsForm';
 
 export const metadata: Metadata = {

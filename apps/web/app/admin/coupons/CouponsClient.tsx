@@ -23,7 +23,7 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import { createCoupon, deleteCoupon, toggleCoupon } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export type Coupon = {
   id: string;

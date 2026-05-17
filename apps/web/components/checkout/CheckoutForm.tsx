@@ -21,7 +21,7 @@ import { Footer } from '@/components/layout/Footer';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { clearCart } from '@/store/slices/cartSlice';
 import { createCheckoutIntent } from '@/app/checkout/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 const stripePromise = loadStripe(process.env.NEXT_PUBLIC_STRIPE_PUBLISHABLE_KEY!);
 

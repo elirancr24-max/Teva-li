@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setSortBy, type SortBy } from '@/store/slices/productsSlice';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { ProductCard } from './ProductCard';
 
 const GRID_COLS = {

@@ -5,7 +5,7 @@ import { Footer } from '@/components/layout/Footer';
 import { ContactForm } from '@/components/contact/ContactForm';
 import { ContactMethods } from '@/components/contact/ContactMethods';
 import { getSettings } from '@/lib/settings';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'צור קשר',

@@ -7,7 +7,7 @@ import GroupsOutlinedIcon from '@mui/icons-material/GroupsOutlined';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'עלינו',

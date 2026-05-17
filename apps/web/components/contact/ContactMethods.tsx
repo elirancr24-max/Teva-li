@@ -3,7 +3,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { whatsappLink } from '@/lib/settings';
 
 type Props = {

@@ -11,3 +11,5 @@ scripts/meshek-dahan-catalog*.json
 .turbo
 next-env.d.ts
 tsconfig.tsbuildinfo
+
+.vercel

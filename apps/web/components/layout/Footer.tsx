@@ -6,15 +6,15 @@ import InstagramIcon from '@mui/icons-material/Instagram';
 import PhoneOutlinedIcon from '@mui/icons-material/PhoneOutlined';
 import EmailOutlinedIcon from '@mui/icons-material/EmailOutlined';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import CheckIcon from '@mui/icons-material/Check';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 const FOOTER_INFO = {
   name: 'טבע לי',
-  phone: '050-XXX-XXXX',
-  whatsapp: '972541234567',
+  phone: '054-8897445',
+  whatsapp: '972548897445',
   email: 'orders@teva-li.com',
   address: 'דימונה, ישראל',
+  tagline: 'פירות וירקות טריים · קיאקי פירות לאירועים',
 } as const;
 
 const LINK_SX = {
@@ -66,34 +66,28 @@ export function Footer() {
         >
           {/* Right (logical first): Brand */}
           <Stack spacing={2}>
-            <Stack direction="row" spacing={1} alignItems="center">
-              <Typography sx={{ fontSize: 24, fontWeight: 800, lineHeight: 1, color: '#fff' }}>
-                {FOOTER_INFO.name}
-              </Typography>
-              <Box
-                sx={{
-                  width: 26,
-                  height: 26,
-                  borderRadius: '50%',
-                  bgcolor: BRAND.green,
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: '#fff',
-                }}
-                aria-hidden
-              >
-                <CheckIcon sx={{ fontSize: 16 }} />
-              </Box>
-            </Stack>
+            <Box
+              component="img"
+              src="/logo-teva-trans.png"
+              alt={FOOTER_INFO.name}
+              sx={{
+                width: 100,
+                height: 'auto',
+                filter:
+                  'drop-shadow(0 0 8px rgba(255,255,255,0.5)) drop-shadow(0 4px 12px rgba(0,0,0,0.3))',
+              }}
+            />
+            <Typography sx={{ fontSize: 14, color: 'rgba(255,255,255,0.85)', maxWidth: 280, lineHeight: 1.55 }}>
+              {FOOTER_INFO.tagline}
+            </Typography>
             <Stack direction="row" spacing={1.25} alignItems="center">
-              <PlaceOutlinedIcon sx={{ fontSize: 18, color: BRAND.green }} />
+              <PlaceOutlinedIcon sx={{ fontSize: 18, color: BRAND.gold }} />
               <Typography sx={{ fontSize: 14, color: '#fff', opacity: 0.85 }}>
                 {FOOTER_INFO.address}
               </Typography>
             </Stack>
             <Stack direction="row" spacing={1.25} alignItems="center">
-              <PhoneOutlinedIcon sx={{ fontSize: 18, color: BRAND.green }} />
+              <PhoneOutlinedIcon sx={{ fontSize: 18, color: BRAND.gold }} />
               <Typography component="a" href={telHref} sx={LINK_SX}>
                 {FOOTER_INFO.phone}
               </Typography>

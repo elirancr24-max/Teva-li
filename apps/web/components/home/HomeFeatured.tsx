@@ -7,7 +7,7 @@ import { useAppDispatch } from '@/store';
 import { setProducts } from '@/store/slices/productsSlice';
 import { setCategories } from '@/store/slices/categoriesSlice';
 import { ProductCard } from '@/components/products/ProductCard';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import type { Category, Product } from '@/types/shop';
 
 interface HomeFeaturedProps {
@@ -38,7 +38,7 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
       sx={{
         bgcolor: BRAND.paper,
         py: { xs: 5, md: 8 },
-        borderBottom: `2px solid ${BRAND.ink}`,
+        borderBottom: '1px solid #ececec',
       }}
     >
       <Container maxWidth="xl">
@@ -79,35 +79,47 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
           </Box>
         </Stack>
 
-        <Box
-          sx={{
-            display: 'flex',
-            gap: 2,
-            overflowX: 'auto',
-            scrollSnapType: 'x mandatory',
-            scrollPaddingInlineStart: { xs: 8, md: 16 },
-            pb: 2,
-            // Hide scrollbar but keep scroll functional.
-            '&::-webkit-scrollbar': { height: 8 },
-            '&::-webkit-scrollbar-thumb': {
-              bgcolor: 'rgba(0,0,0,0.18)',
-              borderRadius: 999,
-            },
-            scrollbarWidth: 'thin',
-          }}
-        >
-          {products.map((p) => (
-            <Box
-              key={p.id}
-              sx={{
-                flex: '0 0 auto',
-                width: 200,
-                scrollSnapAlign: 'start',
-              }}
-            >
-              <ProductCard product={p} />
-            </Box>
-          ))}
+        <Box sx={{ position: 'relative' }}>
+          <Box
+            sx={{
+              display: 'flex',
+              gap: 2,
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              scrollPaddingInlineStart: { xs: 8, md: 16 },
+              pb: 1,
+              scrollbarWidth: 'none',
+              msOverflowStyle: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+            }}
+          >
+            {products.map((p) => (
+              <Box
+                key={p.id}
+                sx={{
+                  flex: '0 0 auto',
+                  width: { xs: 200, md: 230 },
+                  scrollSnapAlign: 'start',
+                }}
+              >
+                <ProductCard product={p} />
+              </Box>
+            ))}
+          </Box>
+          {/* Fade mask on the left edge (RTL — fade outward) */}
+          <Box
+            aria-hidden
+            sx={{
+              position: 'absolute',
+              top: 0,
+              bottom: 0,
+              left: 0,
+              width: { xs: 24, md: 56 },
+              background: `linear-gradient(to right, ${BRAND.paper} 0%, rgba(255,255,255,0) 100%)`,
+              pointerEvents: 'none',
+              display: { xs: 'none', md: 'block' },
+            }}
+          />
         </Box>
       </Container>
     </Box>

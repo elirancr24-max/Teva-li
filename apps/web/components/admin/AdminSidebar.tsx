@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import { adminLogout } from '@/app/admin/login/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 const NAV = [
   { href: '/admin',            label: 'לוח בקרה', icon: '◐' },

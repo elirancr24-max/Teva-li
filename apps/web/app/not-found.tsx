@@ -1,5 +1,5 @@
 import { Box, Typography, Button, Stack } from '@mui/material';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export default function NotFound() {
   return (

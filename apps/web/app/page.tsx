@@ -12,7 +12,7 @@ import { KayakTeaser } from '@/components/home/KayakTeaser';
 import { CTABanner } from '@/components/home/CTABanner';
 import { getCatalog } from '@/lib/data/products';
 import { getSettings, whatsappLink } from '@/lib/settings';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export default async function Home() {
   const [{ products, categories }, settings] = await Promise.all([
@@ -61,8 +61,8 @@ export default async function Home() {
       {/* Featured products — horizontal rail (hydrates Redux for cart/category flows) */}
       <HomeFeatured products={featured} catalog={products} categories={categories} />
 
-      {/* Visual category tiles */}
-      <CategoryGrid />
+      {/* Visual category tiles with real product images */}
+      <CategoryGrid products={products} />
 
       {/* Delivery cities pill list */}
       <DeliveryAreas />

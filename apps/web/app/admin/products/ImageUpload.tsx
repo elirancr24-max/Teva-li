@@ -3,7 +3,7 @@ import { useCallback, useState } from 'react';
 import { useDropzone, type FileRejection } from 'react-dropzone';
 import { Box, Typography, LinearProgress } from '@mui/material';
 import { uploadProductImage } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 type Props = {
   productId: string;

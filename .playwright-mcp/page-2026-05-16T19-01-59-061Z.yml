@@ -1,0 +1,109 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "טבע לי" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - paragraph [ref=e5]: טבע לי
+        - img [ref=e7]
+      - generic [ref=e9]:
+        - button "חיפוש" [ref=e10] [cursor=pointer]:
+          - img [ref=e11]
+        - textbox "חיפוש מוצר" [ref=e14]
+      - generic [ref=e15]:
+        - button "לאן מגיעים? · דימונה" [ref=e16] [cursor=pointer]:
+          - img [ref=e18]
+          - text: לאן מגיעים?
+          - generic [ref=e20]: · דימונה
+        - link "הרשמה / התחברות" [ref=e21] [cursor=pointer]:
+          - /url: /admin-login
+          - img [ref=e23]
+          - text: הרשמה / התחברות
+        - link "עגלה" [ref=e25] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e27]
+  - navigation [ref=e29]:
+    - button "כל המוצרים" [ref=e31] [cursor=pointer]
+  - generic [ref=e33]:
+    - generic [ref=e35]:
+      - heading "כל המוצרים(0)" [level=1] [ref=e36]:
+        - text: כל המוצרים
+        - generic [ref=e37]: (0)
+      - generic [ref=e38]:
+        - generic [ref=e39]: "מיון לפי:"
+        - generic "מיון מוצרים" [ref=e41]:
+          - combobox "קטגוריה - שם" [ref=e42] [cursor=pointer]
+          - textbox: category
+          - img
+          - group
+      - generic [ref=e43]:
+        - paragraph [ref=e44]: 🍽️
+        - paragraph [ref=e45]: אין מוצרים בקטגוריה זו
+    - generic [ref=e47]:
+      - generic [ref=e48]:
+        - generic [ref=e49]:
+          - img [ref=e50]
+          - generic [ref=e52]: "0"
+          - paragraph [ref=e53]: סל הקניות שלי
+        - paragraph [ref=e54]: ₪0.00
+        - link "המשך לתשלום" [disabled]:
+          - /url: /checkout
+        - button "טעינת הזמנה קודמת" [ref=e55] [cursor=pointer]:
+          - img [ref=e57]
+          - text: טעינת הזמנה קודמת
+      - generic [ref=e60]:
+        - img [ref=e61]
+        - paragraph [ref=e63]: סל הקניות שלכם ריק
+        - paragraph [ref=e64]: התחילו להוסיף מוצרים
+  - contentinfo [ref=e65]:
+    - generic [ref=e66]:
+      - generic [ref=e67]:
+        - generic [ref=e68]:
+          - generic [ref=e69]:
+            - paragraph [ref=e70]: טבע לי
+            - img [ref=e72]
+          - generic [ref=e74]:
+            - img [ref=e75]
+            - paragraph [ref=e77]: דימונה, ישראל
+          - generic [ref=e78]:
+            - img [ref=e79]
+            - link "050-XXX-XXXX" [ref=e81] [cursor=pointer]:
+              - /url: tel:050-XXX-XXXX
+        - generic [ref=e82]:
+          - paragraph [ref=e83]: צרו קשר
+          - generic [ref=e84]:
+            - img [ref=e85]
+            - link "WhatsApp" [ref=e87] [cursor=pointer]:
+              - /url: https://wa.me/972541234567
+          - generic [ref=e88]:
+            - img [ref=e89]
+            - link "050-XXX-XXXX" [ref=e91] [cursor=pointer]:
+              - /url: tel:050-XXX-XXXX
+          - generic [ref=e92]:
+            - img [ref=e93]
+            - link "orders@teva-li.com" [ref=e95] [cursor=pointer]:
+              - /url: mailto:orders@teva-li.com
+          - generic [ref=e96]:
+            - link "Instagram" [ref=e97] [cursor=pointer]:
+              - /url: https://www.instagram.com/
+              - img [ref=e98]
+            - link "Facebook" [ref=e100] [cursor=pointer]:
+              - /url: https://www.facebook.com/
+              - img [ref=e101]
+        - generic [ref=e103]:
+          - paragraph [ref=e104]: קישורים
+          - link "תנאי שימוש" [ref=e105] [cursor=pointer]:
+            - /url: /terms
+            - paragraph [ref=e106]: תנאי שימוש
+          - link "הצהרת נגישות" [ref=e107] [cursor=pointer]:
+            - /url: /accessibility
+            - paragraph [ref=e108]: הצהרת נגישות
+          - link "מדיניות פרטיות" [ref=e109] [cursor=pointer]:
+            - /url: /privacy
+            - paragraph [ref=e110]: מדיניות פרטיות
+          - link "אודות" [ref=e111] [cursor=pointer]:
+            - /url: /about
+            - paragraph [ref=e112]: אודות
+          - link "צור קשר" [ref=e113] [cursor=pointer]:
+            - /url: /contact
+            - paragraph [ref=e114]: צור קשר
+      - paragraph [ref=e116]: © 2026 טבע לי. כל הזכויות שמורות.

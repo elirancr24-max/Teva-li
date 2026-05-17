@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Box, Typography, Paper, Table, TableHead, TableBody, TableCell, TableRow } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { OrderActions } from './OrderActions';
 import type { Order } from '@/types/db';
 

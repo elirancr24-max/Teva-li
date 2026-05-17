@@ -18,7 +18,7 @@ import {
   Checkbox,
 } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { ProductToggle } from './ProductToggle';
 import { RowActions } from './RowActions';
 import { bulkToggleActive, bulkDeleteProducts } from '@/app/admin/actions';

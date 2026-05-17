@@ -4,7 +4,7 @@ import { Box, Container, Stack, Typography, Button } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export const metadata: Metadata = { title: 'הזמנה התקבלה' };
 

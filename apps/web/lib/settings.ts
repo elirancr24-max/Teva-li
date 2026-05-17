@@ -2,15 +2,15 @@ import { adminSupabase } from '@/lib/supabase/admin';
 
 export const DEFAULT_SETTINGS = {
   business_name:      'טבע לי',
-  business_phone:     '054-1234567',
-  business_whatsapp:  '972541234567',
+  business_phone:     '054-8897445',
+  business_whatsapp:  '972548897445',
   business_email:     'orders@teva-li.com',
   business_address:   'דימונה',
   business_hours:     'א-ה 8:00-19:00 · ו 8:00-13:00',
   delivery_fee_cents: '2500',
   min_order_cents:    '8000',
-  hero_title:         'פירות טריים. ישר לדלת.',
-  hero_subtitle:      'טבע לי דימונה — חתוך, ארוז, מוכן לאכילה. מאז 2019.',
+  hero_title:         'פירות וירקות טריים — ישר מהשדה אליכם',
+  hero_subtitle:      'משלוח עד הדלת בדימונה והסביבה. קיאקי פירות מעוצבים לאירועים.',
   banner_message:     '',
 } as const;
 

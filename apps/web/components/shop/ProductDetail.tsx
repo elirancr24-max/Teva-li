@@ -14,7 +14,7 @@ import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { addItem, decrementAmount, incrementAmount } from '@/store/slices/cartSlice';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import type { Product } from '@/types/shop';
 
 const KIND_EMOJI: Record<string, string> = {

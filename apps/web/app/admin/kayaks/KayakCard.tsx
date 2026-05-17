@@ -2,7 +2,7 @@
 import { useTransition } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { updateKayakStatus } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import type { KayakOrder } from '@/types/db';
 
 const STATUS_HE: Record<string, string> = {

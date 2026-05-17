@@ -3,7 +3,7 @@ import { Box, Container, Stack, Typography, Button, Chip } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { Header } from './Header';
 import { Footer } from './Footer';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 type Props = {
   title: string;

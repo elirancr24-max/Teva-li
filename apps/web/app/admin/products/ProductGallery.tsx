@@ -8,7 +8,7 @@ import {
   setPrimaryImage,
   reorderProductImages,
 } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 type GalleryImage = {
   id: string;

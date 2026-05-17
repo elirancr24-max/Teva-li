@@ -1,7 +1,7 @@
 import type { Metadata } from 'next';
 import { Box, Typography } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { KayakCard } from './KayakCard';
 import type { KayakOrder } from '@/types/db';
 

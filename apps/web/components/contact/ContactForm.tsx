@@ -2,7 +2,7 @@
 import { useState } from 'react';
 import { Box, Stack, TextField, Button, Typography } from '@mui/material';
 import SendIcon from '@mui/icons-material/Send';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 const FIELD_LABEL_SX = {
   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, Monaco, Consolas, monospace',

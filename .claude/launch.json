@@ -2,10 +2,10 @@
   "version": "0.0.1",
   "configurations": [
     {
-      "name": "peri-li-web",
+      "name": "teva-li-web",
       "runtimeExecutable": "pnpm",
-      "runtimeArgs": ["--filter", "peri-li-web", "dev"],
-      "port": 3000,
+      "runtimeArgs": ["--filter", "teva-li-web", "exec", "next", "dev", "-p", "3001"],
+      "port": 3001,
       "autoPort": false
     }
   ]

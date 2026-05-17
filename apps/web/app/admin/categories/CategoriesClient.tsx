@@ -17,7 +17,7 @@ import {
   TextField,
   Typography,
 } from '@mui/material';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { createCategory, updateCategory, deleteCategory } from '@/app/admin/actions';
 import type { Category } from '@/types/db';
 

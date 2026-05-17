@@ -2,7 +2,7 @@
 import Link from 'next/link';
 import { Box, Container, Stack, Typography, Button, Paper } from '@mui/material';
 import CheckCircleOutlineIcon from '@mui/icons-material/CheckCircleOutline';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 type Props = {
   orderId: string;

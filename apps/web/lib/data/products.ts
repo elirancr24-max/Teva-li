@@ -53,21 +53,25 @@ export async function getCatalog(): Promise<{ products: Product[]; categories: C
       return { products: mockProducts, categories: mockCategories };
     }
 
+    const products: Product[] = (rawProducts as Parameters<typeof dbProductToProduct>[0][]).map(
+      dbProductToProduct,
+    );
+
+    // Only surface categories that actually have at least one active product.
+    const activeCategoryIds = new Set(products.map((p) => p.categoryId).filter(Boolean));
     const categories: Category[] = ((rawCategories ?? []) as Array<{
       id: string;
       slug: string;
       name_he: string;
       sort_order: number;
-    }>).map((c) => ({
-      id: c.id,
-      slug: c.slug,
-      name: c.name_he,
-      sortOrder: c.sort_order,
-    }));
-
-    const products: Product[] = (rawProducts as Parameters<typeof dbProductToProduct>[0][]).map(
-      dbProductToProduct,
-    );
+    }>)
+      .filter((c) => activeCategoryIds.has(c.id))
+      .map((c) => ({
+        id: c.id,
+        slug: c.slug,
+        name: c.name_he,
+        sortOrder: c.sort_order,
+      }));
 
     return { products, categories };
   } catch {

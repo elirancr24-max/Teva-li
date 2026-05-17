@@ -2,7 +2,7 @@
 import { useActionState } from 'react';
 import { Box, Typography, TextField, Button } from '@mui/material';
 import { adminLogin } from './actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 export function LoginForm() {
   const [state, action, pending] = useActionState(adminLogin, null);

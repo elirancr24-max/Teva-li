@@ -21,7 +21,7 @@ import {
   incrementAmount,
   removeItem,
 } from '@/store/slices/cartSlice';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
 const UNIT_LABEL: Record<string, string> = {
   kg: 'ק״ג',

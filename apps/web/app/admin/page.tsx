@@ -2,7 +2,7 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 import { Box, Typography, Paper, Table, TableBody, TableCell, TableHead, TableRow } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import type { Order } from '@/types/db';
 
 export const metadata: Metadata = { title: 'לוח בקרה — אדמין', robots: { index: false, follow: false } };

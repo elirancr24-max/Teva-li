@@ -13,7 +13,7 @@ import {
   FormControl,
 } from '@mui/material';
 import { createProduct, updateProduct } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { ImageUpload } from './ImageUpload';
 import { ProductGallery } from './ProductGallery';
 import type { Product, Category } from '@/types/db';

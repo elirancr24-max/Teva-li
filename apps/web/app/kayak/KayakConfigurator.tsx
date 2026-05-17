@@ -15,7 +15,7 @@ import {
   Divider,
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { submitKayakOrder, type KayakSubmitInput } from './actions';
 import { SuccessView } from './SuccessView';
 

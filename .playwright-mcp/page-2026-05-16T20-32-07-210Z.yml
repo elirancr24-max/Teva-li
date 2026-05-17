@@ -1,0 +1,328 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "טבע לי" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "טבע לי" [ref=e5]
+      - generic [ref=e6]:
+        - button "חיפוש" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - textbox "חיפוש מוצר" [ref=e11]
+      - generic [ref=e12]:
+        - button "לאן מגיעים? · דימונה" [ref=e13] [cursor=pointer]:
+          - img [ref=e15]
+          - text: לאן מגיעים?
+          - generic [ref=e17]: · דימונה
+        - link "הרשמה / התחברות" [ref=e18] [cursor=pointer]:
+          - /url: /admin-login
+          - img [ref=e20]
+          - text: הרשמה / התחברות
+        - link "עגלה" [ref=e22] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e24]
+  - navigation [ref=e26]:
+    - button "כל המוצרים" [ref=e28] [cursor=pointer]
+  - generic [ref=e32]:
+    - generic [ref=e33]:
+      - generic [ref=e34]: טבע לי · דימונה · משלוח עד חצי שעה!
+      - heading "פירות וירקות טריים — ישר מהשדה אליכם" [level=1] [ref=e36]
+      - paragraph [ref=e37]: משלוח עד הדלת בדימונה והסביבה. קיאקי פירות מעוצבים לאירועים, קופסאות בריאות, ופירות מקולפים מוכנים.
+      - generic [ref=e38]:
+        - link "לקנייה בחנות" [ref=e39] [cursor=pointer]:
+          - /url: /shop
+          - text: לקנייה בחנות
+          - img [ref=e41]
+        - link "קיאק פירות לאירוע" [ref=e43] [cursor=pointer]:
+          - /url: /kayak
+      - generic [ref=e44]:
+        - generic [ref=e45]:
+          - paragraph [ref=e46]: 181+
+          - paragraph [ref=e47]: מוצרים בקטלוג
+        - generic [ref=e48]:
+          - paragraph [ref=e49]: 30׳
+          - paragraph [ref=e50]: זמן משלוח
+        - generic [ref=e51]:
+          - paragraph [ref=e52]: 24/7
+          - paragraph [ref=e53]: שירות לקוחות
+    - generic [ref=e54]:
+      - img "טבע לי" [ref=e55]
+      - generic [ref=e56]:
+        - paragraph [ref=e57]: קיאק פירות החל מ
+        - paragraph [ref=e58]: ₪290
+        - paragraph [ref=e59]: 8-12 אורחים · מקיף לכל אירוע
+  - generic [ref=e62]:
+    - generic [ref=e63]:
+      - img [ref=e65]
+      - paragraph [ref=e67]: FRESHNESS
+      - paragraph [ref=e68]: טרי מהמשתלה
+      - paragraph [ref=e69]: נקטף בבוקר, מגיע אליכם באותו יום
+    - generic [ref=e70]:
+      - img [ref=e72]
+      - paragraph [ref=e74]: DELIVERY
+      - paragraph [ref=e75]: משלוח עד חצי שעה
+      - paragraph [ref=e76]: דימונה והסביבה · מעל ₪150 חינם
+    - generic [ref=e77]:
+      - img [ref=e79]
+      - paragraph [ref=e84]: SUPPORT
+      - paragraph [ref=e85]: תמיכה אישית 24/7
+      - paragraph [ref=e86]: בוואטסאפ או טלפון, תמיד פה
+    - generic [ref=e87]:
+      - img [ref=e89]
+      - paragraph [ref=e92]: LOCAL
+      - paragraph [ref=e93]: מאז 2019 בדימונה
+      - paragraph [ref=e94]: עסק משפחתי, פירות וירקות איכותיים
+  - generic [ref=e96]:
+    - generic [ref=e97]:
+      - heading "מוצרים פופולריים" [level=2] [ref=e98]
+      - link "ראה הכל" [ref=e99] [cursor=pointer]:
+        - /url: /shop
+        - text: ראה הכל
+        - img [ref=e100]
+    - generic [ref=e102]:
+      - link "ארטישוק ירושלמי, פרימיום" [ref=e104] [cursor=pointer]:
+        - img "ארטישוק ירושלמי, פרימיום" [ref=e106]
+        - paragraph [ref=e107]: ארטישוק ירושלמי, פרימיום
+        - generic [ref=e108]:
+          - generic [ref=e109]: ₪29.90
+          - generic [ref=e110]: /ק״ג
+        - button "הוספה לסל ארטישוק ירושלמי, פרימיום" [ref=e112]:
+          - img [ref=e114]
+          - text: הוספה לסל
+      - link "בטטה לבנה, פרימיום" [ref=e117] [cursor=pointer]:
+        - img "בטטה לבנה, פרימיום" [ref=e119]
+        - paragraph [ref=e120]: בטטה לבנה, פרימיום
+        - generic [ref=e121]:
+          - generic [ref=e122]: ₪19.90
+          - generic [ref=e123]: /ק״ג
+        - button "הוספה לסל בטטה לבנה, פרימיום" [ref=e125]:
+          - img [ref=e127]
+          - text: הוספה לסל
+      - link "בטטה מיני" [ref=e130] [cursor=pointer]:
+        - img "בטטה מיני" [ref=e132]
+        - paragraph [ref=e133]: בטטה מיני
+        - generic [ref=e134]:
+          - generic [ref=e135]: ₪12.90
+          - generic [ref=e136]: /ק״ג
+        - button "הוספה לסל בטטה מיני" [ref=e138]:
+          - img [ref=e140]
+          - text: הוספה לסל
+      - link "בטטה ענקית, פרימיום" [ref=e143] [cursor=pointer]:
+        - img "בטטה ענקית, פרימיום" [ref=e145]
+        - paragraph [ref=e146]: בטטה ענקית, פרימיום
+        - generic [ref=e147]:
+          - generic [ref=e148]: ₪12.90
+          - generic [ref=e149]: /ק״ג
+        - button "הוספה לסל בטטה ענקית, פרימיום" [ref=e151]:
+          - img [ref=e153]
+          - text: הוספה לסל
+      - link "בצל לבן, פרימיום" [ref=e156] [cursor=pointer]:
+        - img "בצל לבן, פרימיום" [ref=e158]
+        - paragraph [ref=e159]: בצל לבן, פרימיום
+        - generic [ref=e160]:
+          - generic [ref=e161]: ₪11.90
+          - generic [ref=e162]: /ק״ג
+        - button "הוספה לסל בצל לבן, פרימיום" [ref=e164]:
+          - img [ref=e166]
+          - text: הוספה לסל
+      - link "בצל לח, פרימיום" [ref=e169] [cursor=pointer]:
+        - img "בצל לח, פרימיום" [ref=e171]
+        - paragraph [ref=e172]: בצל לח, פרימיום
+        - generic [ref=e173]:
+          - generic [ref=e174]: ₪14.90
+          - generic [ref=e175]: /ק״ג
+        - button "הוספה לסל בצל לח, פרימיום" [ref=e177]:
+          - img [ref=e179]
+          - text: הוספה לסל
+      - link "בצלי שאלוט" [ref=e182] [cursor=pointer]:
+        - img "בצלי שאלוט" [ref=e184]
+        - paragraph [ref=e185]: בצלי שאלוט
+        - generic [ref=e186]:
+          - generic [ref=e187]: ₪11.90
+          - generic [ref=e188]: /יח׳
+        - button "הוספה לסל בצלי שאלוט" [ref=e190]:
+          - img [ref=e192]
+          - text: הוספה לסל
+      - link "ג'ינג'ר שורש" [ref=e195] [cursor=pointer]:
+        - img "ג'ינג'ר שורש" [ref=e197]
+        - paragraph [ref=e198]: ג'ינג'ר שורש
+        - generic [ref=e199]:
+          - generic [ref=e200]: ₪59.90
+          - generic [ref=e201]: /ק״ג
+        - button "הוספה לסל ג'ינג'ר שורש" [ref=e203]:
+          - img [ref=e205]
+          - text: הוספה לסל
+  - generic [ref=e209]:
+    - generic [ref=e210]:
+      - generic [ref=e211]:
+        - paragraph [ref=e212]: · קטלוג
+        - heading "גלו את הקטגוריות שלנו" [level=2] [ref=e213]
+      - link "לכל המוצרים" [ref=e214] [cursor=pointer]:
+        - /url: /shop
+        - text: לכל המוצרים
+        - img [ref=e215]
+    - generic [ref=e217]:
+      - link "ירקניה טרייה גלה" [ref=e218] [cursor=pointer]:
+        - /url: /shop?cat=vegetables
+        - generic [ref=e219]:
+          - paragraph [ref=e220]: ירקניה טרייה
+          - generic [ref=e221]:
+            - text: גלה
+            - img [ref=e222]
+      - link "פירות גלה" [ref=e224] [cursor=pointer]:
+        - /url: /shop?cat=fruits
+        - generic [ref=e225]:
+          - paragraph [ref=e226]: פירות
+          - generic [ref=e227]:
+            - text: גלה
+            - img [ref=e228]
+      - link "פטריות ונבטים גלה" [ref=e230] [cursor=pointer]:
+        - /url: /shop?cat=mushrooms
+        - generic [ref=e231]:
+          - paragraph [ref=e232]: פטריות ונבטים
+          - generic [ref=e233]:
+            - text: גלה
+            - img [ref=e234]
+      - link "פירות יבשים גלה" [ref=e236] [cursor=pointer]:
+        - /url: /shop?cat=dried
+        - generic [ref=e237]:
+          - paragraph [ref=e238]: פירות יבשים
+          - generic [ref=e239]:
+            - text: גלה
+            - img [ref=e240]
+      - link "ממרחים ורטבים גלה" [ref=e242] [cursor=pointer]:
+        - /url: /shop?cat=spreads
+        - generic [ref=e243]:
+          - paragraph [ref=e244]: ממרחים ורטבים
+          - generic [ref=e245]:
+            - text: גלה
+            - img [ref=e246]
+      - link "מוצרים כלליים גלה" [ref=e248] [cursor=pointer]:
+        - /url: /shop?cat=grocery
+        - generic [ref=e249]:
+          - paragraph [ref=e250]: מוצרים כלליים
+          - generic [ref=e251]:
+            - text: גלה
+            - img [ref=e252]
+  - generic [ref=e256]:
+    - generic [ref=e257]:
+      - generic [ref=e259]: 🚚
+      - heading "משלוח טרי עד הדלת" [level=2] [ref=e260]
+      - paragraph [ref=e261]: אנחנו מספקים פירות וירקות איכותיים מקליפה ועד מארז למבחר ערים בדרום הארץ. משלוח חינם בהזמנה מעל ₪150.
+    - generic [ref=e262]:
+      - paragraph [ref=e263]: · אזורי חלוקה
+      - generic [ref=e264]:
+        - generic [ref=e265]: דימונה
+        - generic [ref=e267]: ערד
+        - generic [ref=e269]: באר שבע
+        - generic [ref=e271]: ירוחם
+        - generic [ref=e273]: מצפה רמון
+  - generic [ref=e277]:
+    - generic [ref=e278]:
+      - img "טבע לי" [ref=e283]
+      - generic [ref=e284]: EST · 2019
+      - generic [ref=e285]: DIMONA · ISRAEL
+    - generic [ref=e286]:
+      - paragraph [ref=e287]: · הסיפור שלנו
+      - heading "עסק משפחתי מדימונה, עם טעם אמיתי של בית." [level=2] [ref=e288]:
+        - text: עסק משפחתי מדימונה,
+        - generic [ref=e289]: עם טעם אמיתי של בית.
+      - paragraph [ref=e290]: "ב־2019 התחלנו עם רעיון פשוט: פירות וירקות אמיתיים, ישר מהשדה, לדלת שלכם בחצי שעה. כל מנגו נחתך ביד באותו בוקר, כל קיאק פירות מעוצב במקצועיות לאירוע שלכם, וכל לקוח מקבל יחס אישי על קצה הטלפון."
+      - generic [ref=e291]:
+        - generic [ref=e292]:
+          - paragraph [ref=e293]: "+6"
+          - paragraph [ref=e294]: שנים של פרי טרי
+        - generic [ref=e295]:
+          - paragraph [ref=e296]: 100%
+          - paragraph [ref=e297]: ישראלי, חתוך ביד
+        - generic [ref=e298]:
+          - paragraph [ref=e299]: 24/7
+          - paragraph [ref=e300]: תמיכה בוואטסאפ
+  - generic [ref=e304]:
+    - generic [ref=e305]:
+      - img [ref=e307]
+      - paragraph [ref=e309]: · חוויה ייחודית · SIGNATURE
+    - heading "קיאק פירות — האטרקציה של האירוע." [level=2] [ref=e310]:
+      - text: קיאק פירות —
+      - generic [ref=e311]: האטרקציה של האירוע.
+    - paragraph [ref=e312]: חתונות, ימי הולדת, בר/בת מצווה, אירועי עסקים — קיאק עץ ענק עמוס בפירות עונתיים, חתוכים בידנו ומסודרים כיצירת אומנות. מגיע מוכן, נראה מהמם, נעלם מהר.
+    - generic [ref=e313]:
+      - generic [ref=e314]: ✓ 8–12 אורחים מ־₪290
+      - generic [ref=e315]: ✓ 50+ אורחים גם
+      - generic [ref=e316]: ✓ מסירה והתקנה כלולים
+      - generic [ref=e317]: ✓ תמונה לזיכרון
+    - generic [ref=e318]:
+      - link "בנה את הקיאק שלי" [ref=e319] [cursor=pointer]:
+        - /url: /kayak
+        - text: בנה את הקיאק שלי
+        - img [ref=e321]
+      - 'link "התקשרו: 054-8897445" [ref=e323] [cursor=pointer]':
+        - /url: tel:054-8897445
+  - generic [ref=e327]:
+    - generic [ref=e328]:
+      - paragraph [ref=e329]: · בואו נדבר · 054-8897445
+      - paragraph [ref=e330]:
+        - text: יש לך שאלה?
+        - generic [ref=e331]: דברו איתנו בוואטסאפ.
+      - paragraph [ref=e332]: עונים אישית, כל יום, גם בסופ"ש. הזמנות, התאמות אישיות לאירועים — אנחנו פה לכל שאלה.
+    - generic [ref=e333]:
+      - link "צ׳אט בוואטסאפ" [ref=e334] [cursor=pointer]:
+        - /url: https://wa.me/972548897445?text=%D7%94%D7%99%D7%99%20%D7%98%D7%91%D7%A2%20%D7%9C%D7%99%2C%20%D7%90%D7%A9%D7%9E%D7%97%20%D7%9C%D7%A4%D7%A8%D7%98%D7%99%D7%9D%20%D7%A2%D7%9C%20%D7%94%D7%96%D7%9E%D7%A0%D7%94.
+        - img [ref=e336]
+        - text: צ׳אט בוואטסאפ
+        - img [ref=e339]
+      - link "054-8897445" [ref=e341] [cursor=pointer]:
+        - /url: tel:0548897445
+        - img [ref=e343]
+        - text: 054-8897445
+  - contentinfo [ref=e345]:
+    - generic [ref=e346]:
+      - generic [ref=e347]:
+        - generic [ref=e348]:
+          - img "טבע לי" [ref=e349]
+          - paragraph [ref=e350]: פירות וירקות טריים · קיאקי פירות לאירועים
+          - generic [ref=e351]:
+            - img [ref=e352]
+            - paragraph [ref=e354]: דימונה, ישראל
+          - generic [ref=e355]:
+            - img [ref=e356]
+            - link "054-8897445" [ref=e358] [cursor=pointer]:
+              - /url: tel:054-8897445
+        - generic [ref=e359]:
+          - paragraph [ref=e360]: צרו קשר
+          - generic [ref=e361]:
+            - img [ref=e362]
+            - link "WhatsApp" [ref=e364] [cursor=pointer]:
+              - /url: https://wa.me/972548897445
+          - generic [ref=e365]:
+            - img [ref=e366]
+            - link "054-8897445" [ref=e368] [cursor=pointer]:
+              - /url: tel:054-8897445
+          - generic [ref=e369]:
+            - img [ref=e370]
+            - link "orders@teva-li.com" [ref=e372] [cursor=pointer]:
+              - /url: mailto:orders@teva-li.com
+          - generic [ref=e373]:
+            - link "Instagram" [ref=e374] [cursor=pointer]:
+              - /url: https://www.instagram.com/
+              - img [ref=e375]
+            - link "Facebook" [ref=e377] [cursor=pointer]:
+              - /url: https://www.facebook.com/
+              - img [ref=e378]
+        - generic [ref=e380]:
+          - paragraph [ref=e381]: קישורים
+          - link "תנאי שימוש" [ref=e382] [cursor=pointer]:
+            - /url: /terms
+            - paragraph [ref=e383]: תנאי שימוש
+          - link "הצהרת נגישות" [ref=e384] [cursor=pointer]:
+            - /url: /accessibility
+            - paragraph [ref=e385]: הצהרת נגישות
+          - link "מדיניות פרטיות" [ref=e386] [cursor=pointer]:
+            - /url: /privacy
+            - paragraph [ref=e387]: מדיניות פרטיות
+          - link "אודות" [ref=e388] [cursor=pointer]:
+            - /url: /about
+            - paragraph [ref=e389]: אודות
+          - link "צור קשר" [ref=e390] [cursor=pointer]:
+            - /url: /contact
+            - paragraph [ref=e391]: צור קשר
+      - paragraph [ref=e393]: © 2026 טבע לי. כל הזכויות שמורות.

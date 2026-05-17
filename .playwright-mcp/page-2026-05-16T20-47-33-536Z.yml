@@ -1,0 +1,140 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "טבע לי" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "טבע לי" [ref=e5]
+      - generic [ref=e6]:
+        - button "חיפוש" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - textbox "חיפוש מוצר" [ref=e11]
+      - generic [ref=e12]:
+        - button "לאן מגיעים? · דימונה" [ref=e13] [cursor=pointer]:
+          - img [ref=e15]
+          - text: לאן מגיעים?
+          - generic [ref=e17]: · דימונה
+        - link "הרשמה / התחברות" [ref=e18] [cursor=pointer]:
+          - /url: /admin-login
+          - img [ref=e20]
+          - text: הרשמה / התחברות
+        - link "עגלה" [ref=e22] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e24]
+  - navigation [ref=e26]:
+    - button "כל המוצרים" [ref=e28] [cursor=pointer]
+  - generic [ref=e31]:
+    - paragraph [ref=e32]: // אודות · טבע לי
+    - heading "המשפחה מאחורי טבע לי." [level=1] [ref=e33]:
+      - text: המשפחה
+      - text: מאחורי
+      - generic [ref=e34]: טבע לי.
+    - paragraph [ref=e35]: עסק משפחתי קטן מדימונה, שבחר לעשות דבר אחד — ולעשות אותו טוב. פירות וירקות טריים, חיתוך נקי, ויחס אישי שלא תמצאו בשום סופר.
+  - generic [ref=e37]:
+    - paragraph [ref=e38]: // הסיפור
+    - paragraph [ref=e39]: התחלנו ב-2019 בדימונה.
+    - paragraph [ref=e40]: "הכל התחיל בארגז אבטיחים אחד שאבא הביא משוק בנמל. הוא חתך, סידר, ואמר לאמא: \"תראי כמה זה יפה ככה.\" באותו בוקר נולד טבע לי — דוכן קטן בשוק העירוני, עם שלט כתוב ביד וחלום פשוט: שכל אחד בדימונה יוכל לקבל פירות שנראים ומרגישים כאילו קטפו אותם ברגע זה."
+    - paragraph [ref=e41]: שש שנים אחר כך, אנחנו עדיין בוחרים כל פרי ביד. עדיין מכירים את הלקוחות שלנו בשם. עדיין מתעוררים לפני הזריחה כדי להגיע לחקלאים. אבל היום אפשר להזמין גם דרך האתר, וזה מגיע אליכם הביתה — ארוז, חתוך, מוכן. עם אותה תשומת לב שאבא נתן לאבטיח הראשון.
+    - paragraph [ref=e42]: כי בסוף — פירות זה לא רק אוכל. זה דרך להגיד למישהו "חשבתי עליך היום".
+  - generic [ref=e45]:
+    - generic [ref=e46]:
+      - paragraph [ref=e47]: // הערכים שלנו
+      - paragraph [ref=e48]:
+        - text: שלושה עקרונות.
+        - text: ללא פשרות.
+    - generic [ref=e49]:
+      - generic [ref=e51]:
+        - img [ref=e53]
+        - paragraph [ref=e55]: טריות
+        - paragraph [ref=e56]: כל פרי וכל ירק נבחר ידנית בבוקר. אם הוא לא יעלה על השולחן שלנו — הוא לא יעלה על שלכם.
+      - generic [ref=e58]:
+        - img [ref=e60]
+        - paragraph [ref=e62]: אישיות
+        - paragraph [ref=e63]: אנחנו מכירים את הלקוחות שלנו בשם. מזמינים, מתקשרים, ולפעמים גם שולחים תפוח מתנה.
+      - generic [ref=e65]:
+        - img [ref=e67]
+        - paragraph [ref=e69]: קהילתיות
+        - paragraph [ref=e70]: דימונה היא הבית שלנו. אנחנו תומכים בחקלאים מקומיים ומחזירים לקהילה שגדלנו בה.
+  - generic [ref=e72]:
+    - generic [ref=e73]:
+      - paragraph [ref=e74]: // ציר הזמן
+      - paragraph [ref=e75]: שש שנים. ארבע נקודות ציון.
+    - generic [ref=e76]:
+      - generic [ref=e77]:
+        - paragraph [ref=e78]: "2019"
+        - paragraph [ref=e79]: ההתחלה
+        - paragraph [ref=e80]: דוכן קטן בשוק העירוני של דימונה. שני ארגזי פירות וחיוך גדול.
+      - generic [ref=e81]:
+        - paragraph [ref=e82]: "2021"
+        - paragraph [ref=e83]: הקיאקים הראשונים
+        - paragraph [ref=e84]: התחלנו לסדר קיאקי פירות לאירועים משפחתיים — הביקוש הפך לנהר.
+      - generic [ref=e85]:
+        - paragraph [ref=e86]: "2023"
+        - paragraph [ref=e87]: משלוחים לכל העיר
+        - paragraph [ref=e88]: רכב משלוחים ראשון. הזמנות מקוונות. צוות של חמישה בני משפחה.
+      - generic [ref=e89]:
+        - paragraph [ref=e90]: "2025"
+        - paragraph [ref=e91]: הדור הבא
+        - paragraph [ref=e92]: אתר חדש, מטבח חיתוך מקצועי, ושותפויות עם חקלאים בערבה ובאזורים נוספים.
+  - generic [ref=e95]:
+    - generic [ref=e96]:
+      - paragraph [ref=e97]: // הסיפור שלנו ממשיך
+      - paragraph [ref=e98]:
+        - text: בואו לטעום
+        - text: את ההבדל.
+    - link "לקטלוג המוצרים" [ref=e99] [cursor=pointer]:
+      - /url: /shop
+      - button "לקטלוג המוצרים" [ref=e100]:
+        - text: לקטלוג המוצרים
+        - img [ref=e102]
+  - contentinfo [ref=e104]:
+    - generic [ref=e105]:
+      - generic [ref=e106]:
+        - generic [ref=e107]:
+          - img "טבע לי" [ref=e108]
+          - paragraph [ref=e109]: פירות וירקות טריים · קיאקי פירות לאירועים
+          - generic [ref=e110]:
+            - img [ref=e111]
+            - paragraph [ref=e113]: דימונה, ישראל
+          - generic [ref=e114]:
+            - img [ref=e115]
+            - link "054-8897445" [ref=e117] [cursor=pointer]:
+              - /url: tel:054-8897445
+        - generic [ref=e118]:
+          - paragraph [ref=e119]: צרו קשר
+          - generic [ref=e120]:
+            - img [ref=e121]
+            - link "WhatsApp" [ref=e123] [cursor=pointer]:
+              - /url: https://wa.me/972548897445
+          - generic [ref=e124]:
+            - img [ref=e125]
+            - link "054-8897445" [ref=e127] [cursor=pointer]:
+              - /url: tel:054-8897445
+          - generic [ref=e128]:
+            - img [ref=e129]
+            - link "orders@teva-li.com" [ref=e131] [cursor=pointer]:
+              - /url: mailto:orders@teva-li.com
+          - generic [ref=e132]:
+            - link "Instagram" [ref=e133] [cursor=pointer]:
+              - /url: https://www.instagram.com/
+              - img [ref=e134]
+            - link "Facebook" [ref=e136] [cursor=pointer]:
+              - /url: https://www.facebook.com/
+              - img [ref=e137]
+        - generic [ref=e139]:
+          - paragraph [ref=e140]: קישורים
+          - link "תנאי שימוש" [ref=e141] [cursor=pointer]:
+            - /url: /terms
+            - paragraph [ref=e142]: תנאי שימוש
+          - link "הצהרת נגישות" [ref=e143] [cursor=pointer]:
+            - /url: /accessibility
+            - paragraph [ref=e144]: הצהרת נגישות
+          - link "מדיניות פרטיות" [ref=e145] [cursor=pointer]:
+            - /url: /privacy
+            - paragraph [ref=e146]: מדיניות פרטיות
+          - link "אודות" [ref=e147] [cursor=pointer]:
+            - /url: /about
+            - paragraph [ref=e148]: אודות
+          - link "צור קשר" [ref=e149] [cursor=pointer]:
+            - /url: /contact
+            - paragraph [ref=e150]: צור קשר
+      - paragraph [ref=e152]: © 2026 טבע לי. כל הזכויות שמורות.

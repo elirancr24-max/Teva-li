@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import { ProductForm } from '../../ProductForm';
 import type { Category, Product } from '@/types/db';
 

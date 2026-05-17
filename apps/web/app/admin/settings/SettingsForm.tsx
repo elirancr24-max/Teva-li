@@ -10,7 +10,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { updateSettings } from '@/app/admin/actions';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 import type { Settings } from '@/lib/settings';
 
 type State = { ok?: boolean; error?: string } | null;

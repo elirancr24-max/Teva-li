@@ -1,0 +1,107 @@
+- generic [active] [ref=e1]:
+  - banner [ref=e2]:
+    - generic [ref=e3]:
+      - link "טבע לי" [ref=e4] [cursor=pointer]:
+        - /url: /
+        - img "טבע לי" [ref=e5]
+      - generic [ref=e6]:
+        - button "חיפוש" [ref=e7] [cursor=pointer]:
+          - img [ref=e8]
+        - textbox "חיפוש מוצר" [ref=e11]
+      - generic [ref=e12]:
+        - button "לאן מגיעים? · דימונה" [ref=e13] [cursor=pointer]:
+          - img [ref=e15]
+          - text: לאן מגיעים?
+          - generic [ref=e17]: · דימונה
+        - link "הרשמה / התחברות" [ref=e18] [cursor=pointer]:
+          - /url: /admin-login
+          - img [ref=e20]
+          - text: הרשמה / התחברות
+        - link "עגלה" [ref=e22] [cursor=pointer]:
+          - /url: /cart
+          - img [ref=e24]
+  - navigation [ref=e26]:
+    - button "כל המוצרים" [ref=e28] [cursor=pointer]
+  - generic [ref=e30]:
+    - generic [ref=e32]:
+      - heading "כל המוצרים(0)" [level=1] [ref=e33]:
+        - text: כל המוצרים
+        - generic [ref=e34]: (0)
+      - generic [ref=e35]:
+        - generic [ref=e36]: "מיון לפי:"
+        - generic "מיון מוצרים" [ref=e38]:
+          - combobox "קטגוריה - שם" [ref=e39] [cursor=pointer]
+          - textbox: category
+          - img
+          - group
+      - generic [ref=e40]:
+        - paragraph [ref=e41]: 🍽️
+        - paragraph [ref=e42]: אין מוצרים בקטגוריה זו
+    - generic [ref=e44]:
+      - generic [ref=e45]:
+        - generic [ref=e46]:
+          - img [ref=e47]
+          - generic [ref=e49]: "0"
+          - paragraph [ref=e50]: סל הקניות שלי
+        - paragraph [ref=e51]: ₪0.00
+        - link "המשך לתשלום" [disabled]:
+          - /url: /checkout
+        - button "טעינת הזמנה קודמת" [ref=e52] [cursor=pointer]:
+          - img [ref=e54]
+          - text: טעינת הזמנה קודמת
+      - generic [ref=e57]:
+        - img [ref=e58]
+        - paragraph [ref=e60]: סל הקניות שלכם ריק
+        - paragraph [ref=e61]: התחילו להוסיף מוצרים
+  - contentinfo [ref=e62]:
+    - generic [ref=e63]:
+      - generic [ref=e64]:
+        - generic [ref=e65]:
+          - img "טבע לי" [ref=e66]
+          - paragraph [ref=e67]: פירות וירקות טריים · קיאקי פירות לאירועים
+          - generic [ref=e68]:
+            - img [ref=e69]
+            - paragraph [ref=e71]: דימונה, ישראל
+          - generic [ref=e72]:
+            - img [ref=e73]
+            - link "054-8897445" [ref=e75] [cursor=pointer]:
+              - /url: tel:054-8897445
+        - generic [ref=e76]:
+          - paragraph [ref=e77]: צרו קשר
+          - generic [ref=e78]:
+            - img [ref=e79]
+            - link "WhatsApp" [ref=e81] [cursor=pointer]:
+              - /url: https://wa.me/972548897445
+          - generic [ref=e82]:
+            - img [ref=e83]
+            - link "054-8897445" [ref=e85] [cursor=pointer]:
+              - /url: tel:054-8897445
+          - generic [ref=e86]:
+            - img [ref=e87]
+            - link "orders@teva-li.com" [ref=e89] [cursor=pointer]:
+              - /url: mailto:orders@teva-li.com
+          - generic [ref=e90]:
+            - link "Instagram" [ref=e91] [cursor=pointer]:
+              - /url: https://www.instagram.com/
+              - img [ref=e92]
+            - link "Facebook" [ref=e94] [cursor=pointer]:
+              - /url: https://www.facebook.com/
+              - img [ref=e95]
+        - generic [ref=e97]:
+          - paragraph [ref=e98]: קישורים
+          - link "תנאי שימוש" [ref=e99] [cursor=pointer]:
+            - /url: /terms
+            - paragraph [ref=e100]: תנאי שימוש
+          - link "הצהרת נגישות" [ref=e101] [cursor=pointer]:
+            - /url: /accessibility
+            - paragraph [ref=e102]: הצהרת נגישות
+          - link "מדיניות פרטיות" [ref=e103] [cursor=pointer]:
+            - /url: /privacy
+            - paragraph [ref=e104]: מדיניות פרטיות
+          - link "אודות" [ref=e105] [cursor=pointer]:
+            - /url: /about
+            - paragraph [ref=e106]: אודות
+          - link "צור קשר" [ref=e107] [cursor=pointer]:
+            - /url: /contact
+            - paragraph [ref=e108]: צור קשר
+      - paragraph [ref=e110]: © 2026 טבע לי. כל הזכויות שמורות.

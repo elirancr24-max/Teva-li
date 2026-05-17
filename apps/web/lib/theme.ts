@@ -1,16 +1,9 @@
 'use client';
 import { createTheme } from '@mui/material/styles';
 import { heIL } from '@mui/material/locale';
-
-export const BRAND = {
-  green: '#8CBE3C',
-  greenDark: '#7AA635',
-  greenLight: '#F4FAEB',
-  brown: '#47251C',
-  cream: '#F0EFEC',
-  ink: '#0D0D0D',
-  paper: '#FFFFFF',
-} as const;
+// Re-export brand tokens for backward-compat with files that still import BRAND from theme.
+export { BRAND, MESH } from './brand';
+import { BRAND } from './brand';
 
 export const theme = createTheme(
   {
@@ -24,59 +17,77 @@ export const theme = createTheme(
         contrastText: '#fff',
       },
       secondary: {
-        main: BRAND.brown,
-        contrastText: '#fff',
+        main: BRAND.gold,
+        dark: BRAND.goldDark,
+        light: BRAND.goldLight,
+        contrastText: BRAND.brown,
       },
+      error: { main: BRAND.watermelon, dark: BRAND.watermelonDark, contrastText: '#fff' },
+      info: { main: BRAND.teal, dark: BRAND.tealDark, contrastText: '#fff' },
       grey: {
-        50: '#F7F6F5',
-        100: '#F5F3F0',
-        200: '#EDECE9',
-        300: '#CBC9C6',
+        50: '#FAF8F2',
+        100: '#F5F2E9',
+        200: '#EFE9D8',
+        300: '#D6CFB8',
       },
       background: {
         default: BRAND.cream,
         paper: BRAND.paper,
       },
       text: {
-        primary: '#1f1f1f',
-        secondary: '#5b5b5b',
+        primary: BRAND.brown,
+        secondary: BRAND.brownLight,
       },
-      divider: 'rgba(0,0,0,0.08)',
+      divider: 'rgba(42,24,16,0.10)',
     },
     typography: {
       fontFamily: 'var(--font-rubik), var(--font-heebo), Rubik, Heebo, system-ui, Arial, sans-serif',
-      h1: { fontWeight: 800, letterSpacing: '-0.02em' },
-      h2: { fontWeight: 800, letterSpacing: '-0.02em', fontSize: '1.6rem' },
-      h3: { fontWeight: 700, letterSpacing: '-0.01em' },
-      h6: { fontWeight: 700 },
-      button: { fontWeight: 700 },
+      h1: { fontWeight: 900, letterSpacing: '-0.025em' },
+      h2: { fontWeight: 900, letterSpacing: '-0.025em', fontSize: '1.8rem' },
+      h3: { fontWeight: 800, letterSpacing: '-0.015em' },
+      h6: { fontWeight: 800 },
+      button: { fontWeight: 800 },
     },
-    shape: { borderRadius: 8 },
+    shape: { borderRadius: 14 },
     components: {
       MuiButton: {
         styleOverrides: {
           root: {
-            borderRadius: 8,
+            borderRadius: 999,
             textTransform: 'none',
-            fontWeight: 700,
+            fontWeight: 800,
+            paddingInline: 24,
           },
           containedPrimary: {
             backgroundColor: BRAND.green,
-            '&:hover': { backgroundColor: BRAND.greenDark },
+            boxShadow: '0 6px 18px -6px rgba(76,174,58,0.55)',
+            '&:hover': {
+              backgroundColor: BRAND.greenDark,
+              boxShadow: '0 10px 24px -6px rgba(76,174,58,0.65)',
+            },
+          },
+          containedSecondary: {
+            backgroundColor: BRAND.gold,
+            color: BRAND.brown,
+            boxShadow: '0 6px 18px -6px rgba(255,179,48,0.55)',
+            '&:hover': {
+              backgroundColor: BRAND.goldDark,
+              boxShadow: '0 10px 24px -6px rgba(255,179,48,0.65)',
+            },
           },
         },
       },
       MuiCard: {
         styleOverrides: {
           root: {
-            boxShadow: '0 2px 10px rgba(0,0,0,0.06)',
-            borderRadius: 8,
+            boxShadow: '0 2px 12px rgba(42,24,16,0.06)',
+            borderRadius: 16,
           },
         },
       },
       MuiPaper: {
         styleOverrides: {
-          rounded: { borderRadius: 8 },
+          rounded: { borderRadius: 16 },
         },
       },
       MuiAppBar: {

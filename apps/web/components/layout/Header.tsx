@@ -19,12 +19,11 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
-import CheckIcon from '@mui/icons-material/Check';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveCategory } from '@/store/slices/categoriesSlice';
-import { BRAND } from '@/lib/theme';
+import { BRAND } from '@/lib/brand';
 
-const TOP_BAR_HEIGHT = 60;
+const TOP_BAR_HEIGHT = 72;
 const NAV_BAR_HEIGHT = 50;
 
 export function Header() {
@@ -76,45 +75,30 @@ export function Header() {
             gap: { xs: 1, md: 2 },
           }}
         >
-          {/* Right (logical first) — Logo + green badge */}
+          {/* Right (logical first) — Logo image */}
           <Link
             href="/"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
+              gap: 10,
               textDecoration: 'none',
               color: 'inherit',
               flexShrink: 0,
             }}
           >
-            <Typography
-              sx={{
-                fontFamily: 'var(--font-heebo), Heebo, system-ui, Arial, sans-serif',
-                fontSize: 24,
-                fontWeight: 800,
-                lineHeight: 1,
-                color: '#fff',
-              }}
-            >
-              טבע לי
-            </Typography>
             <Box
+              component="img"
+              src="/logo-teva-trans.png"
+              alt="טבע לי"
               sx={{
-                width: 26,
-                height: 26,
-                borderRadius: '50%',
-                bgcolor: BRAND.green,
-                display: 'inline-flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                color: '#fff',
-                flexShrink: 0,
+                height: { xs: 48, md: 60 },
+                width: 'auto',
+                display: 'block',
+                filter:
+                  'drop-shadow(0 0 4px rgba(255,255,255,0.95)) drop-shadow(0 0 12px rgba(255,255,255,0.7)) drop-shadow(0 4px 8px rgba(0,0,0,0.35))',
               }}
-              aria-hidden
-            >
-              <CheckIcon sx={{ fontSize: 16 }} />
-            </Box>
+            />
           </Link>
 
           {/* Center — Search bar */}

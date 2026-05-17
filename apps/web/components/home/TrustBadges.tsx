@@ -1,28 +1,66 @@
 import { Box, Container, Stack, Typography } from '@mui/material';
-import { BRAND } from '@/lib/theme';
+import LocalFloristOutlinedIcon from '@mui/icons-material/LocalFloristOutlined';
+import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
+import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
+import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
+import type { ComponentType, SVGProps } from 'react';
+import { BRAND } from '@/lib/brand';
 
 interface Badge {
-  emoji: string;
+  Icon: ComponentType<{ sx?: object }>;
   label: string;
   title: string;
-  accent?: string;
+  desc: string;
 }
 
-const BADGES: Badge[] = [
-  { emoji: '🌿', label: 'FRESHNESS', title: 'טרי מהמשתלה', accent: BRAND.green },
-  { emoji: '🚚', label: 'DELIVERY',  title: 'משלוח עד הדלת', accent: BRAND.ink },
-  { emoji: '💬', label: 'SUPPORT',   title: 'תמיכה אישית 24/7', accent: BRAND.green },
-  { emoji: '🏡', label: 'LOCAL',     title: 'מאז 2019 בדימונה', accent: '#C9184A' },
+interface BadgeWithColor extends Badge {
+  iconBg: string;
+  iconColor: string;
+}
+
+const BADGES: BadgeWithColor[] = [
+  {
+    Icon: LocalFloristOutlinedIcon,
+    label: 'FRESHNESS',
+    title: 'טרי מהמשתלה',
+    desc: 'נקטף בבוקר, מגיע אליכם באותו יום',
+    iconBg: '#E8F5DC',
+    iconColor: BRAND.greenDark,
+  },
+  {
+    Icon: LocalShippingOutlinedIcon,
+    label: 'DELIVERY',
+    title: 'משלוח עד חצי שעה',
+    desc: 'דימונה והסביבה · מעל ₪150 חינם',
+    iconBg: '#FFF4D6',
+    iconColor: BRAND.goldDark,
+  },
+  {
+    Icon: SupportAgentOutlinedIcon,
+    label: 'SUPPORT',
+    title: 'תמיכה אישית 24/7',
+    desc: 'בוואטסאפ או טלפון, תמיד פה',
+    iconBg: '#DFF5F1',
+    iconColor: BRAND.tealDark,
+  },
+  {
+    Icon: VerifiedOutlinedIcon,
+    label: 'LOCAL',
+    title: 'מאז 2019 בדימונה',
+    desc: 'עסק משפחתי, פירות וירקות איכותיים',
+    iconBg: '#FFEDED',
+    iconColor: BRAND.watermelonDark,
+  },
 ];
 
-/** Editorial trust strip — 4 bordered cards, monospace label + bold tagline. */
+/** Premium trust strip — 4 minimal cards, SVG icons inside green circle. */
 export function TrustBadges() {
   return (
     <Box
       component="section"
       sx={{
         bgcolor: BRAND.paper,
-        borderBottom: `2px solid ${BRAND.ink}`,
+        borderBottom: `1px solid #ececec`,
       }}
     >
       <Container maxWidth="xl" sx={{ py: { xs: 5, md: 7 } }}>
@@ -36,47 +74,70 @@ export function TrustBadges() {
             },
           }}
         >
-          {BADGES.map((b) => (
+          {BADGES.map(({ Icon, label, title, desc, iconBg, iconColor }) => (
             <Stack
-              key={b.title}
+              key={title}
               spacing={1.5}
+              alignItems={{ xs: 'flex-start', md: 'center' }}
+              textAlign={{ xs: 'right', md: 'center' }}
               sx={{
-                border: `2px solid ${BRAND.ink}`,
-                borderRadius: 2,
-                p: { xs: 2.5, md: 3 },
-                bgcolor: BRAND.cream,
-                minHeight: { xs: 140, md: 180 },
-                transition: 'transform 180ms ease, box-shadow 180ms ease',
+                p: { xs: 2, md: 3 },
+                borderRadius: 4,
+                transition: 'background-color 220ms ease, box-shadow 220ms ease',
                 '&:hover': {
-                  transform: 'translate(-4px, -4px)',
-                  boxShadow: `8px 8px 0 ${BRAND.ink}`,
+                  bgcolor: 'rgba(255,249,229,0.55)',
+                  boxShadow: '0 8px 22px rgba(15,40,24,0.06)',
                 },
               }}
             >
-              <Box sx={{ fontSize: { xs: 36, md: 44 }, lineHeight: 1 }}>{b.emoji}</Box>
+              <Box
+                sx={{
+                  width: { xs: 56, md: 72 },
+                  height: { xs: 56, md: 72 },
+                  borderRadius: '50%',
+                  bgcolor: iconBg,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: iconColor,
+                  flexShrink: 0,
+                  boxShadow: '0 4px 12px rgba(42,24,16,0.08)',
+                }}
+              >
+                <Icon sx={{ fontSize: { xs: 28, md: 36 } }} />
+              </Box>
               <Typography
                 sx={{
                   fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
-                  fontSize: { xs: 10, md: 11 },
-                  letterSpacing: '0.16em',
+                  fontSize: 10,
+                  letterSpacing: '0.2em',
                   textTransform: 'uppercase',
-                  opacity: 0.55,
-                  color: BRAND.ink,
-                  fontWeight: 700,
+                  color: BRAND.brownLight,
+                  fontWeight: 800,
                 }}
               >
-                · {b.label}
+                {label}
               </Typography>
               <Typography
                 sx={{
-                  fontSize: { xs: 17, md: 22 },
-                  fontWeight: 900,
-                  letterSpacing: '-0.02em',
-                  lineHeight: 1.15,
-                  color: b.accent ?? BRAND.ink,
+                  fontSize: { xs: 16, md: 19 },
+                  fontWeight: 800,
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.2,
+                  color: BRAND.ink,
                 }}
               >
-                {b.title}
+                {title}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: { xs: 13, md: 14 },
+                  color: 'rgba(0,0,0,0.62)',
+                  lineHeight: 1.5,
+                  maxWidth: 280,
+                }}
+              >
+                {desc}
               </Typography>
             </Stack>
           ))}
