@@ -17,12 +17,20 @@ interface CategoryTile {
 // Each image: w=1400&q=80&auto=format&fit=crop — sharp, cover-fits any tile.
 const TILES: CategoryTile[] = [
   {
+    slug: 'cups',
+    name: 'פחיות פירות',
+    desc: 'מוכן לאכילה · ₪25',
+    image:
+      'https://iyjxsdxebxmbrrquxbnw.supabase.co/storage/v1/object/public/product-images/cups/1083182a77a989f497fa43659ed430d5.jpg',
+    span: { col: 2, row: 2 },
+  },
+  {
     slug: 'vegetables',
     name: 'ירקנייה טרייה',
     desc: 'נקטף בבוקר · 63 מוצרים',
     image:
       'https://images.unsplash.com/photo-1540420773420-3366772f4999?auto=format&fit=crop&w=1400&q=80',
-    span: { col: 2, row: 2 },
+    span: { col: 2 },
   },
   {
     slug: 'fruits',
