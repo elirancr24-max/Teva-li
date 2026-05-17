@@ -12,12 +12,21 @@ import { BRAND } from '@/lib/brand';
 
 const WA_HREF = 'https://wa.me/972548897445';
 
-const TABS = [
+interface Tab {
+  label: string;
+  icon: React.ElementType;
+  href: string;
+  isCart?: boolean;
+  isWhatsApp?: boolean;
+  external?: boolean;
+}
+
+const TABS: Tab[] = [
   { label: 'ראשי', icon: HomeOutlinedIcon, href: '/' },
   { label: 'חנות', icon: GridViewOutlinedIcon, href: '/shop' },
   { label: 'עגלה', icon: ShoppingCartOutlinedIcon, href: '/cart', isCart: true },
   { label: 'וואטסאפ', icon: WhatsAppIcon, href: WA_HREF, isWhatsApp: true, external: true },
-] as const;
+];
 
 export function BottomNav() {
   const pathname = usePathname();
