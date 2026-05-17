@@ -27,7 +27,7 @@ export function Hero({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        minHeight: { xs: 600, md: 820 },
+        minHeight: { xs: '100svh', md: 820 },
         display: 'flex',
         alignItems: 'center',
         // Full-bleed photo
@@ -60,20 +60,38 @@ export function Hero({
         }}
       />
 
-      <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1, py: { xs: 6, md: 10 } }}>
+      <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1, py: { xs: 8, md: 10 }, height: '100%', display: 'flex', alignItems: 'center' }}>
         <Box
           sx={{
             display: 'grid',
             gap: { xs: 4, md: 6 },
             alignItems: 'center',
             gridTemplateColumns: { xs: '1fr', md: '1.15fr 0.85fr' },
+            width: '100%',
           }}
         >
           {/* Text column */}
           <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
+
+            {/* Mobile-only logo — centered above title */}
+            <Box
+              component="img"
+              src="/logo-teva-trans.png"
+              alt="טבע לי"
+              sx={{
+                display: { xs: 'block', md: 'none' },
+                width: 120,
+                height: 'auto',
+                mx: 'auto',
+                mb: 1,
+                filter:
+                  'drop-shadow(0 0 10px rgba(255,255,255,0.95)) drop-shadow(0 0 30px rgba(255,255,255,0.6)) drop-shadow(0 8px 24px rgba(0,0,0,0.4))',
+              }}
+            />
+
             <Box
               sx={{
-                alignSelf: 'flex-start',
+                alignSelf: { xs: 'center', md: 'flex-start' },
                 bgcolor: 'rgba(255,255,255,0.95)',
                 backdropFilter: 'blur(8px)',
                 border: '1px solid rgba(255,255,255,0.6)',
@@ -99,7 +117,7 @@ export function Hero({
                 fontFamily: 'var(--font-heebo), Heebo, system-ui, sans-serif',
                 color: '#fff',
                 fontWeight: 900,
-                fontSize: { xs: 38, sm: 52, md: 68, lg: 80 },
+                fontSize: { xs: 36, sm: 52, md: 68, lg: 80 },
                 lineHeight: 1.02,
                 letterSpacing: '-0.025em',
                 textShadow: '0 2px 18px rgba(0,0,0,0.35)',
@@ -110,16 +128,22 @@ export function Hero({
             <Typography
               sx={{
                 color: 'rgba(255,255,255,0.92)',
-                fontSize: { xs: 15, md: 18 },
+                fontSize: { xs: 14, md: 18 },
                 fontWeight: 500,
                 lineHeight: 1.55,
-                maxWidth: 540,
+                maxWidth: { xs: 320, md: 540 },
                 textShadow: '0 1px 6px rgba(0,0,0,0.3)',
               }}
             >
               {subtitle}
             </Typography>
-            <Stack direction="row" spacing={1.5} sx={{ pt: 1, flexWrap: 'wrap', gap: 1.5 }}>
+
+            {/* Buttons — stacked on mobile, row on desktop */}
+            <Stack
+              direction={{ xs: 'column', sm: 'row' }}
+              spacing={1.5}
+              sx={{ pt: 1, width: { xs: '100%', sm: 'auto' }, alignItems: { xs: 'stretch', sm: 'center' } }}
+            >
               <Button
                 href={ctaHref}
                 variant="contained"
@@ -128,12 +152,13 @@ export function Hero({
                 sx={{
                   bgcolor: BRAND.green,
                   color: '#fff',
-                  fontSize: 16,
+                  fontSize: { xs: 15, md: 16 },
                   fontWeight: 900,
                   px: 4,
                   py: 1.75,
                   borderRadius: 999,
                   letterSpacing: '0.02em',
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': { bgcolor: BRAND.greenDark },
                 }}
               >
@@ -147,40 +172,56 @@ export function Hero({
                   bgcolor: 'rgba(255,255,255,0.96)',
                   color: BRAND.brown,
                   borderColor: 'transparent',
-                  fontSize: 16,
+                  fontSize: { xs: 15, md: 16 },
                   fontWeight: 900,
                   px: 4,
                   py: 1.75,
                   borderRadius: 999,
                   backdropFilter: 'blur(6px)',
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': { bgcolor: '#fff', borderColor: 'transparent' },
                 }}
               >
                 קיאק פירות לאירוע
               </Button>
             </Stack>
-            {/* Mini-stats */}
-            <Stack
-              direction="row"
-              divider={
-                <Box
-                  sx={{
-                    width: '1px',
-                    alignSelf: 'stretch',
-                    bgcolor: 'rgba(255,255,255,0.28)',
-                  }}
-                />
-              }
-              spacing={{ xs: 3, md: 4 }}
-              sx={{ pt: { xs: 1.5, md: 2 } }}
+
+            {/* Mini-stats — glassmorphism card on mobile */}
+            <Box
+              sx={{
+                bgcolor: { xs: 'rgba(255,255,255,0.10)', md: 'transparent' },
+                backdropFilter: { xs: 'blur(10px)', md: 'none' },
+                WebkitBackdropFilter: { xs: 'blur(10px)', md: 'none' },
+                border: { xs: '1px solid rgba(255,255,255,0.18)', md: 'none' },
+                borderRadius: { xs: 3, md: 0 },
+                px: { xs: 3, md: 0 },
+                py: { xs: 2, md: 0 },
+                mt: { xs: 1, md: 0 },
+                width: { xs: '100%', md: 'auto' },
+              }}
             >
-              <Stat value="180+" label="מוצרים בקטלוג" />
-              <Stat value="30׳" label="זמן משלוח" />
-              <Stat value="24/7" label="שירות לקוחות" />
-            </Stack>
+              <Stack
+                direction="row"
+                divider={
+                  <Box
+                    sx={{
+                      width: '1px',
+                      alignSelf: 'stretch',
+                      bgcolor: 'rgba(255,255,255,0.28)',
+                    }}
+                  />
+                }
+                spacing={{ xs: 2, md: 4 }}
+                justifyContent={{ xs: 'space-around', md: 'flex-start' }}
+              >
+                <Stat value="180+" label="מוצרים בקטלוג" />
+                <Stat value="30׳" label="זמן משלוח" />
+                <Stat value="24/7" label="שירות לקוחות" />
+              </Stack>
+            </Box>
           </Stack>
 
-          {/* Logo + price tag card */}
+          {/* Logo + price tag card — desktop only */}
           <Box
             sx={{
               display: { xs: 'none', md: 'flex' },

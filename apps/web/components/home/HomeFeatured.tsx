@@ -1,5 +1,5 @@
 'use client';
-import { useEffect } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Link from 'next/link';
 import { Box, Container, Stack, Typography } from '@mui/material';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
@@ -24,11 +24,26 @@ interface HomeFeaturedProps {
  */
 export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProps) {
   const dispatch = useAppDispatch();
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const [activeIdx, setActiveIdx] = useState(0);
 
   useEffect(() => {
     if (catalog && catalog.length) dispatch(setProducts(catalog));
     if (categories && categories.length) dispatch(setCategories(categories));
   }, [dispatch, catalog, categories]);
+
+  /* Track active scroll index for dot indicator */
+  useEffect(() => {
+    const el = scrollRef.current;
+    if (!el) return;
+    function onScroll() {
+      if (!el) return;
+      const cardW = el.scrollWidth / (products?.length ?? 1);
+      setActiveIdx(Math.round(el.scrollLeft / cardW));
+    }
+    el.addEventListener('scroll', onScroll, { passive: true });
+    return () => el.removeEventListener('scroll', onScroll);
+  }, [products]);
 
   if (!products || products.length === 0) return null;
 
@@ -81,6 +96,7 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
 
         <Box sx={{ position: 'relative' }}>
           <Box
+            ref={scrollRef}
             sx={{
               display: 'flex',
               gap: 2,
@@ -91,6 +107,7 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
               scrollbarWidth: 'none',
               msOverflowStyle: 'none',
               '&::-webkit-scrollbar': { display: 'none' },
+              WebkitOverflowScrolling: 'touch',
             }}
           >
             {products.map((p) => (
@@ -98,7 +115,8 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
                 key={p.id}
                 sx={{
                   flex: '0 0 auto',
-                  width: { xs: 200, md: 230 },
+                  width: { xs: 'calc(82vw)', sm: 220, md: 230 },
+                  maxWidth: { xs: 300, md: 'none' },
                   scrollSnapAlign: 'start',
                 }}
               >
@@ -106,7 +124,8 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
               </Box>
             ))}
           </Box>
-          {/* Fade mask on the left edge (RTL — fade outward) */}
+
+          {/* Fade mask — both sides */}
           <Box
             aria-hidden
             sx={{
@@ -114,12 +133,34 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
               top: 0,
               bottom: 0,
               left: 0,
-              width: { xs: 24, md: 56 },
+              width: { xs: 16, md: 56 },
               background: `linear-gradient(to right, ${BRAND.paper} 0%, rgba(255,255,255,0) 100%)`,
               pointerEvents: 'none',
-              display: { xs: 'none', md: 'block' },
             }}
           />
+        </Box>
+
+        {/* Scroll dots — mobile only */}
+        <Box
+          sx={{
+            display: { xs: 'flex', md: 'none' },
+            justifyContent: 'center',
+            gap: 0.75,
+            mt: 2,
+          }}
+        >
+          {products.slice(0, 8).map((p, i) => (
+            <Box
+              key={p.id}
+              sx={{
+                width: activeIdx === i ? 20 : 6,
+                height: 6,
+                borderRadius: 999,
+                bgcolor: activeIdx === i ? BRAND.green : 'rgba(0,0,0,0.18)',
+                transition: 'width 260ms ease, background-color 260ms ease',
+              }}
+            />
+          ))}
         </Box>
       </Container>
     </Box>

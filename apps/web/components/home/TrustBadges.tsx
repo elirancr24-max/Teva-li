@@ -63,25 +63,86 @@ export function TrustBadges() {
         borderBottom: `1px solid #ececec`,
       }}
     >
-      <Container maxWidth="xl" sx={{ py: { xs: 5, md: 7 } }}>
+      <Container maxWidth="xl" sx={{ py: { xs: 4, md: 7 } }}>
+
+        {/* Mobile: horizontal scroll strip */}
         <Box
           sx={{
-            display: 'grid',
-            gap: { xs: 2, md: 3 },
-            gridTemplateColumns: {
-              xs: 'repeat(2, 1fr)',
-              md: 'repeat(4, 1fr)',
-            },
+            display: { xs: 'flex', md: 'none' },
+            gap: 2,
+            overflowX: 'auto',
+            scrollSnapType: 'x mandatory',
+            pb: 1,
+            mx: -2,
+            px: 2,
+            scrollbarWidth: 'none',
+            '&::-webkit-scrollbar': { display: 'none' },
+            WebkitOverflowScrolling: 'touch',
+          }}
+        >
+          {BADGES.map(({ Icon, label, title, desc, iconBg, iconColor }) => (
+            <Stack
+              key={title}
+              spacing={1.25}
+              alignItems="flex-start"
+              sx={{
+                flex: '0 0 160px',
+                scrollSnapAlign: 'start',
+                bgcolor: '#fff',
+                borderRadius: 3,
+                p: 2,
+                boxShadow: '0 2px 12px rgba(15,40,24,0.07)',
+              }}
+            >
+              <Box
+                sx={{
+                  width: 48,
+                  height: 48,
+                  borderRadius: '50%',
+                  bgcolor: iconBg,
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  justifyContent: 'center',
+                  color: iconColor,
+                  flexShrink: 0,
+                }}
+              >
+                <Icon sx={{ fontSize: 24 }} />
+              </Box>
+              <Typography
+                sx={{
+                  fontSize: 14,
+                  fontWeight: 800,
+                  letterSpacing: '-0.01em',
+                  lineHeight: 1.2,
+                  color: BRAND.ink,
+                }}
+              >
+                {title}
+              </Typography>
+              <Typography sx={{ fontSize: 11.5, color: 'rgba(0,0,0,0.58)', lineHeight: 1.45 }}>
+                {desc}
+              </Typography>
+            </Stack>
+          ))}
+        </Box>
+
+        {/* Desktop: 4-col grid */}
+        <Box
+          sx={{
+            display: { xs: 'none', md: 'grid' },
+            gap: 3,
+            gridTemplateColumns: 'repeat(4, 1fr)',
           }}
         >
           {BADGES.map(({ Icon, label, title, desc, iconBg, iconColor }) => (
             <Stack
               key={title}
               spacing={1.5}
-              alignItems={{ xs: 'flex-start', md: 'center' }}
-              textAlign={{ xs: 'right', md: 'center' }}
+              alignItems="center"
+              textAlign="center"
               sx={{
-                p: { xs: 2, md: 3 },
+                p: 3,
                 borderRadius: 4,
                 transition: 'background-color 220ms ease, box-shadow 220ms ease',
                 '&:hover': {
@@ -92,8 +153,8 @@ export function TrustBadges() {
             >
               <Box
                 sx={{
-                  width: { xs: 56, md: 72 },
-                  height: { xs: 56, md: 72 },
+                  width: 72,
+                  height: 72,
                   borderRadius: '50%',
                   bgcolor: iconBg,
                   display: 'inline-flex',
@@ -104,7 +165,7 @@ export function TrustBadges() {
                   boxShadow: '0 4px 12px rgba(42,24,16,0.08)',
                 }}
               >
-                <Icon sx={{ fontSize: { xs: 28, md: 36 } }} />
+                <Icon sx={{ fontSize: 36 }} />
               </Box>
               <Typography
                 sx={{
@@ -118,30 +179,16 @@ export function TrustBadges() {
               >
                 {label}
               </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 16, md: 19 },
-                  fontWeight: 800,
-                  letterSpacing: '-0.01em',
-                  lineHeight: 1.2,
-                  color: BRAND.ink,
-                }}
-              >
+              <Typography sx={{ fontSize: 19, fontWeight: 800, letterSpacing: '-0.01em', lineHeight: 1.2, color: BRAND.ink }}>
                 {title}
               </Typography>
-              <Typography
-                sx={{
-                  fontSize: { xs: 13, md: 14 },
-                  color: 'rgba(0,0,0,0.62)',
-                  lineHeight: 1.5,
-                  maxWidth: 280,
-                }}
-              >
+              <Typography sx={{ fontSize: 14, color: 'rgba(0,0,0,0.62)', lineHeight: 1.5, maxWidth: 280 }}>
                 {desc}
               </Typography>
             </Stack>
           ))}
         </Box>
+
       </Container>
     </Box>
   );

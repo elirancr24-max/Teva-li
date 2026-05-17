@@ -89,7 +89,7 @@ export function CartView() {
                       <TableCell>
                         <Typography sx={{ fontWeight: 600 }}>{item.product.name}</Typography>
                         <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
-                          {formatPrice(item.product.priceCents)} / {UNIT_LABEL[item.product.unit]}
+                          {formatPrice(item.product.priceCents)} / {(item.product.weight && item.product.weight.trim()) || UNIT_LABEL[item.product.unit] || ''}
                         </Typography>
                       </TableCell>
                       <TableCell align="center">

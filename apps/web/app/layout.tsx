@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import { Heebo, Rubik } from 'next/font/google';
 import { Providers } from './providers';
 import { AccessibilityWidget } from '@/components/a11y/AccessibilityWidget';
+import { BottomNav } from '@/components/layout/BottomNav';
 import './globals.css';
 
 const rubik = Rubik({
@@ -49,10 +50,11 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  themeColor: '#F0EFEC',
+  themeColor: '#0F2818',
   width: 'device-width',
   initialScale: 1,
   maximumScale: 5,
+  viewportFit: 'cover',
 };
 
 const ldJson = {
@@ -88,6 +90,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="he" dir="rtl" className={`${rubik.variable} ${heebo.variable}`}>
       <head>
+        <meta name="apple-mobile-web-app-capable" content="yes" />
+        <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+        <meta name="apple-mobile-web-app-title" content="טבע לי" />
         <script
           type="application/ld+json"
           dangerouslySetInnerHTML={{ __html: JSON.stringify(ldJson) }}
@@ -97,6 +102,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <a href="#main" className="skip-link">דלגו לתוכן העיקרי</a>
         <Providers>
           <div id="main">{children}</div>
+          <BottomNav />
         </Providers>
         <AccessibilityWidget />
       </body>

@@ -107,7 +107,9 @@ export function ProductCard({ product }: { product: Product }) {
     !!product.originalPriceCents && product.originalPriceCents > product.priceCents;
 
   const isPremium = product.quality === 'premium';
-  const unitLabel = UNIT_LABEL[product.unit] ?? product.weight ?? '';
+  // Always prefer the explicit weight string (e.g. "500 גרם", "מגש", "ק״ג")
+  // since that's what the admin edits per-product. Fallback to unit label.
+  const unitLabel = (product.weight && product.weight.trim()) || UNIT_LABEL[product.unit] || '';
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
 

@@ -1,6 +1,6 @@
 #!/usr/bin/env node
 // Download FAL-generated images and upload to Supabase + update product image_url.
-import { readFileSync } from 'node:fs';
+import { readFileSync, existsSync } from 'node:fs';
 import { dirname, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createClient } from '@supabase/supabase-js';
@@ -35,10 +35,17 @@ const IMAGES = JSON.parse(process.env.IMAGES_JSON || '{}');
 
 async function main() {
   if (!Object.keys(IMAGES).length) { console.error('IMAGES_JSON empty'); process.exit(1); }
-  for (const [slug, falUrl] of Object.entries(IMAGES)) {
-    const res = await fetch(falUrl);
-    if (!res.ok) { console.warn('fetch fail', slug, res.status); continue; }
-    const buf = Buffer.from(await res.arrayBuffer());
+  for (const [slug, src] of Object.entries(IMAGES)) {
+    let buf;
+    if (src.startsWith('http')) {
+      const res = await fetch(src);
+      if (!res.ok) { console.warn('fetch fail', slug, res.status); continue; }
+      buf = Buffer.from(await res.arrayBuffer());
+    } else if (existsSync(src)) {
+      buf = readFileSync(src);
+    } else {
+      console.warn('missing', slug, src); continue;
+    }
     const folder = slug.startsWith('cup-') ? 'cups-ai' : 'peeled-ai';
     const path = `${folder}/${slug}.jpg`;
     const up = await sb.storage.from(BUCKET).upload(path, buf, {

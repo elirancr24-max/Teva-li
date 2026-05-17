@@ -69,7 +69,11 @@ export function CTABanner({ whatsappHref, phone }: CTABannerProps) {
               עונים אישית, כל יום, גם בסופ&quot;ש. הזמנות, התאמות אישיות לאירועים, אנחנו פה לכל שאלה.
             </Typography>
           </Stack>
-          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ flexShrink: 0 }}>
+          <Stack
+            direction={{ xs: 'column', sm: 'row' }}
+            spacing={1.5}
+            sx={{ flexShrink: 0, width: { xs: '100%', sm: 'auto' } }}
+          >
             <Button
               component="a"
               href={whatsappHref}
@@ -88,6 +92,7 @@ export function CTABanner({ whatsappHref, phone }: CTABannerProps) {
                 py: 1.75,
                 borderRadius: 999,
                 boxShadow: '0 10px 30px rgba(0,0,0,0.2)',
+                width: { xs: '100%', sm: 'auto' },
                 '&:hover': { bgcolor: BRAND.goldLight, color: BRAND.brown },
               }}
             >
@@ -108,6 +113,7 @@ export function CTABanner({ whatsappHref, phone }: CTABannerProps) {
                 px: 4,
                 py: 1.75,
                 borderRadius: 999,
+                width: { xs: '100%', sm: 'auto' },
                 '&:hover': {
                   borderColor: '#fff',
                   bgcolor: 'rgba(255,255,255,0.15)',

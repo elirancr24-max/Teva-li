@@ -147,16 +147,34 @@ export function CategoryGrid({ products: _products = [] }: CategoryGridProps) {
             </Typography>
           </Stack>
 
+          {/* Mobile: horizontal App Store scroll */}
           <Box
             sx={{
-              display: 'grid',
-              gap: { xs: 1.5, md: 2.5 },
-              gridTemplateColumns: {
-                xs: '1fr',
-                sm: 'repeat(2, 1fr)',
-                md: 'repeat(4, 1fr)',
-              },
-              gridAutoRows: { xs: 220, md: 280 },
+              display: { xs: 'flex', md: 'none' },
+              gap: 1.5,
+              overflowX: 'auto',
+              scrollSnapType: 'x mandatory',
+              scrollPaddingInlineStart: '16px',
+              pb: 1.5,
+              mx: -2,
+              px: 2,
+              scrollbarWidth: 'none',
+              '&::-webkit-scrollbar': { display: 'none' },
+              WebkitOverflowScrolling: 'touch',
+            }}
+          >
+            {TILES.map((t, i) => (
+              <MobileTileCard key={t.slug} tile={t} index={i} />
+            ))}
+          </Box>
+
+          {/* Desktop: existing bento grid */}
+          <Box
+            sx={{
+              display: { xs: 'none', md: 'grid' },
+              gap: 2.5,
+              gridTemplateColumns: 'repeat(4, 1fr)',
+              gridAutoRows: 280,
             }}
           >
             {TILES.map((t, i) => (
@@ -341,6 +359,106 @@ function TileCard({ tile, index }: TileCardProps) {
           גלה
           <ArrowBackIcon sx={{ fontSize: 14 }} />
         </Box>
+      </Box>
+    </Box>
+  );
+}
+
+/* Mobile-only horizontal scroll tile */
+function MobileTileCard({ tile, index }: TileCardProps) {
+  const isFirst = index === 0;
+  const delay = index * 50;
+
+  return (
+    <Box
+      component="a"
+      href={`/shop?cat=${tile.slug}`}
+      sx={{
+        flex: `0 0 ${isFirst ? 220 : 180}px`,
+        height: 220,
+        borderRadius: 3,
+        overflow: 'hidden',
+        position: 'relative',
+        scrollSnapAlign: 'start',
+        textDecoration: 'none',
+        bgcolor: BRAND.brown,
+        boxShadow: '0 4px 16px rgba(15,40,24,0.14)',
+        transition: `opacity 500ms ease ${delay}ms`,
+        '&:active': {
+          transform: 'scale(0.97)',
+          transition: 'transform 120ms ease',
+        },
+      }}
+    >
+      <Box
+        component="img"
+        src={tile.image}
+        alt={tile.name}
+        loading="lazy"
+        decoding="async"
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          width: '100%',
+          height: '100%',
+          objectFit: 'cover',
+        }}
+      />
+      <Box
+        aria-hidden
+        sx={{
+          position: 'absolute',
+          inset: 0,
+          background:
+            'linear-gradient(to top, rgba(15,40,24,0.85) 0%, rgba(15,40,24,0.2) 55%, rgba(15,40,24,0) 80%)',
+        }}
+      />
+      {isFirst && (
+        <Box
+          sx={{
+            position: 'absolute',
+            top: 12,
+            right: 12,
+            bgcolor: 'rgba(255,255,255,0.92)',
+            backdropFilter: 'blur(8px)',
+            color: BRAND.greenDark,
+            fontSize: 9,
+            fontWeight: 900,
+            letterSpacing: '0.18em',
+            textTransform: 'uppercase',
+            px: 1.25,
+            py: 0.5,
+            borderRadius: 999,
+            fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
+          }}
+        >
+          · בחירת הבית
+        </Box>
+      )}
+      <Box sx={{ position: 'absolute', bottom: 14, right: 14, left: 14, zIndex: 2 }}>
+        <Typography
+          sx={{
+            fontSize: 17,
+            fontWeight: 900,
+            color: '#fff',
+            lineHeight: 1.1,
+            letterSpacing: '-0.02em',
+            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+          }}
+        >
+          {tile.name}
+        </Typography>
+        <Typography
+          sx={{
+            fontSize: 11,
+            color: 'rgba(255,255,255,0.85)',
+            fontWeight: 600,
+            mt: 0.5,
+            textShadow: '0 1px 6px rgba(0,0,0,0.4)',
+          }}
+        >
+          {tile.desc}
+        </Typography>
       </Box>
     </Box>
   );

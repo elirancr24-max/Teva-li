@@ -1,5 +1,5 @@
 'use client';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 import {
@@ -23,14 +23,22 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveCategory } from '@/store/slices/categoriesSlice';
 import { BRAND } from '@/lib/brand';
 
-const TOP_BAR_HEIGHT = 72;
-const NAV_BAR_HEIGHT = 50;
+const TOP_BAR_HEIGHT_MD = 72;
+const TOP_BAR_HEIGHT_XS = 60;
+const NAV_BAR_HEIGHT = 48;
 
 export function Header() {
   const router = useRouter();
   const dispatch = useAppDispatch();
   const [q, setQ] = useState('');
   const [locOpen, setLocOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 8); }
+    window.addEventListener('scroll', onScroll, { passive: true });
+    return () => window.removeEventListener('scroll', onScroll);
+  }, []);
 
   const cartCount = useAppSelector((s) => s.cart.items.length);
   const categoryIds = useAppSelector((s) => s.categories.ids);
@@ -57,11 +65,14 @@ export function Header() {
           position: 'sticky',
           top: 0,
           zIndex: 100,
-          bgcolor: BRAND.brown,
+          bgcolor: scrolled ? 'rgba(42,24,16,0.90)' : BRAND.brown,
+          backdropFilter: scrolled ? 'blur(20px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(20px)' : 'none',
           color: '#fff',
-          height: TOP_BAR_HEIGHT,
+          height: { xs: TOP_BAR_HEIGHT_XS, md: TOP_BAR_HEIGHT_MD },
           display: 'flex',
           alignItems: 'center',
+          transition: 'background-color 300ms ease, backdrop-filter 300ms ease',
         }}
       >
         <Box
@@ -92,7 +103,7 @@ export function Header() {
               src="/logo-teva-trans.png"
               alt="טבע לי"
               sx={{
-                height: { xs: 48, md: 60 },
+                height: { xs: 40, md: 60 },
                 width: 'auto',
                 display: 'block',
                 filter:
@@ -115,7 +126,7 @@ export function Header() {
               borderRadius: '24px',
               px: 1.5,
               py: 0.5,
-              height: 40,
+              height: { xs: 36, md: 40 },
             }}
           >
             <IconButton
@@ -190,14 +201,17 @@ export function Header() {
         component="nav"
         sx={{
           position: 'sticky',
-          top: TOP_BAR_HEIGHT,
+          top: { xs: TOP_BAR_HEIGHT_XS, md: TOP_BAR_HEIGHT_MD },
           zIndex: 99,
-          bgcolor: '#fff',
+          bgcolor: scrolled ? 'rgba(255,255,255,0.92)' : '#fff',
+          backdropFilter: scrolled ? 'blur(16px)' : 'none',
+          WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           color: BRAND.ink,
           height: NAV_BAR_HEIGHT,
           borderBottom: '1px solid #eee',
           display: 'flex',
           alignItems: 'stretch',
+          transition: 'background-color 300ms ease',
         }}
       >
         <Box

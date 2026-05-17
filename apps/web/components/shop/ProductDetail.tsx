@@ -61,7 +61,7 @@ export function ProductDetail({
   const showActiveImage = !!activeSrc && !imgError[activeIdx];
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
-  const unitLabel = UNIT_LABEL[product.unit] ?? product.weight ?? '';
+  const unitLabel = (product.weight && product.weight.trim()) || UNIT_LABEL[product.unit] || '';
 
   const discountPct =
     product.originalPriceCents && product.originalPriceCents > product.priceCents
