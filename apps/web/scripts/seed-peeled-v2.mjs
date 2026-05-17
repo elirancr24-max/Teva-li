@@ -114,11 +114,11 @@ async function uploadCrops() {
   const W = meta.width;
   const H = meta.height;
   const rowH = Math.floor(H / 3);
-  const cellH = Math.floor(rowH * 0.70); // top portion (drops price label)
+  const cellH = Math.floor(rowH * 0.76); // captures full cup, stops above price label
   const col4W = Math.floor(W / 4);
   const cropW = Math.floor(col4W * 0.78); // tighter — no neighbor bleed
   const insetX = Math.floor((col4W - cropW) / 2);
-  const insetY = Math.floor(rowH * 0.02);
+  const insetY = 0;
 
   // Row 2 has 3 items centered: each W/4 wide, offset W/8 from left.
   function leftFor(col, row) {
