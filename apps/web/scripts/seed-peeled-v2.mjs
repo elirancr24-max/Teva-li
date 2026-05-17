@@ -114,26 +114,28 @@ async function uploadCrops() {
   const W = meta.width;
   const H = meta.height;
   const rowH = Math.floor(H / 3);
-  const cellH = Math.floor(rowH * 0.62); // drop label
+  const cellH = Math.floor(rowH * 0.70); // top portion (drops price label)
   const col4W = Math.floor(W / 4);
+  const cropW = Math.floor(col4W * 0.78); // tighter — no neighbor bleed
+  const insetX = Math.floor((col4W - cropW) / 2);
+  const insetY = Math.floor(rowH * 0.02);
+
   // Row 2 has 3 items centered: each W/4 wide, offset W/8 from left.
   function leftFor(col, row) {
     if (row < 2) return col * col4W;
-    // Row 2: 3 items centered. col indices 0,1,2 → positions W/8, W/8+col4W, W/8+2*col4W
     return Math.floor(W / 8) + col * col4W;
   }
 
   const slugToUrl = new Map();
   for (const p of PRODUCTS) {
     const [col, row] = p.gridCell;
-    const left = leftFor(col, row);
-    const top = row * rowH;
-    const inset = Math.floor(col4W * 0.04);
+    const cellLeft = leftFor(col, row);
+    const cellTop = row * rowH;
     const extract = {
-      left: left + inset,
-      top: top + Math.floor(rowH * 0.02),
-      width: col4W - 2 * inset,
-      height: cellH - Math.floor(rowH * 0.02),
+      left: cellLeft + insetX,
+      top: cellTop + insetY,
+      width: cropW,
+      height: cellH,
     };
     const buf = await sharp(SOURCE_IMG)
       .extract(extract)
@@ -148,7 +150,9 @@ async function uploadCrops() {
       continue;
     }
     const { data } = sb.storage.from(BUCKET).getPublicUrl(storagePath);
-    slugToUrl.set(p.slug, data.publicUrl);
+    // Append a version param so the CDN/browser refetch the new bytes.
+    const versioned = `${data.publicUrl}?v=${Date.now()}`;
+    slugToUrl.set(p.slug, versioned);
     console.log('[seed] uploaded:', storagePath, `[${extract.left},${extract.top} ${extract.width}x${extract.height}]`);
   }
   return slugToUrl;
