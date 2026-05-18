@@ -112,32 +112,57 @@ export function Header() {
             gap: { xs: 1, md: 2 },
           }}
         >
-          {/* Right (logical first) — Logo image */}
+          {/* Right (logical first) — Logo */}
           <Link
             href="/"
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 10,
+              gap: 8,
               textDecoration: 'none',
               color: 'inherit',
               flexShrink: 0,
             }}
           >
-            <Box
-              component="img"
-              src="/logo-teva-trans.png"
-              alt="טבע לי"
-              sx={{
-                height: { xs: 44, md: 72 },
-                width: 'auto',
+            {/* Leaf icon circle */}
+            <Box sx={{
+              width: { xs: 40, md: 52 },
+              height: { xs: 40, md: 52 },
+              borderRadius: '50%',
+              bgcolor: BRAND.green,
+              display: 'flex',
+              alignItems: 'center',
+              justifyContent: 'center',
+              fontSize: { xs: 20, md: 26 },
+              flexShrink: 0,
+              boxShadow: '0 2px 10px rgba(0,0,0,0.30)',
+            }}>
+              🌿
+            </Box>
+            {/* Brand name */}
+            <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
+              <Box component="span" sx={{
+                fontFamily: 'var(--font-rubik)',
+                fontSize: { xs: 20, md: 26 },
+                fontWeight: 900,
+                color: '#fff',
+                letterSpacing: '-0.02em',
                 display: 'block',
-                filter: {
-                  xs: 'drop-shadow(0 0 5px rgba(255,255,255,0.98)) drop-shadow(0 0 14px rgba(255,255,255,0.8)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))',
-                  md: 'drop-shadow(0 0 6px rgba(255,255,255,0.98)) drop-shadow(0 0 18px rgba(255,255,255,0.85)) drop-shadow(0 6px 12px rgba(0,0,0,0.4))',
-                },
-              }}
-            />
+              }}>
+                טבע{' '}
+                <Box component="span" sx={{ color: BRAND.green }}>לי</Box>
+              </Box>
+              <Box component="span" sx={{
+                fontFamily: 'var(--font-rubik)',
+                fontSize: { xs: 10, md: 11 },
+                fontWeight: 500,
+                color: 'rgba(255,255,255,0.65)',
+                letterSpacing: '0.08em',
+                display: { xs: 'none', md: 'block' },
+              }}>
+                פירות וירקות טריים
+              </Box>
+            </Box>
           </Link>
 
           {/* Center — Search bar: full on desktop, icon on mobile */}
