@@ -34,8 +34,8 @@ export function KayakTeaser() {
             gridTemplateColumns: { xs: '1fr', md: '1.2fr 0.8fr' },
           }}
         >
-          <Stack spacing={{ xs: 2.5, md: 3 }}>
-            <Stack direction="row" spacing={1.5} alignItems="center">
+          <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
+            <Stack direction="row" spacing={1.5} alignItems="center" justifyContent={{ xs: 'center', md: 'flex-start' }}>
               <Box
                 sx={{
                   width: 38,
@@ -66,7 +66,7 @@ export function KayakTeaser() {
             <Typography
               variant="h2"
               sx={{
-                fontSize: { xs: 42, md: 76 },
+                fontSize: { xs: 36, md: 76 },
                 fontWeight: 900,
                 letterSpacing: '-0.035em',
                 lineHeight: 1,
@@ -92,7 +92,7 @@ export function KayakTeaser() {
               חתוכים בידנו ומסודרים כיצירת אומנות. מגיע מוכן, נראה מהמם, נעלם מהר.
             </Typography>
             {/* Highlights chips */}
-            <Stack direction="row" sx={{ flexWrap: 'wrap', gap: 1, pt: 1 }}>
+            <Stack direction="row" justifyContent={{ xs: 'center', md: 'flex-start' }} sx={{ flexWrap: 'wrap', gap: 1, pt: 1 }}>
               {[
                 'קיאק יחיד מ־₪599',
                 'אירוע גדול עד ₪1,999',
@@ -117,7 +117,7 @@ export function KayakTeaser() {
                 </Box>
               ))}
             </Stack>
-            <Stack direction="row" spacing={1.5} sx={{ pt: 2, flexWrap: 'wrap', gap: 1.5 }}>
+            <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}>
               <Button
                 href="/kayak"
                 variant="contained"
@@ -131,6 +131,7 @@ export function KayakTeaser() {
                   px: 4.5,
                   py: 1.75,
                   borderRadius: 999,
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': { bgcolor: BRAND.goldDark },
                 }}
               >
@@ -149,6 +150,7 @@ export function KayakTeaser() {
                   px: 4,
                   py: 1.75,
                   borderRadius: 999,
+                  width: { xs: '100%', sm: 'auto' },
                   '&:hover': { borderColor: '#fff', bgcolor: 'rgba(255,255,255,0.1)', borderWidth: '1.5px' },
                 }}
               >

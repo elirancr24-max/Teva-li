@@ -13,6 +13,7 @@ import { CTABanner } from '@/components/home/CTABanner';
 import { getCatalog } from '@/lib/data/products';
 import { getSettings, whatsappLink } from '@/lib/settings';
 import { BRAND } from '@/lib/brand';
+import type { Product } from '@/types/shop';
 
 export default async function Home() {
   const [{ products, categories }, settings] = await Promise.all([
@@ -25,9 +26,55 @@ export default async function Home() {
     `היי ${settings.business_name}, אשמח לפרטים על הזמנה.`,
   );
 
-  // Featured = products tagged "פופולרי", up to 8. Falls back to top 8 if no tags exist.
-  const tagged = products.filter((p) => p.tag === 'פופולרי').slice(0, 8);
-  const featured = tagged.length > 0 ? tagged : products.slice(0, 8);
+  // Featured = balanced mix across categories so the home rail isn't all from one
+  // section (cups, fruits, vegetables, peeled, etc). We take up to 2 per category
+  // in round-robin order, then pad up to 8 from the remaining catalog.
+  const FEATURED_COUNT = 8;
+  const MAX_PER_CATEGORY = 2;
+  const byCategory = new Map<string, Product[]>();
+  for (const p of products) {
+    const key = p.categoryId ?? 'misc';
+    if (!byCategory.has(key)) byCategory.set(key, []);
+    byCategory.get(key)!.push(p);
+  }
+  // Sort categories so the catalog-defined order leads
+  const orderedCatIds = categories.map((c) => c.id);
+  for (const c of byCategory.keys()) {
+    if (!orderedCatIds.includes(c)) orderedCatIds.push(c);
+  }
+  const pickedIds = new Set<string>();
+  const featured: Product[] = [];
+  // Round 1: one per category
+  for (const cid of orderedCatIds) {
+    if (featured.length >= FEATURED_COUNT) break;
+    const list = byCategory.get(cid);
+    if (!list || list.length === 0) continue;
+    const pick = list[0];
+    if (pick && !pickedIds.has(pick.id)) {
+      featured.push(pick);
+      pickedIds.add(pick.id);
+    }
+  }
+  // Round 2: optional second from each category
+  for (const cid of orderedCatIds) {
+    if (featured.length >= FEATURED_COUNT) break;
+    const list = byCategory.get(cid);
+    if (!list || list.length < 2) continue;
+    const pick = list[1];
+    if (pick && !pickedIds.has(pick.id)) {
+      featured.push(pick);
+      pickedIds.add(pick.id);
+    }
+    if (featured.filter((p) => p.categoryId === cid).length > MAX_PER_CATEGORY) break;
+  }
+  // Pad: fall back to remaining catalog (popular first since data is ordered by reviews_count)
+  for (const p of products) {
+    if (featured.length >= FEATURED_COUNT) break;
+    if (!pickedIds.has(p.id)) {
+      featured.push(p);
+      pickedIds.add(p.id);
+    }
+  }
 
   return (
     <>

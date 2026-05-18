@@ -37,7 +37,7 @@ export function CTABanner({ whatsappHref, phone }: CTABannerProps) {
           alignItems={{ xs: 'flex-start', md: 'center' }}
           justifyContent="space-between"
         >
-          <Stack spacing={1.5} sx={{ flex: 1 }}>
+          <Stack spacing={1.5} sx={{ flex: 1, textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
             <Typography
               sx={{
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',

@@ -69,8 +69,8 @@ export function ProductDetail({
       : 0;
 
   return (
-    <Container maxWidth="lg" sx={{ py: 4 }}>
-      <Stack direction={{ xs: 'column', md: 'row' }} spacing={4}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2.5, md: 4 }, px: { xs: 2, md: 3 } }}>
+      <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 2.5, md: 4 }}>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <Paper
             sx={{
@@ -188,7 +188,7 @@ export function ProductDetail({
               />
             </Box>
           )}
-          <Typography variant="h1" sx={{ fontSize: 32, fontWeight: 800 }}>
+          <Typography variant="h1" sx={{ fontSize: { xs: 24, md: 32 }, fontWeight: 800, lineHeight: 1.2 }}>
             {product.name}
           </Typography>
           {product.fullName && (
@@ -196,10 +196,10 @@ export function ProductDetail({
           )}
 
           <Stack direction="row" spacing={2} alignItems="baseline">
-            <Typography sx={{ fontSize: 36, fontWeight: 800, color: BRAND.green }}>
+            <Typography sx={{ fontSize: { xs: 28, md: 36 }, fontWeight: 800, color: BRAND.green }}>
               {formatPrice(product.priceCents)}
             </Typography>
-            <Typography sx={{ fontSize: 16, color: 'text.secondary' }}>/ {unitLabel}</Typography>
+            <Typography sx={{ fontSize: { xs: 14, md: 16 }, color: 'text.secondary' }}>/ {unitLabel}</Typography>
             {discountPct > 0 && product.originalPriceCents && (
               <Typography sx={{ fontSize: 14, color: 'text.secondary', textDecoration: 'line-through' }}>
                 {formatPrice(product.originalPriceCents)}
@@ -241,6 +241,7 @@ export function ProductDetail({
                 size="large"
                 startIcon={<AddIcon />}
                 onClick={() => dispatch(addItem({ product }))}
+                sx={{ width: { xs: '100%', sm: 'auto' }, py: 1.5, fontWeight: 800 }}
               >
                 הוספה לסל
               </Button>

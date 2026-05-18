@@ -61,7 +61,7 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
           direction="row"
           alignItems="baseline"
           justifyContent="space-between"
-          sx={{ mb: { xs: 2, md: 3 } }}
+          sx={{ mb: { xs: 2, md: 3 }, px: { xs: 0.5, md: 0 } }}
         >
           <Typography
             component="h2"

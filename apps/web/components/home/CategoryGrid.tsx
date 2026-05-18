@@ -94,9 +94,10 @@ export function CategoryGrid({ products: _products = [] }: CategoryGridProps) {
         <Stack spacing={{ xs: 4, md: 5 }}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
-            alignItems={{ xs: 'flex-start', md: 'flex-end' }}
+            alignItems={{ xs: 'center', md: 'flex-end' }}
             justifyContent="space-between"
-            spacing={{ xs: 1, md: 0 }}
+            spacing={{ xs: 1.5, md: 0 }}
+            sx={{ textAlign: { xs: 'center', md: 'right' } }}
           >
             <Box>
               <Typography

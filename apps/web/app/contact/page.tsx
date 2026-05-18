@@ -29,8 +29,8 @@ export default async function ContactPage() {
 
       {/* Hero */}
       <Box sx={{ bgcolor: BRAND.cream, borderBottom: `2px solid ${BRAND.ink}` }}>
-        <Container maxWidth="lg" sx={{ py: { xs: 8, md: 14 } }}>
-          <Stack spacing={3} sx={{ maxWidth: 820 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 14 }, px: { xs: 2.5, md: 3 } }}>
+          <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ maxWidth: 820, textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
             <Typography sx={LABEL_SX}>// צור קשר</Typography>
             <Typography
               variant="h1"

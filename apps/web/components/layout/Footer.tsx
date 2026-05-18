@@ -52,20 +52,21 @@ export function Footer() {
       sx={{
         bgcolor: BRAND.brown,
         color: '#fff',
-        mt: 8,
+        mt: { xs: 5, md: 8 },
       }}
     >
-      <Container maxWidth="xl" sx={{ pt: 6, pb: 3, px: { xs: 2, md: 2 } }}>
+      <Container maxWidth="xl" sx={{ pt: { xs: 5, md: 6 }, pb: 3, px: { xs: 2, md: 2 } }}>
         <Box
           sx={{
             display: 'grid',
             gridTemplateColumns: { xs: '1fr', md: 'repeat(3, 1fr)' },
             gap: { xs: 4, md: 6 },
             alignItems: 'flex-start',
+            textAlign: { xs: 'center', md: 'right' },
           }}
         >
           {/* Right (logical first): Brand */}
-          <Stack spacing={2}>
+          <Stack spacing={2} sx={{ alignItems: { xs: 'center', md: 'flex-start' } }}>
             <Box
               component="img"
               src="/logo-teva-trans.png"
@@ -95,7 +96,7 @@ export function Footer() {
           </Stack>
 
           {/* Middle: Contact */}
-          <Stack spacing={1.75}>
+          <Stack spacing={1.75} sx={{ alignItems: { xs: 'center', md: 'flex-start' } }}>
             <Typography
               sx={{
                 fontSize: 13,
@@ -156,7 +157,7 @@ export function Footer() {
           </Stack>
 
           {/* Left: Links */}
-          <Stack spacing={1.5}>
+          <Stack spacing={1.5} sx={{ alignItems: { xs: 'center', md: 'flex-start' } }}>
             <Typography
               sx={{
                 fontSize: 13,

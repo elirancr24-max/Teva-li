@@ -70,8 +70,8 @@ export default function AboutPage() {
 
       {/* Hero */}
       <Box sx={{ bgcolor: BRAND.cream, borderBottom: `2px solid ${BRAND.ink}` }}>
-        <Container maxWidth="lg" sx={{ py: { xs: 8, md: 14 } }}>
-          <Stack spacing={3} sx={{ maxWidth: 820 }}>
+        <Container maxWidth="lg" sx={{ py: { xs: 6, md: 14 }, px: { xs: 2.5, md: 3 } }}>
+          <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ maxWidth: 820, textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
             <Typography sx={LABEL_SX}>// אודות · טבע לי</Typography>
             <Typography
               variant="h1"
@@ -107,8 +107,8 @@ export default function AboutPage() {
       </Box>
 
       {/* Story */}
-      <Container maxWidth="md" sx={{ py: { xs: 8, md: 14 } }}>
-        <Stack spacing={4}>
+      <Container maxWidth="md" sx={{ py: { xs: 6, md: 14 }, px: { xs: 2.5, md: 3 } }}>
+        <Stack spacing={{ xs: 3, md: 4 }} sx={{ textAlign: { xs: 'center', md: 'right' } }}>
           <Typography sx={LABEL_SX}>// הסיפור</Typography>
           <Typography
             sx={{
@@ -310,7 +310,7 @@ export default function AboutPage() {
                 את ההבדל.
               </Typography>
             </Stack>
-            <Link href="/shop" style={{ textDecoration: 'none' }}>
+            <Link href="/shop" style={{ textDecoration: 'none', width: '100%', display: 'block' }}>
               <Button
                 variant="contained"
                 size="large"
@@ -323,6 +323,7 @@ export default function AboutPage() {
                   fontSize: 16,
                   fontWeight: 800,
                   borderRadius: 0,
+                  width: { xs: '100%', md: 'auto' },
                   '&:hover': { bgcolor: '#fff' },
                 }}
               >

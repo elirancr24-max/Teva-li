@@ -38,8 +38,8 @@ export function AboutSection() {
             sx={{
               position: 'relative',
               width: '100%',
-              aspectRatio: '1 / 1',
-              maxHeight: 560,
+              aspectRatio: { xs: '4 / 3', md: '1 / 1' },
+              maxHeight: { xs: 360, md: 560 },
               borderRadius: 8,
               overflow: 'hidden',
               boxShadow: '0 30px 80px -24px rgba(15,40,24,0.5)',
@@ -151,7 +151,7 @@ export function AboutSection() {
           </Box>
 
           {/* RIGHT text side */}
-          <Stack spacing={{ xs: 3, md: 4 }} sx={{ maxWidth: 640 }}>
+          <Stack spacing={{ xs: 3, md: 4 }} sx={{ maxWidth: 640, textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
             <Typography
               sx={{
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',

@@ -157,8 +157,8 @@ export function CheckoutForm() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg" sx={{ py: 4, minHeight: '60vh' }}>
-        <Typography variant="h1" sx={{ fontSize: 32, fontWeight: 800, mb: 3 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 }, px: { xs: 2, md: 3 }, minHeight: '60vh' }}>
+        <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 800, mb: { xs: 2, md: 3 }, textAlign: { xs: 'center', md: 'right' } }}>
           תשלום
         </Typography>
 
@@ -281,7 +281,7 @@ export function CheckoutForm() {
             ) : null}
           </Paper>
 
-          <Paper sx={{ width: { md: 320 }, p: 3, height: 'fit-content' }}>
+          <Paper sx={{ width: { xs: '100%', md: 320 }, p: { xs: 2, md: 3 }, height: 'fit-content' }}>
             <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>הזמנתך</Typography>
             <Stack spacing={1}>
               {items.map((i) => (

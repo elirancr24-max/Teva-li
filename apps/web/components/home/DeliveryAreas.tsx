@@ -33,7 +33,7 @@ export function DeliveryAreas() {
             alignItems: 'center',
           }}
         >
-          <Stack spacing={2.25}>
+          <Stack spacing={2.25} sx={{ alignItems: { xs: 'center', md: 'flex-start' }, textAlign: { xs: 'center', md: 'right' } }}>
             <Box
               sx={{
                 width: 60,
@@ -97,7 +97,7 @@ export function DeliveryAreas() {
             </Box>
           </Stack>
 
-          <Stack spacing={2.25}>
+          <Stack spacing={2.25} sx={{ alignItems: { xs: 'center', md: 'flex-start' }, textAlign: { xs: 'center', md: 'right' } }}>
             <Typography
               sx={{
                 fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
@@ -110,7 +110,7 @@ export function DeliveryAreas() {
             >
               · אזורי חלוקה
             </Typography>
-            <Stack direction="row" flexWrap="wrap" sx={{ gap: 1.25 }}>
+            <Stack direction="row" flexWrap="wrap" justifyContent={{ xs: 'center', md: 'flex-start' }} sx={{ gap: 1.25 }}>
               {CITIES.map((city) => (
                 <Box
                   key={city}

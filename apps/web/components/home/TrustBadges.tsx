@@ -84,14 +84,16 @@ export function TrustBadges() {
             <Stack
               key={title}
               spacing={1.25}
-              alignItems="flex-start"
+              alignItems="center"
+              textAlign="center"
               sx={{
-                flex: '0 0 160px',
+                flex: '0 0 170px',
                 scrollSnapAlign: 'start',
                 bgcolor: '#fff',
                 borderRadius: 3,
-                p: 2,
-                boxShadow: '0 2px 12px rgba(15,40,24,0.07)',
+                p: 2.25,
+                boxShadow: '0 4px 16px rgba(15,40,24,0.08)',
+                border: '1px solid rgba(0,0,0,0.04)',
               }}
             >
               <Box

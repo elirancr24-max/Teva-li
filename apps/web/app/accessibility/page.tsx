@@ -16,10 +16,10 @@ export default function AccessibilityPage() {
       <Box component="main" id="main" sx={{ bgcolor: BRAND.cream, minHeight: '60vh' }}>
         <Container maxWidth="md" sx={{ py: { xs: 6, md: 10 } }}>
           <Stack spacing={3}>
-            <Typography component="h1" sx={{ fontSize: { xs: 32, md: 44 }, fontWeight: 900, color: BRAND.brown, letterSpacing: '-0.02em' }}>
+            <Typography component="h1" sx={{ fontSize: { xs: 28, md: 44 }, fontWeight: 900, color: BRAND.brown, letterSpacing: '-0.02em', textAlign: { xs: 'center', md: 'right' } }}>
               הצהרת נגישות
             </Typography>
-            <Typography sx={{ fontSize: 15, color: 'text.secondary' }}>
+            <Typography sx={{ fontSize: 15, color: 'text.secondary', textAlign: { xs: 'center', md: 'right' } }}>
               עודכן לאחרונה: 17 במאי 2026
             </Typography>
 

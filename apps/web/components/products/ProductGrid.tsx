@@ -96,12 +96,13 @@ export function ProductGrid({
       <Typography
         component="h1"
         sx={{
-          fontSize: { xs: 28, md: 36 },
+          fontSize: { xs: 26, md: 36 },
           fontWeight: 800,
           color: BRAND.brown,
           fontFamily: 'var(--font-heebo), Heebo, sans-serif',
           mb: 1.5,
           lineHeight: 1.2,
+          textAlign: { xs: 'center', md: 'right' },
         }}
       >
         {title ?? 'כל המוצרים'}
@@ -132,7 +133,7 @@ export function ProductGrid({
         >
           מיון לפי:
         </Typography>
-        <FormControl size="small" sx={{ minWidth: 180 }}>
+        <FormControl size="small" sx={{ minWidth: { xs: 140, md: 180 } }}>
           <Select
             id="product-sort"
             value={sortBy}

@@ -51,8 +51,8 @@ export function CartView() {
   return (
     <>
       <Header />
-      <Container maxWidth="lg" sx={{ py: 4, minHeight: '60vh' }}>
-        <Typography variant="h1" sx={{ fontSize: 32, fontWeight: 800, mb: 3 }}>
+      <Container maxWidth="lg" sx={{ py: { xs: 3, md: 4 }, px: { xs: 2, md: 3 }, minHeight: '60vh' }}>
+        <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 800, mb: { xs: 2, md: 3 }, textAlign: { xs: 'center', md: 'right' } }}>
           הסל שלי
         </Typography>
 
@@ -69,65 +69,144 @@ export function CartView() {
           </Paper>
         ) : (
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
-            <Paper sx={{ flex: 1, p: 2 }}>
-              <Table>
-                <TableHead>
-                  <TableRow>
-                    <TableCell sx={{ fontWeight: 700 }}>מוצר</TableCell>
-                    <TableCell sx={{ fontWeight: 700 }} align="center">
-                      כמות
-                    </TableCell>
-                    <TableCell sx={{ fontWeight: 700 }} align="left">
-                      סה״כ
-                    </TableCell>
-                    <TableCell />
-                  </TableRow>
-                </TableHead>
-                <TableBody>
-                  {items.map((item) => (
-                    <TableRow key={item.productId}>
-                      <TableCell>
-                        <Typography sx={{ fontWeight: 600 }}>{item.product.name}</Typography>
-                        <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
-                          {formatPrice(item.product.priceCents)} / {(item.product.weight && item.product.weight.trim()) || UNIT_LABEL[item.product.unit] || ''}
-                        </Typography>
+            <Paper sx={{ flex: 1, p: { xs: 1.5, md: 2 } }}>
+              {/* Desktop: table */}
+              <Box sx={{ display: { xs: 'none', md: 'block' } }}>
+                <Table>
+                  <TableHead>
+                    <TableRow>
+                      <TableCell sx={{ fontWeight: 700 }}>מוצר</TableCell>
+                      <TableCell sx={{ fontWeight: 700 }} align="center">
+                        כמות
                       </TableCell>
-                      <TableCell align="center">
-                        <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>
+                      <TableCell sx={{ fontWeight: 700 }} align="left">
+                        סה״כ
+                      </TableCell>
+                      <TableCell />
+                    </TableRow>
+                  </TableHead>
+                  <TableBody>
+                    {items.map((item) => (
+                      <TableRow key={item.productId}>
+                        <TableCell>
+                          <Typography sx={{ fontWeight: 600 }}>{item.product.name}</Typography>
+                          <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
+                            {formatPrice(item.product.priceCents)} / {(item.product.weight && item.product.weight.trim()) || UNIT_LABEL[item.product.unit] || ''}
+                          </Typography>
+                        </TableCell>
+                        <TableCell align="center">
+                          <Stack direction="row" alignItems="center" justifyContent="center" spacing={1}>
+                            <IconButton
+                              size="small"
+                              onClick={() => dispatch(decrementAmount(item.productId))}
+                            >
+                              <RemoveIcon fontSize="small" />
+                            </IconButton>
+                            <Typography sx={{ minWidth: 60, textAlign: 'center', fontWeight: 600 }}>
+                              {item.amount} {UNIT_LABEL[item.product.unit]}
+                            </Typography>
+                            <IconButton
+                              size="small"
+                              onClick={() => dispatch(incrementAmount(item.productId))}
+                              sx={{ bgcolor: BRAND.green, color: '#fff', '&:hover': { bgcolor: BRAND.greenDark } }}
+                            >
+                              <AddIcon fontSize="small" />
+                            </IconButton>
+                          </Stack>
+                        </TableCell>
+                        <TableCell align="left" sx={{ fontWeight: 700, color: BRAND.green }}>
+                          {formatPrice(item.product.priceCents * item.amount)}
+                        </TableCell>
+                        <TableCell align="left">
                           <IconButton
                             size="small"
-                            onClick={() => dispatch(decrementAmount(item.productId))}
+                            onClick={() => dispatch(removeItem(item.productId))}
+                            sx={{ color: 'text.secondary' }}
                           >
-                            <RemoveIcon fontSize="small" />
+                            <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
-                          <Typography sx={{ minWidth: 60, textAlign: 'center', fontWeight: 600 }}>
-                            {item.amount} {UNIT_LABEL[item.product.unit]}
+                        </TableCell>
+                      </TableRow>
+                    ))}
+                  </TableBody>
+                </Table>
+              </Box>
+
+              {/* Mobile: card stack */}
+              <Stack spacing={1.5} sx={{ display: { xs: 'flex', md: 'none' } }}>
+                {items.map((item) => {
+                  const unit = (item.product.weight && item.product.weight.trim()) || UNIT_LABEL[item.product.unit] || '';
+                  return (
+                    <Box
+                      key={item.productId}
+                      sx={{
+                        border: '1px solid #eee',
+                        borderRadius: 2,
+                        p: 1.5,
+                        display: 'flex',
+                        gap: 1.25,
+                        alignItems: 'flex-start',
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          width: 64,
+                          height: 64,
+                          borderRadius: 1.5,
+                          bgcolor: 'grey.100',
+                          backgroundImage: item.product.imageUrl ? `url(${item.product.imageUrl})` : 'none',
+                          backgroundSize: 'cover',
+                          backgroundPosition: 'center',
+                          flexShrink: 0,
+                        }}
+                      />
+                      <Box sx={{ flex: 1, minWidth: 0 }}>
+                        <Stack direction="row" justifyContent="space-between" alignItems="flex-start" spacing={1}>
+                          <Typography sx={{ fontWeight: 700, fontSize: 14, lineHeight: 1.3 }}>
+                            {item.product.name}
                           </Typography>
                           <IconButton
                             size="small"
-                            onClick={() => dispatch(incrementAmount(item.productId))}
-                            sx={{ bgcolor: BRAND.green, color: '#fff', '&:hover': { bgcolor: BRAND.greenDark } }}
+                            onClick={() => dispatch(removeItem(item.productId))}
+                            sx={{ color: 'text.secondary', p: 0.25, mt: -0.5, mr: -0.5 }}
+                            aria-label="הסר"
                           >
-                            <AddIcon fontSize="small" />
+                            <DeleteOutlineIcon fontSize="small" />
                           </IconButton>
                         </Stack>
-                      </TableCell>
-                      <TableCell align="left" sx={{ fontWeight: 700, color: BRAND.green }}>
-                        {formatPrice(item.product.priceCents * item.amount)}
-                      </TableCell>
-                      <TableCell align="left">
-                        <IconButton
-                          size="small"
-                          onClick={() => dispatch(removeItem(item.productId))}
-                          sx={{ color: 'text.secondary' }}
-                        >
-                          <DeleteOutlineIcon fontSize="small" />
-                        </IconButton>
-                      </TableCell>
-                    </TableRow>
-                  ))}
-                </TableBody>
-              </Table>
+                        <Typography sx={{ fontSize: 12, color: 'text.secondary', mt: 0.25 }}>
+                          {formatPrice(item.product.priceCents)} / {unit}
+                        </Typography>
+                        <Stack direction="row" alignItems="center" justifyContent="space-between" sx={{ mt: 1 }}>
+                          <Stack direction="row" alignItems="center" spacing={0.75}>
+                            <IconButton
+                              size="small"
+                              onClick={() => dispatch(decrementAmount(item.productId))}
+                              sx={{ bgcolor: 'grey.100', width: 32, height: 32 }}
+                            >
+                              <RemoveIcon fontSize="small" />
+                            </IconButton>
+                            <Typography sx={{ minWidth: 50, textAlign: 'center', fontWeight: 700, fontSize: 14 }}>
+                              {item.amount} {unit}
+                            </Typography>
+                            <IconButton
+                              size="small"
+                              onClick={() => dispatch(incrementAmount(item.productId))}
+                              sx={{ bgcolor: BRAND.green, color: '#fff', width: 32, height: 32, '&:hover': { bgcolor: BRAND.greenDark } }}
+                            >
+                              <AddIcon fontSize="small" />
+                            </IconButton>
+                          </Stack>
+                          <Typography sx={{ fontWeight: 800, color: BRAND.green, fontSize: 16 }}>
+                            {formatPrice(item.product.priceCents * item.amount)}
+                          </Typography>
+                        </Stack>
+                      </Box>
+                    </Box>
+                  );
+                })}
+              </Stack>
+
               <Box sx={{ pt: 2, textAlign: 'left' }}>
                 <Button onClick={() => dispatch(clearCart())} color="inherit" size="small">
                   ריקון הסל
@@ -135,7 +214,7 @@ export function CartView() {
               </Box>
             </Paper>
 
-            <Paper sx={{ width: { md: 320 }, p: 3, height: 'fit-content' }}>
+            <Paper sx={{ width: { xs: '100%', md: 320 }, p: { xs: 2, md: 3 }, height: 'fit-content' }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>סיכום</Typography>
               <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                 <Typography>סכום ביניים</Typography>
