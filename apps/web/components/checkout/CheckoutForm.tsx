@@ -118,7 +118,7 @@ export function CheckoutForm() {
           סיום הזמנה
         </Typography>
 
-        <Stack direction={{ xs: 'column', md: 'row' }} spacing={3} alignItems="flex-start">
+        <Stack direction={{ xs: 'column-reverse', md: 'row' }} spacing={3} alignItems="flex-start">
           <Paper sx={{ flex: 1, p: { xs: 2, md: 4 }, width: '100%' }}>
             <Box component="form" onSubmit={handleSubmit}>
               <Stack spacing={2}>
@@ -145,11 +145,10 @@ export function CheckoutForm() {
                 </Stack>
                 <TextField
                   name="email"
-                  label="דוא״ל"
+                  label="דוא״ל (לא חובה)"
                   type="email"
                   value={form.email}
                   onChange={handleChange}
-                  required
                   fullWidth
                 />
 
@@ -208,10 +207,32 @@ export function CheckoutForm() {
 
                 {error && <Alert severity="error">{error}</Alert>}
 
-                <Alert severity="info" sx={{ fontSize: 13 }}>
-                  לאחר שליחת ההזמנה תועברו לוואטסאפ עם הודעה מוכנה. אנחנו ניצור איתכם
-                  קשר לאישור פרטי התשלום (Bit / העברה בנקאית).
-                </Alert>
+                {/* Payment methods */}
+                <Box
+                  sx={{
+                    border: `1px solid rgba(0,0,0,0.12)`,
+                    borderRadius: 2,
+                    p: 2,
+                    bgcolor: 'grey.50',
+                  }}
+                >
+                  <Typography sx={{ fontSize: 13, fontWeight: 700, mb: 1, color: 'text.secondary' }}>
+                    אמצעי תשלום מקובלים
+                  </Typography>
+                  <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" gap={1}>
+                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, bgcolor: '#fff', border: '1px solid #eee', borderRadius: 1.5, px: 1.5, py: 0.75 }}>
+                      <Box component="span" sx={{ fontSize: 18 }}>💙</Box>
+                      <Typography sx={{ fontSize: 13, fontWeight: 700 }}>ביט</Typography>
+                    </Box>
+                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, bgcolor: '#fff', border: '1px solid #eee', borderRadius: 1.5, px: 1.5, py: 0.75 }}>
+                      <Box component="span" sx={{ fontSize: 18 }}>🏦</Box>
+                      <Typography sx={{ fontSize: 13, fontWeight: 700 }}>העברה בנקאית</Typography>
+                    </Box>
+                  </Stack>
+                  <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 1 }}>
+                    תשלום מאובטח לאחר אישור ההזמנה בוואטסאפ
+                  </Typography>
+                </Box>
 
                 <Button
                   type="submit"

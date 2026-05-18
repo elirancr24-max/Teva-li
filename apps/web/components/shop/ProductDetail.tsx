@@ -1,5 +1,6 @@
 'use client';
 import { useState } from 'react';
+import Link from 'next/link';
 import {
   Box,
   Container,
@@ -9,9 +10,11 @@ import {
   Paper,
   Chip,
   ButtonBase,
+  IconButton,
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
+import ArrowForwardIcon from '@mui/icons-material/ArrowForward';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { addItem, decrementAmount, incrementAmount } from '@/store/slices/cartSlice';
 import { BRAND } from '@/lib/brand';
@@ -69,7 +72,19 @@ export function ProductDetail({
       : 0;
 
   return (
-    <Container maxWidth="lg" sx={{ py: { xs: 2.5, md: 4 }, px: { xs: 2, md: 3 } }}>
+    <Container maxWidth="lg" sx={{ py: { xs: 2.5, md: 4 }, px: { xs: 2, md: 3 }, pb: { xs: '100px', md: 4 } }}>
+      {/* Back button — mobile only */}
+      <Box sx={{ display: { xs: 'flex', md: 'none' }, mb: 1.5 }}>
+        <Button
+          component={Link}
+          href="/shop"
+          startIcon={<ArrowForwardIcon />}
+          sx={{ color: BRAND.brown, fontWeight: 700, fontSize: 14, px: 0 }}
+        >
+          חזרה לחנות
+        </Button>
+      </Box>
+
       <Stack direction={{ xs: 'column', md: 'row' }} spacing={{ xs: 2.5, md: 4 }}>
         <Box sx={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 1.5 }}>
           <Paper
@@ -249,6 +264,70 @@ export function ProductDetail({
           </Box>
         </Stack>
       </Stack>
+
+      {/* Sticky Add-to-Cart bar — mobile only, above bottom nav */}
+      <Box
+        sx={{
+          display: { xs: 'flex', md: 'none' },
+          position: 'fixed',
+          bottom: 'calc(64px + env(safe-area-inset-bottom, 0px))',
+          left: 0,
+          right: 0,
+          zIndex: 150,
+          bgcolor: 'rgba(255,255,255,0.97)',
+          backdropFilter: 'blur(16px)',
+          WebkitBackdropFilter: 'blur(16px)',
+          borderTop: '1px solid rgba(0,0,0,0.10)',
+          px: 2,
+          py: 1.25,
+          gap: 2,
+          alignItems: 'center',
+        }}
+      >
+        <Box sx={{ flex: 1 }}>
+          <Typography sx={{ fontSize: 12, color: 'text.secondary', lineHeight: 1 }}>{product.name}</Typography>
+          <Typography sx={{ fontSize: 20, fontWeight: 800, color: BRAND.green, lineHeight: 1.2 }}>
+            {formatPrice(product.priceCents)}
+            <Typography component="span" sx={{ fontSize: 12, color: 'text.secondary', fontWeight: 400, ml: 0.5 }}>
+              /{unitLabel}
+            </Typography>
+          </Typography>
+        </Box>
+        {inCart ? (
+          <Stack direction="row" alignItems="center" spacing={1}>
+            <IconButton
+              size="small"
+              onClick={() => dispatch(decrementAmount(product.id))}
+              aria-label="הפחת כמות"
+              sx={{ bgcolor: BRAND.greenLight, color: BRAND.greenDark, width: 44, height: 44 }}
+            >
+              <RemoveIcon />
+            </IconButton>
+            <Typography sx={{ fontWeight: 700, minWidth: 32, textAlign: 'center' }}>
+              {cartItem!.amount}
+            </Typography>
+            <IconButton
+              size="small"
+              onClick={() => dispatch(incrementAmount(product.id))}
+              aria-label="הוסף כמות"
+              sx={{ bgcolor: BRAND.green, color: '#fff', width: 44, height: 44, '&:hover': { bgcolor: BRAND.greenDark } }}
+            >
+              <AddIcon />
+            </IconButton>
+          </Stack>
+        ) : (
+          <Button
+            variant="contained"
+            size="large"
+            startIcon={<AddIcon />}
+            onClick={() => dispatch(addItem({ product }))}
+            aria-label={`הוספה לסל ${product.name}`}
+            sx={{ bgcolor: BRAND.green, color: '#fff', fontWeight: 800, px: 3, py: 1.25, borderRadius: 2, '&:hover': { bgcolor: BRAND.greenDark } }}
+          >
+            הוספה לסל
+          </Button>
+        )}
+      </Box>
     </Container>
   );
 }

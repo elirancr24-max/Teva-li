@@ -106,7 +106,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
       <body>
         <a href="#main" className="skip-link">דלגו לתוכן העיקרי</a>
         <Providers>
-          <div id="main">{children}</div>
+          <main id="main">{children}</main>
           <BottomNav />
         </Providers>
         <AccessibilityWidget />

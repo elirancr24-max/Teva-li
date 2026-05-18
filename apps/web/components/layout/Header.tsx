@@ -24,8 +24,9 @@ import { setActiveCategory } from '@/store/slices/categoriesSlice';
 import { BRAND } from '@/lib/brand';
 
 const TOP_BAR_HEIGHT_MD = 72;
-const TOP_BAR_HEIGHT_XS = 60;
-const NAV_BAR_HEIGHT = 48;
+const TOP_BAR_HEIGHT_XS = 64;
+const NAV_BAR_HEIGHT_XS = 56;
+const NAV_BAR_HEIGHT_MD = 48;
 
 export function Header() {
   const router = useRouter();
@@ -103,7 +104,7 @@ export function Header() {
               src="/logo-teva-trans.png"
               alt="טבע לי"
               sx={{
-                height: { xs: 40, md: 60 },
+                height: { xs: 52, md: 68 },
                 width: 'auto',
                 display: 'block',
                 filter:
@@ -126,7 +127,7 @@ export function Header() {
               borderRadius: '24px',
               px: 1.5,
               py: 0.5,
-              height: { xs: 36, md: 40 },
+              height: { xs: 44, md: 44 },
             }}
           >
             <IconButton
@@ -203,28 +204,32 @@ export function Header() {
           position: 'sticky',
           top: { xs: TOP_BAR_HEIGHT_XS, md: TOP_BAR_HEIGHT_MD },
           zIndex: 99,
-          bgcolor: scrolled ? 'rgba(255,255,255,0.92)' : '#fff',
+          bgcolor: scrolled ? 'rgba(255,255,255,0.96)' : '#fff',
           backdropFilter: scrolled ? 'blur(16px)' : 'none',
           WebkitBackdropFilter: scrolled ? 'blur(16px)' : 'none',
           color: BRAND.ink,
-          height: NAV_BAR_HEIGHT,
-          borderBottom: '1px solid #eee',
+          height: { xs: NAV_BAR_HEIGHT_XS, md: NAV_BAR_HEIGHT_MD },
+          borderBottom: `2px solid ${BRAND.greenLight}`,
           display: 'flex',
-          alignItems: 'stretch',
+          alignItems: 'center',
           transition: 'background-color 300ms ease',
         }}
       >
         <Box
+          role="tablist"
+          aria-label="קטגוריות מוצרים"
           sx={{
             width: '100%',
             maxWidth: 'xl',
             mx: 'auto',
-            px: { xs: 1, md: 2 },
+            px: { xs: 1.5, md: 2 },
             display: 'flex',
-            alignItems: 'stretch',
+            alignItems: 'center',
+            gap: { xs: 1, md: 0 },
             overflowX: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': { display: 'none' },
+            WebkitOverflowScrolling: 'touch',
           }}
         >
           <CategoryButton
@@ -273,35 +278,62 @@ function CategoryButton({
   return (
     <Box
       component="button"
+      role="tab"
+      aria-selected={active}
       onClick={onClick}
       sx={{
-        position: 'relative',
-        background: 'none',
+        /* Mobile: pill chip */
+        display: 'inline-flex',
+        alignItems: 'center',
+        justifyContent: 'center',
         border: 'none',
         cursor: 'pointer',
         fontFamily: 'inherit',
-        fontSize: 15,
-        fontWeight: active ? 700 : 500,
-        color: active ? BRAND.green : BRAND.ink,
-        px: '18px',
-        py: '12px',
         whiteSpace: 'nowrap',
-        transition: 'background-color 160ms, color 160ms',
-        '&:hover': {
-          bgcolor: BRAND.greenLight,
-          color: BRAND.green,
+        flexShrink: 0,
+        transition: 'background-color 160ms, color 160ms, box-shadow 160ms',
+        /* Mobile styles — pill */
+        borderRadius: { xs: 999, md: 0 },
+        fontSize: { xs: 14, md: 15 },
+        fontWeight: active ? 800 : 600,
+        px: { xs: '16px', md: '18px' },
+        py: { xs: '8px', md: '12px' },
+        minHeight: { xs: 40, md: 'auto' },
+        bgcolor: {
+          xs: active ? BRAND.green : 'rgba(0,0,0,0.06)',
+          md: 'transparent',
         },
-        '&::after': active
-          ? {
-              content: '""',
-              position: 'absolute',
-              left: 0,
-              right: 0,
-              bottom: 0,
-              height: '3px',
-              bgcolor: BRAND.green,
-            }
-          : undefined,
+        color: {
+          xs: active ? '#fff' : BRAND.ink,
+          md: active ? BRAND.green : BRAND.ink,
+        },
+        boxShadow: {
+          xs: active ? `0 4px 12px rgba(15,40,24,0.25)` : 'none',
+          md: 'none',
+        },
+        position: 'relative',
+        /* Desktop: underline indicator */
+        '&::after': {
+          content: '""',
+          display: { xs: 'none', md: 'block' },
+          position: 'absolute',
+          left: 0,
+          right: 0,
+          bottom: 0,
+          height: '3px',
+          bgcolor: active ? BRAND.green : 'transparent',
+          transition: 'background-color 160ms',
+        },
+        '&:hover': {
+          bgcolor: {
+            xs: active ? BRAND.greenDark : 'rgba(0,0,0,0.10)',
+            md: BRAND.greenLight,
+          },
+          color: {
+            xs: active ? '#fff' : BRAND.ink,
+            md: BRAND.green,
+          },
+        },
       }}
     >
       {label}

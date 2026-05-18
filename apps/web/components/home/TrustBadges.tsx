@@ -3,7 +3,8 @@ import LocalFloristOutlinedIcon from '@mui/icons-material/LocalFloristOutlined';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import SupportAgentOutlinedIcon from '@mui/icons-material/SupportAgentOutlined';
 import VerifiedOutlinedIcon from '@mui/icons-material/VerifiedOutlined';
-import type { ComponentType, SVGProps } from 'react';
+import PaymentsOutlinedIcon from '@mui/icons-material/PaymentsOutlined';
+import type { ComponentType } from 'react';
 import { BRAND } from '@/lib/brand';
 
 interface Badge {
@@ -22,7 +23,7 @@ const BADGES: BadgeWithColor[] = [
   {
     Icon: LocalFloristOutlinedIcon,
     label: 'FRESHNESS',
-    title: 'טרי מהמשתלה',
+    title: 'טרי מהדשא',
     desc: 'נקטף בבוקר, מגיע אליכם באותו יום',
     iconBg: '#E8F5DC',
     iconColor: BRAND.greenDark,
@@ -50,6 +51,14 @@ const BADGES: BadgeWithColor[] = [
     desc: 'עסק משפחתי, פירות וירקות איכותיים',
     iconBg: '#FFEDED',
     iconColor: BRAND.watermelonDark,
+  },
+  {
+    Icon: PaymentsOutlinedIcon,
+    label: 'PAYMENT',
+    title: 'ביט / העברה בנקאית',
+    desc: 'תשלום מאובטח לאחר אישור ההזמנה בוואטסאפ',
+    iconBg: '#E8F0FF',
+    iconColor: '#1565C0',
   },
 ];
 
@@ -134,7 +143,7 @@ export function TrustBadges() {
           sx={{
             display: { xs: 'none', md: 'grid' },
             gap: 3,
-            gridTemplateColumns: 'repeat(4, 1fr)',
+            gridTemplateColumns: 'repeat(5, 1fr)',
           }}
         >
           {BADGES.map(({ Icon, label, title, desc, iconBg, iconColor }) => (

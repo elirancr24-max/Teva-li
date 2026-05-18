@@ -1,6 +1,6 @@
 'use client';
 import { useState, type MouseEvent } from 'react';
-import { useRouter } from 'next/navigation';
+import Link from 'next/link';
 import {
   Card,
   Box,
@@ -96,7 +96,6 @@ const UNIT_LABEL: Record<string, string> = {
 };
 
 export function ProductCard({ product }: { product: Product }) {
-  const router = useRouter();
   const [imgError, setImgError] = useState(false);
   const showImage = !!product.imageUrl && !imgError;
   const dispatch = useAppDispatch();
@@ -107,27 +106,22 @@ export function ProductCard({ product }: { product: Product }) {
     !!product.originalPriceCents && product.originalPriceCents > product.priceCents;
 
   const isPremium = product.quality === 'premium';
-  // Always prefer the explicit weight string (e.g. "500 גרם", "מגש", "ק״ג")
-  // since that's what the admin edits per-product. Fallback to unit label.
   const unitLabel = (product.weight && product.weight.trim()) || UNIT_LABEL[product.unit] || '';
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
 
-  // Stop propagation so clicking inside controls doesn't navigate.
+  const discountPct =
+    product.originalPriceCents && product.originalPriceCents > product.priceCents
+      ? Math.round((1 - product.priceCents / product.originalPriceCents) * 100)
+      : 0;
+
+  // Stop propagation so clicking cart controls doesn't navigate to product page.
   const stop = (e: MouseEvent) => e.stopPropagation();
-  const goToProduct = () => router.push(`/shop/${product.slug}`);
 
   return (
     <Card
-      onClick={goToProduct}
-      onKeyDown={(e) => {
-        if (e.key === 'Enter' || e.key === ' ') {
-          e.preventDefault();
-          goToProduct();
-        }
-      }}
-      role="link"
-      tabIndex={0}
+      component={Link}
+      href={`/shop/${product.slug}`}
       aria-label={product.name}
       sx={{
         position: 'relative',
@@ -142,6 +136,8 @@ export function ProductCard({ product }: { product: Product }) {
         boxShadow: 'none',
         border: 'none',
         cursor: 'pointer',
+        textDecoration: 'none',
+        color: 'inherit',
         transition: 'box-shadow 200ms ease, transform 200ms ease',
         outline: 'none',
         '&:hover': {
@@ -184,9 +180,15 @@ export function ProductCard({ product }: { product: Product }) {
               transformOrigin: 'left top',
               pointerEvents: 'none',
             }}
+            aria-hidden="true"
           >
             הנחה
           </Typography>
+          {discountPct > 0 && (
+            <Box component="span" sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}>
+              הנחה {discountPct}%
+            </Box>
+          )}
         </>
       )}
 

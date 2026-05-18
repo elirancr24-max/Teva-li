@@ -1,4 +1,4 @@
-import { Box } from '@mui/material';
+import { Box, Container, Stack, Typography } from '@mui/material';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { CategoryNavbar } from '@/components/layout/CategoryNavbar';
@@ -104,6 +104,39 @@ export default async function Home() {
 
       {/* Trust badges */}
       <TrustBadges />
+
+      {/* How it works — 3 steps */}
+      <Box component="section" sx={{ bgcolor: BRAND.cream, py: { xs: 5, md: 8 }, borderBottom: '1px solid #ececec' }}>
+        <Container maxWidth="md">
+          <Typography component="h2" sx={{ fontSize: { xs: 24, md: 34 }, fontWeight: 900, textAlign: 'center', color: BRAND.brown, mb: { xs: 4, md: 5 }, letterSpacing: '-0.02em' }}>
+            איך זה עובד?
+          </Typography>
+          <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} justifyContent="center">
+            {[
+              { num: '1', emoji: '🛒', title: 'בוחרים ומזמינים', desc: 'גולשים בקטלוג, בוחרים מוצרים ושולחים הזמנה בוואטסאפ' },
+              { num: '2', emoji: '✅', title: 'מאשרים ומשלמים', desc: 'אנחנו מאשרים את ההזמנה ומשלמים בביט או העברה בנקאית' },
+              { num: '3', emoji: '🚀', title: 'מקבלים עד חצי שעה', desc: 'נקטף בבוקר, מגיע אליכם טרי ורענן ישירות לדלת' },
+            ].map(({ num, emoji, title, desc }) => (
+              <Box key={num} sx={{ flex: 1, textAlign: 'center', position: 'relative' }}>
+                <Box sx={{ width: 64, height: 64, borderRadius: '50%', bgcolor: BRAND.green, color: '#fff', display: 'inline-flex', alignItems: 'center', justifyContent: 'center', fontSize: 26, mb: 2, boxShadow: '0 4px 16px rgba(15,40,24,0.18)' }}>
+                  {emoji}
+                </Box>
+                <Box sx={{ position: 'absolute', top: 28, right: 0, left: 0, display: { xs: 'none', sm: num !== '3' ? 'flex' : 'none' }, justifyContent: 'flex-end', pr: '-16px' }}>
+                </Box>
+                <Typography sx={{ fontSize: 11, fontWeight: 900, letterSpacing: '0.18em', color: BRAND.greenDark, textTransform: 'uppercase', mb: 0.5 }}>
+                  שלב {num}
+                </Typography>
+                <Typography sx={{ fontSize: { xs: 18, md: 20 }, fontWeight: 800, color: BRAND.brown, mb: 0.75 }}>
+                  {title}
+                </Typography>
+                <Typography sx={{ fontSize: 14, color: 'rgba(0,0,0,0.62)', lineHeight: 1.55, maxWidth: 220, mx: 'auto' }}>
+                  {desc}
+                </Typography>
+              </Box>
+            ))}
+          </Stack>
+        </Container>
+      </Box>
 
       {/* Featured products — horizontal rail (hydrates Redux for cart/category flows) */}
       <HomeFeatured products={featured} catalog={products} categories={categories} />

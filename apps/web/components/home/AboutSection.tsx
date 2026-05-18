@@ -192,15 +192,15 @@ export function AboutSection() {
               מקבל יחס אישי על קצה הטלפון.
             </Typography>
 
-            {/* Stats — tropical chips */}
+            {/* Stats — premium cards */}
             <Stack
-              direction={{ xs: 'column', sm: 'row' }}
-              spacing={{ xs: 2, sm: 3 }}
+              direction="row"
+              spacing={{ xs: 1.5, sm: 2 }}
               sx={{ pt: 2 }}
             >
-              <StatChip value="+6" label="שנים של פרי טרי" color={BRAND.green} />
-              <StatChip value="100%" label="ישראלי, חתוך ביד" color={BRAND.gold} colorText={BRAND.brown} />
-              <StatChip value="24/7" label="תמיכה בוואטסאפ" color={BRAND.teal} />
+              <StatChip value="+6" label="שנים של פרי טרי" accentColor={BRAND.green} />
+              <StatChip value="100%" label="ישראלי, חתוך ביד" accentColor={BRAND.gold} />
+              <StatChip value="24/7" label="תמיכה בוואטסאפ" accentColor={BRAND.teal} />
             </Stack>
           </Stack>
         </Box>
@@ -212,30 +212,59 @@ export function AboutSection() {
 function StatChip({
   value,
   label,
-  color,
-  colorText = '#fff',
+  accentColor,
 }: {
   value: string;
   label: string;
-  color: string;
-  colorText?: string;
+  accentColor: string;
 }) {
   return (
     <Box
       sx={{
-        bgcolor: color,
-        color: colorText,
-        borderRadius: 3,
-        px: 3,
-        py: 2,
         flex: 1,
-        boxShadow: '0 8px 20px -6px rgba(15,40,24,0.18)',
+        bgcolor: '#fff',
+        borderRadius: 3,
+        px: { xs: 1.5, sm: 2.5 },
+        py: { xs: 2, sm: 2.5 },
+        boxShadow: '0 4px 20px -4px rgba(15,40,24,0.14)',
+        border: `1.5px solid ${accentColor}22`,
+        textAlign: 'center',
+        position: 'relative',
+        overflow: 'hidden',
+        '&::before': {
+          content: '""',
+          position: 'absolute',
+          top: 0,
+          left: 0,
+          right: 0,
+          height: '4px',
+          bgcolor: accentColor,
+          borderRadius: '3px 3px 0 0',
+        },
       }}
     >
-      <Typography sx={{ fontSize: { xs: 32, md: 36 }, fontWeight: 900, lineHeight: 1 }}>
+      <Typography
+        sx={{
+          fontSize: { xs: 28, sm: 34, md: 38 },
+          fontWeight: 900,
+          lineHeight: 1,
+          color: accentColor,
+          letterSpacing: '-0.03em',
+        }}
+      >
         {value}
       </Typography>
-      <Typography sx={{ fontSize: 13, fontWeight: 700, opacity: 0.9, mt: 0.5 }}>{label}</Typography>
+      <Typography
+        sx={{
+          fontSize: { xs: 11, sm: 12 },
+          fontWeight: 700,
+          color: BRAND.brownLight,
+          mt: 0.75,
+          lineHeight: 1.3,
+        }}
+      >
+        {label}
+      </Typography>
     </Box>
   );
 }

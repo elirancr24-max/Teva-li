@@ -99,6 +99,7 @@ export function CartView() {
                             <IconButton
                               size="small"
                               onClick={() => dispatch(decrementAmount(item.productId))}
+                              aria-label={`הפחת כמות ${item.product.name}`}
                             >
                               <RemoveIcon fontSize="small" />
                             </IconButton>
@@ -108,6 +109,7 @@ export function CartView() {
                             <IconButton
                               size="small"
                               onClick={() => dispatch(incrementAmount(item.productId))}
+                              aria-label={`הוסף כמות ${item.product.name}`}
                               sx={{ bgcolor: BRAND.green, color: '#fff', '&:hover': { bgcolor: BRAND.greenDark } }}
                             >
                               <AddIcon fontSize="small" />
@@ -182,7 +184,8 @@ export function CartView() {
                             <IconButton
                               size="small"
                               onClick={() => dispatch(decrementAmount(item.productId))}
-                              sx={{ bgcolor: 'grey.100', width: 32, height: 32 }}
+                              aria-label={`הפחת כמות ${item.product.name}`}
+                              sx={{ bgcolor: 'grey.100', width: 44, height: 44 }}
                             >
                               <RemoveIcon fontSize="small" />
                             </IconButton>
@@ -192,7 +195,8 @@ export function CartView() {
                             <IconButton
                               size="small"
                               onClick={() => dispatch(incrementAmount(item.productId))}
-                              sx={{ bgcolor: BRAND.green, color: '#fff', width: 32, height: 32, '&:hover': { bgcolor: BRAND.greenDark } }}
+                              aria-label={`הוסף כמות ${item.product.name}`}
+                              sx={{ bgcolor: BRAND.green, color: '#fff', width: 44, height: 44, '&:hover': { bgcolor: BRAND.greenDark } }}
                             >
                               <AddIcon fontSize="small" />
                             </IconButton>
@@ -216,6 +220,30 @@ export function CartView() {
 
             <Paper sx={{ width: { xs: '100%', md: 320 }, p: { xs: 2, md: 3 }, height: 'fit-content' }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>סיכום</Typography>
+
+              {/* Free delivery progress bar */}
+              {(() => {
+                const FREE_DELIVERY_MIN = 15000; // ₪150 in cents
+                const remaining = FREE_DELIVERY_MIN - total;
+                const progress = Math.min(100, Math.round((total / FREE_DELIVERY_MIN) * 100));
+                return (
+                  <Box sx={{ mb: 2 }}>
+                    {remaining > 0 ? (
+                      <Typography sx={{ fontSize: 13, color: 'text.secondary', mb: 0.75 }}>
+                        עוד <Box component="span" sx={{ fontWeight: 800, color: BRAND.brown }}>{formatPrice(remaining)}</Box> למשלוח חינם
+                      </Typography>
+                    ) : (
+                      <Typography sx={{ fontSize: 13, fontWeight: 700, color: BRAND.green, mb: 0.75 }}>
+                        ✓ זכאי למשלוח חינם!
+                      </Typography>
+                    )}
+                    <Box sx={{ width: '100%', height: 6, bgcolor: 'grey.200', borderRadius: 999, overflow: 'hidden' }}>
+                      <Box sx={{ width: `${progress}%`, height: '100%', bgcolor: BRAND.green, borderRadius: 999, transition: 'width 400ms ease' }} />
+                    </Box>
+                  </Box>
+                );
+              })()}
+
               <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                 <Typography>סכום ביניים</Typography>
                 <Typography>{formatPrice(total)}</Typography>

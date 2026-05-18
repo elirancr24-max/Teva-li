@@ -48,6 +48,16 @@ export function BottomNav() {
   }, []);
 
   return (
+    <>
+    {/* Screen reader announcement for cart count changes */}
+    <Box
+      role="status"
+      aria-live="polite"
+      aria-atomic="true"
+      sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}
+    >
+      {cartCount > 0 ? `${cartCount} פריטים בעגלה` : 'העגלה ריקה'}
+    </Box>
     <Box
       component="nav"
       aria-label="ניווט תחתון"
@@ -146,7 +156,7 @@ export function BottomNav() {
             <Box
               component="span"
               sx={{
-                fontSize: 10,
+                fontSize: 11,
                 fontWeight: isActive ? 700 : 500,
                 letterSpacing: '0.01em',
                 lineHeight: 1,
@@ -158,5 +168,6 @@ export function BottomNav() {
         );
       })}
     </Box>
+    </>
   );
 }
