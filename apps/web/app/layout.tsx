@@ -4,6 +4,7 @@ import { Analytics } from '@vercel/analytics/react';
 import { Providers } from './providers';
 import { AccessibilityWidget } from '@/components/a11y/AccessibilityWidget';
 import { BottomNav } from '@/components/layout/BottomNav';
+import { CookieBanner } from '@/components/legal/CookieBanner';
 import './globals.css';
 
 const rubik = Rubik({
@@ -111,6 +112,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </Providers>
         <AccessibilityWidget />
         <Analytics />
+        <CookieBanner />
       </body>
     </html>
   );

@@ -6,7 +6,7 @@ import { BRAND } from '@/lib/brand';
 
 export const metadata: Metadata = {
   title: 'הצהרת נגישות',
-  description: 'הצהרת נגישות לאתר טבע לי לפי תקן ישראלי 5568 ו-WCAG 2.0 ברמה AA.',
+  description: 'הצהרת נגישות לאתר טבע לי לפי תקן ישראלי 5568 ו-WCAG 2.1 ברמה AA.',
 };
 
 export default function AccessibilityPage() {
@@ -31,7 +31,7 @@ export default function AccessibilityPage() {
               <ul>
                 <li>תפריט נגישות צף עם אפשרות להגדלת גופן, ניגודיות גבוהה, הדגשת קישורים, וכיבוי אנימציות.</li>
                 <li>תמיכה מלאה בניווט באמצעות מקלדת.</li>
-                <li>ניגודיות צבעים ברמת AA לפי WCAG 2.0.</li>
+                <li>ניגודיות צבעים ברמת AA לפי WCAG 2.1.</li>
                 <li>תיאורי alt לכל התמונות החשובות.</li>
                 <li>שימוש ב-aria-labels לכפתורי אייקון.</li>
                 <li>קישור &quot;דלג לתוכן העיקרי&quot; בתחילת כל דף.</li>
@@ -43,7 +43,7 @@ export default function AccessibilityPage() {
               <p>אם נתקלתם בבעיית נגישות באתר, או יש לכם הצעה לשיפור, אנא צרו קשר עם רכז הנגישות שלנו:</p>
               <ul>
                 <li>שם: אלירן (רכז נגישות)</li>
-                <li>טלפון: 050-0000000</li>
+                <li>טלפון: 054-8897445</li>
                 <li>דוא&quot;ל: <a href="mailto:eliranabu320@gmail.com" style={{ color: BRAND.green }}>eliranabu320@gmail.com</a></li>
                 <li>זמן מענה: עד 3 ימי עבודה.</li>
               </ul>

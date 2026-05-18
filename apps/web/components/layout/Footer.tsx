@@ -178,6 +178,9 @@ export function Footer() {
             <Link href="/privacy" style={{ textDecoration: 'none' }}>
               <Typography sx={LINK_SX}>מדיניות פרטיות</Typography>
             </Link>
+            <Link href="/cookies" style={{ textDecoration: 'none' }}>
+              <Typography sx={LINK_SX}>מדיניות עוגיות</Typography>
+            </Link>
             <Link href="/about" style={{ textDecoration: 'none' }}>
               <Typography sx={LINK_SX}>אודות</Typography>
             </Link>
