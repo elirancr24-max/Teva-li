@@ -1,5 +1,5 @@
 import { Box, Button, Container, Stack, Typography } from '@mui/material';
-import KayakingIcon from '@mui/icons-material/Kayaking';
+import CelebrationIcon from '@mui/icons-material/Celebration';
 import ArrowBackIcon from '@mui/icons-material/ArrowBack';
 import { BRAND } from '@/lib/brand';
 
@@ -48,7 +48,7 @@ export function KayakTeaser() {
                   color: '#fff',
                 }}
               >
-                <KayakingIcon sx={{ fontSize: 22 }} />
+                <CelebrationIcon sx={{ fontSize: 22 }} />
               </Box>
               <Typography
                 sx={{

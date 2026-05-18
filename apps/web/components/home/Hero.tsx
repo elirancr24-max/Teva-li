@@ -27,7 +27,7 @@ export function Hero({
       sx={{
         position: 'relative',
         overflow: 'hidden',
-        minHeight: { xs: '100svh', md: 820 },
+        minHeight: { xs: 520, md: 820 },
         display: 'flex',
         alignItems: 'center',
         // Full-bleed photo
@@ -73,21 +73,6 @@ export function Hero({
           {/* Text column */}
           <Stack spacing={{ xs: 2.5, md: 3 }} sx={{ textAlign: { xs: 'center', md: 'right' }, alignItems: { xs: 'center', md: 'stretch' } }}>
 
-            {/* Mobile-only logo — centered above title */}
-            <Box
-              component="img"
-              src="/logo-teva-trans.png"
-              alt="טבע לי"
-              sx={{
-                display: { xs: 'block', md: 'none' },
-                width: 120,
-                height: 'auto',
-                mx: 'auto',
-                mb: 1,
-                filter:
-                  'drop-shadow(0 0 10px rgba(255,255,255,0.95)) drop-shadow(0 0 30px rgba(255,255,255,0.6)) drop-shadow(0 8px 24px rgba(0,0,0,0.4))',
-              }}
-            />
 
             <Box
               sx={{
@@ -117,7 +102,7 @@ export function Hero({
                 fontFamily: 'var(--font-heebo), Heebo, system-ui, sans-serif',
                 color: '#fff',
                 fontWeight: 900,
-                fontSize: { xs: 36, sm: 52, md: 68, lg: 80 },
+                fontSize: { xs: 28, sm: 52, md: 68, lg: 80 },
                 lineHeight: 1.02,
                 letterSpacing: '-0.025em',
                 textShadow: '0 2px 18px rgba(0,0,0,0.35)',

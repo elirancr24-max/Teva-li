@@ -23,9 +23,9 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveCategory } from '@/store/slices/categoriesSlice';
 import { BRAND } from '@/lib/brand';
 
-const TOP_BAR_HEIGHT_MD = 88;
-const TOP_BAR_HEIGHT_XS = 80;
-const NAV_BAR_HEIGHT_XS = 60;
+const TOP_BAR_HEIGHT_MD = 80;
+const TOP_BAR_HEIGHT_XS = 60;
+const NAV_BAR_HEIGHT_XS = 52;
 const NAV_BAR_HEIGHT_MD = 52;
 
 export function Header() {
@@ -34,6 +34,7 @@ export function Header() {
   const [q, setQ] = useState('');
   const [locOpen, setLocOpen] = useState(false);
   const [scrolled, setScrolled] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
 
   useEffect(() => {
     function onScroll() { setScrolled(window.scrollY > 8); }
@@ -104,7 +105,7 @@ export function Header() {
               src="/logo-teva-trans.png"
               alt="טבע לי"
               sx={{
-                height: { xs: 72, md: 80 },
+                height: { xs: 52, md: 72 },
                 width: 'auto',
                 display: 'block',
                 filter:
@@ -113,7 +114,7 @@ export function Header() {
             />
           </Link>
 
-          {/* Center — Search bar */}
+          {/* Center — Search bar: full on desktop, icon on mobile */}
           <Box
             component="form"
             onSubmit={submitSearch}
@@ -121,13 +122,13 @@ export function Header() {
               flex: 1,
               maxWidth: 560,
               mx: 'auto',
-              display: 'flex',
+              display: { xs: 'none', md: 'flex' },
               alignItems: 'center',
               bgcolor: '#fff',
               borderRadius: '24px',
               px: 1.5,
               py: 0.5,
-              height: { xs: 44, md: 44 },
+              height: 44,
             }}
           >
             <IconButton
@@ -142,12 +143,7 @@ export function Header() {
               value={q}
               onChange={(e) => setQ(e.target.value)}
               placeholder="חיפוש מוצר"
-              sx={{
-                flex: 1,
-                fontSize: 15,
-                color: BRAND.ink,
-                px: 1,
-              }}
+              sx={{ flex: 1, fontSize: 15, color: BRAND.ink, px: 1 }}
               inputProps={{ 'aria-label': 'חיפוש מוצר' }}
             />
           </Box>
@@ -158,6 +154,14 @@ export function Header() {
             spacing={{ xs: 0.5, md: 1 }}
             sx={{ alignItems: 'center', flexShrink: 0 }}
           >
+            {/* Mobile: search icon toggle */}
+            <IconButton
+              onClick={() => setSearchOpen((v) => !v)}
+              sx={{ color: '#fff', display: { xs: 'inline-flex', md: 'none' } }}
+              aria-label="פתיחת חיפוש"
+            >
+              <SearchIcon />
+            </IconButton>
             <Button
               onClick={() => setLocOpen(true)}
               startIcon={<PlaceOutlinedIcon />}
@@ -189,13 +193,59 @@ export function Header() {
               sx={{ color: '#fff' }}
               aria-label="עגלה"
             >
-              <Badge badgeContent={cartCount} color="primary">
+              <Badge badgeContent={cartCount} color="error">
                 <ShoppingCartOutlinedIcon />
               </Badge>
             </IconButton>
           </Stack>
         </Box>
       </Box>
+
+      {/* Mobile expandable search bar */}
+      {searchOpen && (
+        <Box
+          component="form"
+          onSubmit={(e: React.FormEvent) => { submitSearch(e); setSearchOpen(false); }}
+          sx={{
+            display: { xs: 'flex', md: 'none' },
+            position: 'sticky',
+            top: TOP_BAR_HEIGHT_XS,
+            zIndex: 99,
+            bgcolor: BRAND.brown,
+            px: 2,
+            py: 1,
+            gap: 1,
+            alignItems: 'center',
+          }}
+        >
+          <Box
+            sx={{
+              flex: 1,
+              display: 'flex',
+              alignItems: 'center',
+              bgcolor: '#fff',
+              borderRadius: '24px',
+              px: 1.5,
+              height: 44,
+            }}
+          >
+            <IconButton type="submit" size="small" sx={{ color: BRAND.brown, p: 0.5 }} aria-label="חיפוש">
+              <SearchIcon sx={{ fontSize: 20 }} />
+            </IconButton>
+            <InputBase
+              autoFocus
+              value={q}
+              onChange={(e) => setQ(e.target.value)}
+              placeholder="חיפוש מוצר"
+              sx={{ flex: 1, fontSize: 15, color: BRAND.ink, px: 1 }}
+              inputProps={{ 'aria-label': 'חיפוש מוצר' }}
+            />
+          </Box>
+          <IconButton onClick={() => setSearchOpen(false)} sx={{ color: '#fff' }} aria-label="סגירת חיפוש">
+            <Box component="span" sx={{ fontSize: 18, lineHeight: 1 }}>✕</Box>
+          </IconButton>
+        </Box>
+      )}
 
       {/* Category nav bar */}
       <Box
@@ -301,7 +351,7 @@ function CategoryButton({
         py: { xs: '10px', md: '12px' },
         minHeight: { xs: 44, md: 'auto' },
         border: {
-          xs: active ? 'none' : `1.5px solid rgba(42,24,16,0.15)`,
+          xs: active ? 'none' : `1.5px solid rgba(15,40,24,0.20)`,
           md: 'none',
         },
         bgcolor: {
@@ -313,7 +363,7 @@ function CategoryButton({
           md: active ? BRAND.green : BRAND.ink,
         },
         boxShadow: {
-          xs: active ? `0 4px 16px rgba(15,40,24,0.3)` : '0 1px 4px rgba(0,0,0,0.08)',
+          xs: active ? `0 4px 16px rgba(15,40,24,0.3)` : '0 2px 6px rgba(0,0,0,0.10)',
           md: 'none',
         },
         position: 'relative',

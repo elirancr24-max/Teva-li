@@ -78,7 +78,7 @@ export function TrustBadges() {
         <Box
           sx={{
             display: { xs: 'flex', md: 'none' },
-            gap: 2,
+            gap: 1.5,
             overflowX: 'auto',
             scrollSnapType: 'x mandatory',
             pb: 1,
@@ -96,7 +96,7 @@ export function TrustBadges() {
               alignItems="center"
               textAlign="center"
               sx={{
-                flex: '0 0 170px',
+                flex: '0 0 155px',
                 scrollSnapAlign: 'start',
                 bgcolor: '#fff',
                 borderRadius: 3,

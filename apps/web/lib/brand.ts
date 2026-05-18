@@ -23,7 +23,7 @@ export const BRAND = {
   brownLight: '#3D5A45',
 
   cream: '#FFF9E5',
-  paper: '#FFFFFF',
+  paper: '#FDFCF8',
   ink: '#1A1612',
 } as const;
 
