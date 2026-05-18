@@ -39,7 +39,6 @@ export const metadata: Metadata = {
     title: 'טבע לי · פירות וירקות טריים עד הדלת',
     description:
       'פירות וירקות טריים נקטפים בבוקר. משלוח ₪20 בדימונה, ₪25 בשאר הערים. קיאקי פירות לאירועים.',
-    images: ['/logo-teva-trans.png'],
   },
   twitter: {
     card: 'summary_large_image',
