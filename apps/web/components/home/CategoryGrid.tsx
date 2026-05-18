@@ -91,12 +91,12 @@ export function CategoryGrid({ products: _products = [] }: CategoryGridProps) {
       }}
     >
       <Container maxWidth="xl" sx={{ position: 'relative', zIndex: 1 }}>
-        <Stack spacing={{ xs: 4, md: 5 }}>
+        <Stack spacing={{ xs: 3, md: 5 }}>
           <Stack
             direction={{ xs: 'column', md: 'row' }}
             alignItems={{ xs: 'center', md: 'flex-end' }}
             justifyContent="space-between"
-            spacing={{ xs: 1.5, md: 0 }}
+            spacing={{ xs: 1, md: 0 }}
             sx={{ textAlign: { xs: 'center', md: 'right' } }}
           >
             <Box>
@@ -148,24 +148,16 @@ export function CategoryGrid({ products: _products = [] }: CategoryGridProps) {
             </Typography>
           </Stack>
 
-          {/* Mobile: horizontal App Store scroll */}
+          {/* Mobile: editorial grid — wide tiles full-width, normal tiles paired 2-col */}
           <Box
             sx={{
-              display: { xs: 'flex', md: 'none' },
-              gap: 1.5,
-              overflowX: 'auto',
-              scrollSnapType: 'x mandatory',
-              scrollPaddingInlineStart: '16px',
-              pb: 1.5,
-              mx: -2,
-              px: 2,
-              scrollbarWidth: 'none',
-              '&::-webkit-scrollbar': { display: 'none' },
-              WebkitOverflowScrolling: 'touch',
+              display: { xs: 'grid', md: 'none' },
+              gridTemplateColumns: '1fr 1fr',
+              gap: 1.25,
             }}
           >
             {TILES.map((t, i) => (
-              <MobileTileCard key={t.slug} tile={t} index={i} />
+              <MobileTileCard key={t.slug} tile={t} index={i} totalCount={TILES.length} />
             ))}
           </Box>
 
@@ -365,29 +357,36 @@ function TileCard({ tile, index }: TileCardProps) {
   );
 }
 
-/* Mobile-only horizontal scroll tile */
-function MobileTileCard({ tile, index }: TileCardProps) {
-  const isFirst = index === 0;
-  const delay = index * 50;
+/* Mobile editorial grid tile — respects span metadata from TILES data */
+function MobileTileCard({
+  tile,
+  index,
+  totalCount,
+}: TileCardProps & { totalCount: number }) {
+  const isWide = (tile.span?.col ?? 1) >= 2;
+  const isFeatured = isWide && (tile.span?.row ?? 1) >= 2; // cups only
+  // Last tile that would sit alone in a row → force full width
+  const isLoneTile = index === totalCount - 1 && !isWide;
+  const spansTwo = isWide || isLoneTile;
+  const height = isFeatured ? 240 : 140;
 
   return (
     <Box
       component="a"
       href={`/shop?cat=${tile.slug}`}
       sx={{
-        flex: `0 0 ${isFirst ? 220 : 180}px`,
-        height: 220,
-        borderRadius: 3,
+        gridColumn: spansTwo ? 'span 2' : 'span 1',
+        height,
+        borderRadius: 2.5,
         overflow: 'hidden',
         position: 'relative',
-        scrollSnapAlign: 'start',
         textDecoration: 'none',
+        display: 'block',
         bgcolor: BRAND.brown,
-        boxShadow: '0 4px 16px rgba(15,40,24,0.14)',
-        transition: `opacity 500ms ease ${delay}ms`,
+        boxShadow: '0 3px 14px rgba(15,40,24,0.16)',
         '&:active': {
           transform: 'scale(0.97)',
-          transition: 'transform 120ms ease',
+          transition: 'transform 100ms ease',
         },
       }}
     >
@@ -397,38 +396,34 @@ function MobileTileCard({ tile, index }: TileCardProps) {
         alt={tile.name}
         loading="lazy"
         decoding="async"
-        sx={{
-          position: 'absolute',
-          inset: 0,
-          width: '100%',
-          height: '100%',
-          objectFit: 'cover',
-        }}
+        sx={{ position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover' }}
       />
+      {/* Dark gradient — stronger at bottom for text contrast */}
       <Box
         aria-hidden
         sx={{
           position: 'absolute',
           inset: 0,
           background:
-            'linear-gradient(to top, rgba(15,40,24,0.85) 0%, rgba(15,40,24,0.2) 55%, rgba(15,40,24,0) 80%)',
+            'linear-gradient(to top, rgba(10,30,18,0.88) 0%, rgba(10,30,18,0.40) 55%, transparent 100%)',
         }}
       />
-      {isFirst && (
+      {/* Featured badge — only on hero tile */}
+      {isFeatured && (
         <Box
           sx={{
             position: 'absolute',
-            top: 12,
-            right: 12,
-            bgcolor: 'rgba(255,255,255,0.92)',
+            top: 14,
+            right: 14,
+            bgcolor: 'rgba(255,255,255,0.95)',
             backdropFilter: 'blur(8px)',
             color: BRAND.greenDark,
-            fontSize: 9,
+            fontSize: 10,
             fontWeight: 900,
-            letterSpacing: '0.18em',
+            letterSpacing: '0.14em',
             textTransform: 'uppercase',
-            px: 1.25,
-            py: 0.5,
+            px: 1.5,
+            py: 0.6,
             borderRadius: 999,
             fontFamily: 'ui-monospace, SFMono-Regular, Menlo, monospace',
           }}
@@ -436,26 +431,26 @@ function MobileTileCard({ tile, index }: TileCardProps) {
           · בחירת הבית
         </Box>
       )}
-      <Box sx={{ position: 'absolute', bottom: 14, right: 14, left: 14, zIndex: 2 }}>
+      <Box sx={{ position: 'absolute', bottom: 13, right: 14, left: 14, zIndex: 2 }}>
         <Typography
           sx={{
-            fontSize: 17,
+            fontSize: isFeatured ? 22 : 17,
             fontWeight: 900,
             color: '#fff',
             lineHeight: 1.1,
             letterSpacing: '-0.02em',
-            textShadow: '0 2px 10px rgba(0,0,0,0.5)',
+            textShadow: '0 2px 12px rgba(0,0,0,0.7)',
           }}
         >
           {tile.name}
         </Typography>
         <Typography
           sx={{
-            fontSize: 11,
-            color: 'rgba(255,255,255,0.85)',
+            fontSize: 12,
+            color: 'rgba(255,255,255,0.88)',
             fontWeight: 600,
             mt: 0.5,
-            textShadow: '0 1px 6px rgba(0,0,0,0.4)',
+            textShadow: '0 1px 6px rgba(0,0,0,0.6)',
           }}
         >
           {tile.desc}

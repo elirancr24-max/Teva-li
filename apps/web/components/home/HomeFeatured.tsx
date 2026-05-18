@@ -39,7 +39,8 @@ export function HomeFeatured({ products, catalog, categories }: HomeFeaturedProp
     function onScroll() {
       if (!el) return;
       const cardW = el.scrollWidth / (products?.length ?? 1);
-      setActiveIdx(Math.round(el.scrollLeft / cardW));
+      // Chrome RTL: scrollLeft is 0 at start and goes negative as user scrolls left
+      setActiveIdx(Math.round(Math.abs(el.scrollLeft) / cardW));
     }
     el.addEventListener('scroll', onScroll, { passive: true });
     return () => el.removeEventListener('scroll', onScroll);

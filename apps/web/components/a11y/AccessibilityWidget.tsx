@@ -66,7 +66,7 @@ export function AccessibilityWidget() {
         aria-label="פתיחת תפריט נגישות"
         sx={{
           position: 'fixed',
-          bottom: { xs: 16, md: 24 },
+          bottom: { xs: 'calc(72px + env(safe-area-inset-bottom, 0px))', md: 24 },
           left: { xs: 16, md: 24 },
           zIndex: 1300,
           bgcolor: BRAND.green,

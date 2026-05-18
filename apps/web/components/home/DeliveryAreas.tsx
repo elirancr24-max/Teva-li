@@ -78,7 +78,6 @@ export function DeliveryAreas() {
               sx={{
                 mt: 1,
                 display: 'inline-flex',
-                alignSelf: 'flex-start',
                 alignItems: 'center',
                 gap: 1,
                 bgcolor: 'rgba(255,179,48,0.18)',

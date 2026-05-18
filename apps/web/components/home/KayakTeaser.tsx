@@ -74,7 +74,7 @@ export function KayakTeaser() {
                 textShadow: '0 2px 18px rgba(0,0,0,0.35)',
               }}
             >
-              קיאק פירות —
+              קיאק פירות
               <Box component="span" sx={{ color: BRAND.gold, display: 'block' }}>
                 האטרקציה של האירוע.
               </Box>

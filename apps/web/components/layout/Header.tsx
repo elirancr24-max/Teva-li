@@ -19,14 +19,37 @@ import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
+import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
+import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
+import SpaOutlinedIcon from '@mui/icons-material/SpaOutlined';
+import LocalFloristOutlinedIcon from '@mui/icons-material/LocalFloristOutlined';
+import FilterVintageOutlinedIcon from '@mui/icons-material/FilterVintageOutlined';
+import ShoppingBagOutlinedIcon from '@mui/icons-material/ShoppingBagOutlined';
+import LocalDiningOutlinedIcon from '@mui/icons-material/LocalDiningOutlined';
+import StorefrontOutlinedIcon from '@mui/icons-material/StorefrontOutlined';
 import { useAppDispatch, useAppSelector } from '@/store';
 import { setActiveCategory } from '@/store/slices/categoriesSlice';
 import { BRAND } from '@/lib/brand';
 
 const TOP_BAR_HEIGHT_MD = 80;
 const TOP_BAR_HEIGHT_XS = 60;
-const NAV_BAR_HEIGHT_XS = 52;
+const NAV_BAR_HEIGHT_XS = 56;
 const NAV_BAR_HEIGHT_MD = 52;
+
+/** Icon + color config per category slug — Wolt-style colored icon circles */
+interface CatIconCfg { Icon: React.ElementType; bg: string; color: string; }
+
+const CATEGORY_ICON: Record<string, CatIconCfg> = {
+  cups:       { Icon: LocalCafeOutlinedIcon,     bg: '#FFF3E0', color: '#E65100' },
+  vegetables: { Icon: SpaOutlinedIcon,           bg: '#E8F5E9', color: '#2E7D32' },
+  fruits:     { Icon: LocalFloristOutlinedIcon,  bg: '#FCE4EC', color: '#C62828' },
+  mushrooms:  { Icon: FilterVintageOutlinedIcon, bg: '#EFEBE9', color: '#5D4037' },
+  dried:      { Icon: ShoppingBagOutlinedIcon,   bg: '#FFF8E1', color: '#E65100' },
+  spreads:    { Icon: LocalDiningOutlinedIcon,   bg: '#EDE7F6', color: '#512DA8' },
+  grocery:    { Icon: StorefrontOutlinedIcon,    bg: '#E3F2FD', color: '#1565C0' },
+};
+const ICON_ALL:     CatIconCfg = { Icon: GridViewOutlinedIcon, bg: '#F1F8E9', color: BRAND.greenDark };
+const ICON_DEFAULT: CatIconCfg = { Icon: SpaOutlinedIcon,     bg: '#E8F5E9', color: BRAND.green };
 
 export function Header() {
   const router = useRouter();
@@ -74,6 +97,7 @@ export function Header() {
           height: { xs: TOP_BAR_HEIGHT_XS, md: TOP_BAR_HEIGHT_MD },
           display: 'flex',
           alignItems: 'center',
+          overflowY: 'hidden',
           transition: 'background-color 300ms ease, backdrop-filter 300ms ease',
         }}
       >
@@ -105,11 +129,13 @@ export function Header() {
               src="/logo-teva-trans.png"
               alt="טבע לי"
               sx={{
-                height: { xs: 52, md: 72 },
+                height: { xs: 44, md: 72 },
                 width: 'auto',
                 display: 'block',
-                filter:
-                  'drop-shadow(0 0 6px rgba(255,255,255,0.98)) drop-shadow(0 0 18px rgba(255,255,255,0.85)) drop-shadow(0 6px 12px rgba(0,0,0,0.4))',
+                filter: {
+                  xs: 'drop-shadow(0 0 5px rgba(255,255,255,0.98)) drop-shadow(0 0 14px rgba(255,255,255,0.8)) drop-shadow(0 2px 6px rgba(0,0,0,0.35))',
+                  md: 'drop-shadow(0 0 6px rgba(255,255,255,0.98)) drop-shadow(0 0 18px rgba(255,255,255,0.85)) drop-shadow(0 6px 12px rgba(0,0,0,0.4))',
+                },
               }}
             />
           </Link>
@@ -254,17 +280,15 @@ export function Header() {
           position: 'sticky',
           top: { xs: TOP_BAR_HEIGHT_XS, md: TOP_BAR_HEIGHT_MD },
           zIndex: 99,
-          bgcolor: { xs: BRAND.cream, md: scrolled ? 'rgba(255,255,255,0.96)' : '#fff' },
+          bgcolor: { xs: '#fff', md: scrolled ? 'rgba(255,255,255,0.96)' : '#fff' },
           backdropFilter: { xs: 'none', md: scrolled ? 'blur(16px)' : 'none' },
           WebkitBackdropFilter: { xs: 'none', md: scrolled ? 'blur(16px)' : 'none' },
           color: BRAND.ink,
           height: { xs: NAV_BAR_HEIGHT_XS, md: NAV_BAR_HEIGHT_MD },
-          borderBottom: { xs: `2px solid ${BRAND.gold}44`, md: '1px solid #eee' },
-          borderTop: { xs: `1px solid ${BRAND.gold}33`, md: 'none' },
+          borderBottom: '1px solid #eee',
           display: 'flex',
           alignItems: 'center',
           transition: 'background-color 300ms ease',
-          boxShadow: { xs: '0 4px 12px rgba(42,24,16,0.08)', md: 'none' },
         }}
       >
         <Box
@@ -274,10 +298,10 @@ export function Header() {
             width: '100%',
             maxWidth: 'xl',
             mx: 'auto',
-            px: { xs: 1.5, md: 2 },
+            px: { xs: 1.25, md: 2 },
             display: 'flex',
             alignItems: 'center',
-            gap: { xs: 1.25, md: 0 },
+            gap: { xs: 0.75, md: 0 },
             overflowX: 'auto',
             scrollbarWidth: 'none',
             '&::-webkit-scrollbar': { display: 'none' },
@@ -288,6 +312,7 @@ export function Header() {
             label="כל המוצרים"
             active={!activeCategoryId}
             onClick={() => handleCategoryClick(null)}
+            iconCfg={ICON_ALL}
           />
           {categories.map((c) => (
             <CategoryButton
@@ -295,6 +320,7 @@ export function Header() {
               label={c.name}
               active={activeCategoryId === c.id}
               onClick={() => handleCategoryClick(c.id, c.slug)}
+              iconCfg={CATEGORY_ICON[c.slug] ?? ICON_DEFAULT}
             />
           ))}
         </Box>
@@ -322,11 +348,15 @@ function CategoryButton({
   label,
   active,
   onClick,
+  iconCfg,
 }: {
   label: string;
   active: boolean;
   onClick: () => void;
+  iconCfg: CatIconCfg;
 }) {
+  const { Icon, bg, color } = iconCfg;
+
   return (
     <Box
       component="button"
@@ -334,64 +364,48 @@ function CategoryButton({
       aria-selected={active}
       onClick={onClick}
       sx={{
-        /* Mobile: pill chip */
         display: 'inline-flex',
-        alignItems: 'center',
-        justifyContent: 'center',
         cursor: 'pointer',
         fontFamily: 'inherit',
-        whiteSpace: 'nowrap',
         flexShrink: 0,
-        transition: 'background-color 160ms, color 160ms, box-shadow 160ms',
-        /* Mobile styles — pill */
-        borderRadius: { xs: 999, md: 0 },
-        fontSize: { xs: 15, md: 15 },
-        fontWeight: active ? 800 : 600,
-        px: { xs: '18px', md: '18px' },
-        py: { xs: '10px', md: '12px' },
-        minHeight: { xs: 44, md: 'auto' },
-        border: {
-          xs: active ? 'none' : `1.5px solid rgba(15,40,24,0.20)`,
-          md: 'none',
-        },
-        bgcolor: {
-          xs: active ? BRAND.green : '#fff',
-          md: 'transparent',
-        },
-        color: {
-          xs: active ? '#fff' : BRAND.brown,
-          md: active ? BRAND.green : BRAND.ink,
-        },
-        boxShadow: {
-          xs: active ? `0 4px 16px rgba(15,40,24,0.3)` : '0 2px 6px rgba(0,0,0,0.10)',
-          md: 'none',
-        },
         position: 'relative',
-        /* Desktop: underline indicator */
+        alignItems: 'center',
+        justifyContent: 'center',
+        gap: { xs: 0.75, md: 0 },
+        // Mobile: pill button; Desktop: underline tab
+        border: { xs: `1.5px solid ${active ? BRAND.green : '#e5e5e5'}`, md: 'none' },
+        borderRadius: { xs: 999, md: 0 },
+        bgcolor: { xs: active ? BRAND.green : '#fff', md: 'transparent' },
+        px: { xs: 1.5, md: '18px' },
+        py: { xs: 0.75, md: '12px' },
+        fontSize: { xs: 13.5, md: 15 },
+        fontWeight: active ? 800 : 600,
+        color: { xs: active ? '#fff' : BRAND.brown, md: active ? BRAND.green : BRAND.ink },
+        whiteSpace: 'nowrap',
+        transition: 'background-color 160ms, color 160ms, border-color 160ms',
+        boxShadow: { xs: active ? '0 4px 12px rgba(76,174,58,0.32)' : 'none', md: 'none' },
+        /* Desktop: green underline */
         '&::after': {
           content: '""',
           display: { xs: 'none', md: 'block' },
           position: 'absolute',
-          left: 0,
-          right: 0,
-          bottom: 0,
+          left: 0, right: 0, bottom: 0,
           height: '3px',
           bgcolor: active ? BRAND.green : 'transparent',
           transition: 'background-color 160ms',
         },
         '&:hover': {
-          bgcolor: {
-            xs: active ? BRAND.greenDark : 'rgba(0,0,0,0.10)',
-            md: BRAND.greenLight,
-          },
-          color: {
-            xs: active ? '#fff' : BRAND.ink,
-            md: BRAND.green,
-          },
+          color: { xs: active ? '#fff' : BRAND.greenDark, md: BRAND.green },
+          bgcolor: { xs: active ? BRAND.greenDark : '#f5f5f5', md: 'rgba(76,174,58,0.07)' },
         },
       }}
     >
-      {label}
+      <Icon sx={{
+        fontSize: { xs: 18, md: 0 },
+        display: { xs: 'inline-flex', md: 'none' },
+        color: active ? '#fff' : color,
+      }} />
+      <Box component="span">{label}</Box>
     </Box>
   );
 }

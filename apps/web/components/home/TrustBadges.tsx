@@ -23,7 +23,7 @@ const BADGES: BadgeWithColor[] = [
   {
     Icon: LocalFloristOutlinedIcon,
     label: 'FRESHNESS',
-    title: 'טרי מהדשא',
+    title: 'טרי מהחממה',
     desc: 'נקטף בבוקר, מגיע אליכם באותו יום',
     iconBg: '#E8F5DC',
     iconColor: BRAND.greenDark,
