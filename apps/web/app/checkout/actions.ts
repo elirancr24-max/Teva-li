@@ -66,7 +66,7 @@ function buildWhatsAppMessage(args: {
   }
   lines.push(``);
   lines.push(`סכום ביניים: ${shekel(args.subtotal)}`);
-  lines.push(`משלוח: ${args.delivery === 0 ? 'חינם' : shekel(args.delivery)}`);
+  lines.push(`משלוח: ${shekel(args.delivery)}`);
   lines.push(`*סה"כ: ${shekel(args.total)}*`);
   lines.push(``);
   lines.push(`אשמח לאישור ופרטי תשלום (Bit / העברה בנקאית). תודה!`);

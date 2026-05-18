@@ -25,18 +25,16 @@ const INPUT_SX = {
   },
 };
 
-export function ContactForm({ to }: { to: string }) {
+export function ContactForm({ whatsapp }: { whatsapp: string }) {
   const [name, setName] = useState('');
   const [email, setEmail] = useState('');
   const [message, setMessage] = useState('');
 
   function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
-    const subject = encodeURIComponent(`פנייה מאתר טבע לי — ${name || 'ללא שם'}`);
-    const body = encodeURIComponent(
-      `שם: ${name}\nאימייל: ${email}\n\nהודעה:\n${message}\n\n— נשלח מהאתר`,
-    );
-    window.location.href = `mailto:${to}?subject=${subject}&body=${body}`;
+    const cleaned = whatsapp.replace(/[^0-9]/g, '');
+    const text = `פנייה מאתר טבע לי\nשם: ${name}${email ? `\nאימייל: ${email}` : ''}\n\n${message}`;
+    window.open(`https://wa.me/${cleaned}?text=${encodeURIComponent(text)}`, '_blank', 'noopener,noreferrer');
   }
 
   return (
@@ -106,7 +104,7 @@ export function ContactForm({ to }: { to: string }) {
           שליחה
         </Button>
         <Typography sx={{ fontSize: 12, color: 'text.secondary', textAlign: 'center' }}>
-          הטופס יפתח את אפליקציית האימייל שלך עם ההודעה מוכנה.
+          הודעתכם תיפתח ב-WhatsApp לשליחה ישירה אלינו.
         </Typography>
       </Stack>
     </Box>

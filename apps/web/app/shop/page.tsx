@@ -7,7 +7,7 @@ import { getCatalog } from '@/lib/data/products';
 
 export const metadata: Metadata = {
   title: 'קטלוג',
-  description: 'פירות וירקות טריים. נחתכים בבוקר, נארזים במקרר. משלוח חינם בדימונה.',
+  description: 'פירות וירקות טריים. נחתכים בבוקר, נארזים במקרר. משלוח ₪20 בדימונה, ₪25 בשאר הערים.',
 };
 
 type SearchParams = Promise<{ cat?: string }>;

@@ -89,10 +89,10 @@ export default async function ContactPage() {
                   כתבו לנו הודעה.
                 </Typography>
                 <Typography sx={{ fontSize: 14, color: 'text.secondary', lineHeight: 1.6 }}>
-                  הטופס יפתח את אפליקציית האימייל שלכם עם ההודעה מוכנה לשליחה אלינו.
+                  מלאו את הטופס ונפתח לכם WhatsApp עם ההודעה מוכנה — שליחה בלחיצה אחת.
                 </Typography>
               </Stack>
-              <ContactForm to={settings.business_email} />
+              <ContactForm whatsapp={settings.business_whatsapp} />
             </Stack>
           </Box>
 

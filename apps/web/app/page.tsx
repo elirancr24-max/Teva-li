@@ -114,7 +114,7 @@ export default async function Home() {
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={{ xs: 3, sm: 2 }} justifyContent="center">
             {[
               { num: '1', emoji: '🛒', title: 'בוחרים ומזמינים', desc: 'גולשים בקטלוג, בוחרים מוצרים ושולחים הזמנה בוואטסאפ' },
-              { num: '2', emoji: '✅', title: 'מאשרים ומשלמים', desc: 'אנחנו מאשרים את ההזמנה ומשלמים בביט או העברה בנקאית' },
+              { num: '2', emoji: '✅', title: 'מאשרים ומשלמים', desc: 'אנחנו מאשרים את ההזמנה ותשלמו בביט או העברה בנקאית' },
               { num: '3', emoji: '🚀', title: 'מקבלים עד חצי שעה', desc: 'נקטף בבוקר, מגיע אליכם טרי ורענן ישירות לדלת' },
             ].map(({ num, emoji, title, desc }) => (
               <Box key={num} sx={{ flex: 1, textAlign: 'center', position: 'relative' }}>

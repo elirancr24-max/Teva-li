@@ -12,7 +12,7 @@ export async function generateMetadata({ params }: Params): Promise<Metadata> {
   const { products } = await getCatalog();
   const product = products.find((p) => p.slug === slug);
   if (!product) return { title: 'מוצר' };
-  const desc = `${product.name} טרי במשלוח חינם בדימונה מטבע לי. ${product.weight ?? ''} · ₪${(product.priceCents / 100).toFixed(2)}.`;
+  const desc = `${product.name} טרי עם משלוח עד הדלת מטבע לי. ${product.weight ?? ''} · ₪${(product.priceCents / 100).toFixed(2)}.`;
   return {
     title: product.name,
     description: desc,

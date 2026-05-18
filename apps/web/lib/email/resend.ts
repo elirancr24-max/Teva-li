@@ -78,7 +78,7 @@ export async function sendNewOrderEmail(args: NewOrderEmailArgs): Promise<void> 
       </table>
       <div style="margin-top:14px;padding-top:14px;border-top:2px solid #0F2818">
         <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;margin-bottom:4px"><span>סכום ביניים</span><span>${shekel(args.subtotalCents)}</span></div>
-        <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;margin-bottom:8px"><span>משלוח</span><span>${args.deliveryCents === 0 ? 'חינם' : shekel(args.deliveryCents)}</span></div>
+        <div style="display:flex;justify-content:space-between;font-size:13px;color:#444;margin-bottom:8px"><span>משלוח</span><span>${shekel(args.deliveryCents)}</span></div>
         <div style="display:flex;justify-content:space-between;font-size:18px;font-weight:800;color:#4F8C2E"><span>סה"כ</span><span>${shekel(args.totalCents)}</span></div>
       </div>
       ${

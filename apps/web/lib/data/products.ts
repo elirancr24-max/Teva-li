@@ -66,9 +66,9 @@ export async function getCatalog(): Promise<{ products: Product[]; categories: C
       return { products: mockProducts, categories: mockCategories };
     }
 
-    const products: Product[] = (rawProducts as Parameters<typeof dbProductToProduct>[0][]).map(
-      dbProductToProduct,
-    );
+    const products: Product[] = (rawProducts as Parameters<typeof dbProductToProduct>[0][])
+      .map(dbProductToProduct)
+      .filter((p) => !p.name.includes('דמי משלוח'));
 
     // Only surface categories that actually have at least one active product.
     const activeCategoryIds = new Set(products.map((p) => p.categoryId).filter(Boolean));

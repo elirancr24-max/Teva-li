@@ -62,15 +62,25 @@ export function CartView() {
         </Typography>
 
         {items.length === 0 ? (
-          <Paper sx={{ p: 6, textAlign: 'center' }}>
+          <Paper sx={{ p: { xs: 4, md: 6 }, textAlign: 'center' }}>
             <ShoppingCartOutlinedIcon sx={{ fontSize: 64, opacity: 0.4, mb: 2 }} />
             <Typography sx={{ fontSize: 18, fontWeight: 600, mb: 1 }}>הסל ריק</Typography>
             <Typography sx={{ color: 'text.secondary', mb: 3 }}>
               התחילו להוסיף מוצרים לקטלוג
             </Typography>
-            <Button component={Link} href="/shop" variant="contained" size="large">
+            <Button component={Link} href="/shop" variant="contained" size="large" sx={{ mb: 4 }}>
               לקטלוג המוצרים
             </Button>
+            <Box sx={{ mt: 1, p: 2.5, bgcolor: 'grey.50', borderRadius: 2, border: '1px solid', borderColor: 'divider', maxWidth: 340, mx: 'auto', textAlign: 'right' }}>
+              <Typography sx={{ fontSize: 13, fontWeight: 700, mb: 1.25, color: 'text.primary' }}>
+                מידע על משלוח
+              </Typography>
+              <Stack spacing={0.75}>
+                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>🚫 מינימום הזמנה: ₪50</Typography>
+                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>📦 דימונה: ₪20 (מעל ₪150) / ₪35</Typography>
+                <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>📦 ירוחם / באר שבע: ₪25 (מעל ₪150) / ₪40</Typography>
+              </Stack>
+            </Box>
           </Paper>
         ) : (
           <Stack direction={{ xs: 'column', md: 'row' }} spacing={3}>
