@@ -118,50 +118,31 @@ export function Header() {
             style={{
               display: 'flex',
               alignItems: 'center',
-              gap: 8,
               textDecoration: 'none',
-              color: 'inherit',
               flexShrink: 0,
             }}
           >
-            {/* Leaf icon circle */}
-            <Box sx={{
-              width: { xs: 40, md: 52 },
-              height: { xs: 40, md: 52 },
-              borderRadius: '50%',
-              bgcolor: BRAND.green,
-              display: 'flex',
-              alignItems: 'center',
-              justifyContent: 'center',
-              fontSize: { xs: 20, md: 26 },
-              flexShrink: 0,
-              boxShadow: '0 2px 10px rgba(0,0,0,0.30)',
-            }}>
-              🌿
-            </Box>
-            {/* Brand name */}
-            <Box sx={{ display: 'flex', flexDirection: 'column', lineHeight: 1.1 }}>
-              <Box component="span" sx={{
-                fontFamily: 'var(--font-rubik)',
-                fontSize: { xs: 20, md: 26 },
-                fontWeight: 900,
-                color: '#fff',
-                letterSpacing: '-0.02em',
-                display: 'block',
-              }}>
-                טבע{' '}
-                <Box component="span" sx={{ color: BRAND.green }}>לי</Box>
-              </Box>
-              <Box component="span" sx={{
-                fontFamily: 'var(--font-rubik)',
-                fontSize: { xs: 10, md: 11 },
-                fontWeight: 500,
-                color: 'rgba(255,255,255,0.65)',
-                letterSpacing: '0.08em',
-                display: { xs: 'none', md: 'block' },
-              }}>
-                פירות וירקות טריים
-              </Box>
+            <Box
+              sx={{
+                bgcolor: '#fff',
+                borderRadius: { xs: '10px', md: '14px' },
+                p: { xs: '3px 6px', md: '4px 8px' },
+                display: 'flex',
+                alignItems: 'center',
+                boxShadow: '0 2px 10px rgba(0,0,0,0.28)',
+              }}
+            >
+              <Box
+                component="img"
+                src="/logo-brand.png"
+                alt="טבע לי"
+                sx={{
+                  height: { xs: 46, md: 64 },
+                  width: 'auto',
+                  display: 'block',
+                  objectFit: 'contain',
+                }}
+              />
             </Box>
           </Link>
 
