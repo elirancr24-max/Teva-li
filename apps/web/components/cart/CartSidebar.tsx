@@ -41,15 +41,16 @@ export function CartSidebar() {
   const dispatch = useAppDispatch();
   const items = useAppSelector((s) => s.cart.items);
 
-  const total = useMemo(
+  const subtotal = useMemo(
     () => items.reduce((sum, i) => sum + i.product.priceCents * i.amount, 0),
     [items],
   );
 
-  const belowMinimum = total < MIN_ORDER_CENTS;
-  const delivery = belowMinimum ? null : computeDeliveryCents(total);
-  const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
-  const progressPct = Math.min(100, (total / FREE_DELIVERY_THRESHOLD) * 100);
+  const belowMinimum = subtotal < MIN_ORDER_CENTS;
+  const delivery = belowMinimum ? computeDeliveryCents(MIN_ORDER_CENTS) : computeDeliveryCents(subtotal);
+  const grandTotal = subtotal + (belowMinimum ? 0 : delivery);
+  const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+  const progressPct = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100);
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
   const isEmpty = items.length === 0;
@@ -105,7 +106,7 @@ export function CartSidebar() {
             letterSpacing: '-0.01em',
           }}
         >
-          {formatPrice(total)}
+          {formatPrice(belowMinimum ? subtotal : grandTotal)}
         </Typography>
 
         {/* Delivery progress toward ₪150 */}
@@ -130,14 +131,14 @@ export function CartSidebar() {
             />
             <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', mt: 0.75, fontWeight: 600 }}>
               {belowMinimum
-                ? `🚫 נדרש מינימום ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - total)})`
+                ? `🚫 נדרש מינימום ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - subtotal)})`
                 : towardsThreshold > 0
                 ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25`
                 : `✅ משלוח ₪25`}
             </Typography>
-            {delivery !== null && (
+            {!belowMinimum && (
               <Typography sx={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', mt: 0.25 }}>
-                דמי משלוח: {formatPrice(delivery)}
+                כולל משלוח {formatPrice(delivery)}
               </Typography>
             )}
           </Box>
@@ -186,7 +187,7 @@ export function CartSidebar() {
       </Box>
 
       {/* Scrollable middle */}
-      <Box sx={{ flex: 1, overflowY: 'auto', p: isEmpty ? 3 : 1.5 }}>
+      <Box sx={{ flex: 1, overflowY: 'auto', p: isEmpty ? 3 : 1.5, pb: isEmpty ? 3 : 0.5 }}>
         {isEmpty ? (
           <Stack
             alignItems="center"
@@ -295,6 +296,58 @@ export function CartSidebar() {
           </Stack>
         )}
       </Box>
+
+      {/* Price summary footer */}
+      {!isEmpty && (
+        <Box
+          sx={{
+            borderTop: '1px solid',
+            borderColor: 'grey.200',
+            p: 1.5,
+            bgcolor: 'grey.50',
+            flexShrink: 0,
+          }}
+        >
+          <Stack spacing={0.75}>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>סכום מוצרים</Typography>
+              <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>{formatPrice(subtotal)}</Typography>
+            </Stack>
+            <Stack direction="row" justifyContent="space-between">
+              <Typography sx={{ fontSize: 12, color: 'text.secondary' }}>
+                דמי משלוח
+                {towardsThreshold > 0 && !belowMinimum && (
+                  <Typography component="span" sx={{ fontSize: 10, color: BRAND.gold, fontWeight: 700, mr: 0.5 }}>
+                    {' '}הוסף {formatPrice(towardsThreshold)} לחסוך ₪15
+                  </Typography>
+                )}
+              </Typography>
+              <Typography
+                sx={{
+                  fontSize: 12,
+                  fontWeight: 700,
+                  color: belowMinimum ? 'text.disabled' : delivery === 2500 ? BRAND.green : 'text.primary',
+                }}
+              >
+                {belowMinimum ? '—' : formatPrice(delivery)}
+              </Typography>
+            </Stack>
+            <Box sx={{ borderTop: '1px solid', borderColor: 'grey.300', pt: 0.75, mt: 0.25 }}>
+              <Stack direction="row" justifyContent="space-between">
+                <Typography sx={{ fontSize: 14, fontWeight: 800 }}>סה״כ לתשלום</Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 800, color: BRAND.green }}>
+                  {belowMinimum ? formatPrice(subtotal) : formatPrice(grandTotal)}
+                </Typography>
+              </Stack>
+              {belowMinimum && (
+                <Typography sx={{ fontSize: 10, color: 'error.main', fontWeight: 600, mt: 0.5 }}>
+                  + דמי משלוח {formatPrice(delivery)} יחושבו לאחר השלמת המינימום
+                </Typography>
+              )}
+            </Box>
+          </Stack>
+        </Box>
+      )}
     </Paper>
   );
 }

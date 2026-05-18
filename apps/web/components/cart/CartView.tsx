@@ -30,6 +30,11 @@ import {
   removeItem,
 } from '@/store/slices/cartSlice';
 import { BRAND } from '@/lib/brand';
+import {
+  MIN_ORDER_CENTS,
+  FREE_DELIVERY_THRESHOLD,
+  computeDeliveryCents,
+} from '@/lib/delivery';
 
 const UNIT_LABEL: Record<string, string> = {
   kg: 'ק״ג',
@@ -221,24 +226,28 @@ export function CartView() {
             <Paper sx={{ width: { xs: '100%', md: 320 }, p: { xs: 2, md: 3 }, height: 'fit-content' }}>
               <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>סיכום</Typography>
 
-              {/* Free delivery progress bar */}
+              {/* Delivery progress bar */}
               {(() => {
-                const FREE_DELIVERY_MIN = 15000; // ₪150 in cents
-                const remaining = FREE_DELIVERY_MIN - total;
-                const progress = Math.min(100, Math.round((total / FREE_DELIVERY_MIN) * 100));
+                const belowMin = total < MIN_ORDER_CENTS;
+                const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
+                const progress = Math.min(100, Math.round((total / FREE_DELIVERY_THRESHOLD) * 100));
                 return (
                   <Box sx={{ mb: 2 }}>
-                    {remaining > 0 ? (
-                      <Typography sx={{ fontSize: 13, color: 'text.secondary', mb: 0.75 }}>
-                        עוד <Box component="span" sx={{ fontWeight: 800, color: BRAND.brown }}>{formatPrice(remaining)}</Box> למשלוח חינם
-                      </Typography>
-                    ) : (
-                      <Typography sx={{ fontSize: 13, fontWeight: 700, color: BRAND.green, mb: 0.75 }}>
-                        ✓ זכאי למשלוח חינם!
-                      </Typography>
-                    )}
+                    <Typography sx={{ fontSize: 13, color: belowMin ? 'error.main' : towardsThreshold > 0 ? '#b8860b' : BRAND.green, fontWeight: 700, mb: 0.75 }}>
+                      {belowMin
+                        ? `🚫 מינימום הזמנה ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - total)})`
+                        : towardsThreshold > 0
+                        ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25`
+                        : `✅ משלוח ₪25`}
+                    </Typography>
                     <Box sx={{ width: '100%', height: 6, bgcolor: 'grey.200', borderRadius: 999, overflow: 'hidden' }}>
-                      <Box sx={{ width: `${progress}%`, height: '100%', bgcolor: BRAND.green, borderRadius: 999, transition: 'width 400ms ease' }} />
+                      <Box sx={{
+                        width: `${progress}%`,
+                        height: '100%',
+                        bgcolor: belowMin ? '#ef5350' : towardsThreshold > 0 ? '#f59e0b' : BRAND.green,
+                        borderRadius: 999,
+                        transition: 'width 400ms ease',
+                      }} />
                     </Box>
                   </Box>
                 );
@@ -248,18 +257,41 @@ export function CartView() {
                 <Typography>סכום ביניים</Typography>
                 <Typography>{formatPrice(total)}</Typography>
               </Stack>
-              <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
-                <Typography>משלוח</Typography>
-                <Typography sx={{ color: BRAND.green, fontWeight: 700 }}>חינם בדימונה</Typography>
-              </Stack>
-              <Divider sx={{ my: 2 }} />
-              <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
-                <Typography sx={{ fontWeight: 700 }}>סה״כ</Typography>
-                <Typography sx={{ fontWeight: 800, fontSize: 18, color: BRAND.green }}>
-                  {formatPrice(total)}
-                </Typography>
-              </Stack>
-              <Button component={Link} href="/checkout" variant="contained" fullWidth size="large">
+              {(() => {
+                const belowMin = total < MIN_ORDER_CENTS;
+                const delivery = belowMin ? computeDeliveryCents(MIN_ORDER_CENTS) : computeDeliveryCents(total);
+                const grandTotal = total + (belowMin ? 0 : delivery);
+                return (
+                  <>
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
+                      <Typography>משלוח</Typography>
+                      <Typography sx={{ fontWeight: 700, color: belowMin ? 'text.disabled' : delivery === 2500 ? BRAND.green : 'text.primary' }}>
+                        {belowMin ? '—' : formatPrice(delivery)}
+                      </Typography>
+                    </Stack>
+                    <Divider sx={{ my: 1.5 }} />
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                      <Typography sx={{ fontWeight: 700 }}>סה״כ</Typography>
+                      <Typography sx={{ fontWeight: 800, fontSize: 18, color: BRAND.green }}>
+                        {belowMin ? formatPrice(total) : formatPrice(grandTotal)}
+                      </Typography>
+                    </Stack>
+                    {belowMin && (
+                      <Typography sx={{ fontSize: 11, color: 'error.main', fontWeight: 600, mb: 1.5 }}>
+                        + דמי משלוח {formatPrice(delivery)} יחושבו לאחר השלמת המינימום
+                      </Typography>
+                    )}
+                  </>
+                );
+              })()}
+              <Button
+                component={Link}
+                href="/checkout"
+                variant="contained"
+                fullWidth
+                size="large"
+                disabled={total < MIN_ORDER_CENTS}
+              >
                 המשך לתשלום
               </Button>
             </Paper>
