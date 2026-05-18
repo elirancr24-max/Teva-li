@@ -21,8 +21,12 @@ import { useAppDispatch, useAppSelector } from '@/store';
 import { clearCart } from '@/store/slices/cartSlice';
 import { createWhatsAppOrder } from '@/app/checkout/actions';
 import { BRAND } from '@/lib/brand';
-
-const DELIVERY_FEE = 2500;
+import {
+  CITIES_ALLOWED,
+  MIN_ORDER_CENTS,
+  FREE_DELIVERY_THRESHOLD,
+  computeDeliveryCents,
+} from '@/lib/delivery';
 
 export function CheckoutForm() {
   const router = useRouter();
@@ -39,7 +43,7 @@ export function CheckoutForm() {
     phone: '',
     email: '',
     address: '',
-    city: 'דימונה',
+    city: CITIES_ALLOWED[0],
     deliveryDate: '',
     deliveryWindow: '09:00-12:00',
     notes: '',
@@ -47,8 +51,10 @@ export function CheckoutForm() {
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
 
-  const delivery = form.city === 'דימונה' ? 0 : DELIVERY_FEE;
+  const belowMinimum = subtotal < MIN_ORDER_CENTS;
+  const delivery = belowMinimum ? 0 : computeDeliveryCents(subtotal);
   const total = subtotal + delivery;
+  const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
 
@@ -59,14 +65,13 @@ export function CheckoutForm() {
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
     setError(null);
-    if (items.length === 0) {
-      setError('הסל ריק');
-      return;
-    }
+    if (items.length === 0) { setError('הסל ריק'); return; }
+    if (belowMinimum) { setError('מינימום הזמנה ₪50'); return; }
     setSubmitting(true);
 
     const result = await createWhatsAppOrder({
       ...form,
+      email: form.email || undefined,
       items: items.map((i) => ({
         product_id: i.productId,
         qty: Math.max(1, Math.round(i.amount)),
@@ -83,14 +88,11 @@ export function CheckoutForm() {
       return;
     }
 
-    // Clear cart, navigate to success page, then open WhatsApp.
     dispatch(clearCart());
-    const successUrl = `/checkout/success?order=${result.orderId}`;
-    // Open WhatsApp in a new tab so the success page still loads.
     if (typeof window !== 'undefined') {
       window.open(result.whatsappUrl, '_blank', 'noopener,noreferrer');
     }
-    router.push(successUrl);
+    router.push(`/checkout/success?order=${result.orderId}`);
   }
 
   if (items.length === 0) {
@@ -117,6 +119,12 @@ export function CheckoutForm() {
         <Typography variant="h1" sx={{ fontSize: { xs: 26, md: 32 }, fontWeight: 800, mb: { xs: 2, md: 3 }, textAlign: { xs: 'center', md: 'right' } }}>
           סיום הזמנה
         </Typography>
+
+        {belowMinimum && (
+          <Alert severity="warning" sx={{ mb: 2 }}>
+            מינימום הזמנה ₪50 — הוסף עוד {formatPrice(MIN_ORDER_CENTS - subtotal)} לסל כדי להמשיך
+          </Alert>
+        )}
 
         <Stack direction={{ xs: 'column-reverse', md: 'row' }} spacing={3} alignItems="flex-start">
           <Paper sx={{ flex: 1, p: { xs: 2, md: 4 }, width: '100%' }}>
@@ -145,7 +153,7 @@ export function CheckoutForm() {
                 </Stack>
                 <TextField
                   name="email"
-                  label="דוא״ל (לא חובה)"
+                  label='דוא״ל (לא חובה)'
                   type="email"
                   value={form.email}
                   onChange={handleChange}
@@ -167,11 +175,16 @@ export function CheckoutForm() {
                   <TextField
                     name="city"
                     label="עיר"
+                    select
                     value={form.city}
                     onChange={handleChange}
                     required
                     fullWidth
-                  />
+                  >
+                    {CITIES_ALLOWED.map((c) => (
+                      <MenuItem key={c} value={c}>{c}</MenuItem>
+                    ))}
+                  </TextField>
                   <TextField
                     name="deliveryDate"
                     label="תאריך משלוח"
@@ -207,7 +220,6 @@ export function CheckoutForm() {
 
                 {error && <Alert severity="error">{error}</Alert>}
 
-                {/* Payment methods */}
                 <Box
                   sx={{
                     border: `1px solid rgba(0,0,0,0.12)`,
@@ -238,7 +250,7 @@ export function CheckoutForm() {
                   type="submit"
                   variant="contained"
                   size="large"
-                  disabled={submitting}
+                  disabled={submitting || belowMinimum}
                   startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <WhatsAppIcon />}
                   sx={{
                     bgcolor: BRAND.green,
@@ -254,6 +266,7 @@ export function CheckoutForm() {
             </Box>
           </Paper>
 
+          {/* Order summary */}
           <Paper sx={{ width: { xs: '100%', md: 320 }, p: { xs: 2, md: 3 }, height: 'fit-content' }}>
             <Typography sx={{ fontSize: 18, fontWeight: 700, mb: 2 }}>הזמנתך</Typography>
             <Stack spacing={1}>
@@ -269,14 +282,32 @@ export function CheckoutForm() {
               ))}
             </Stack>
             <Divider sx={{ my: 2 }} />
+
+            {/* Delivery tier info */}
+            {!belowMinimum && towardsThreshold > 0 && (
+              <Box
+                sx={{
+                  mb: 1.5,
+                  p: 1.25,
+                  borderRadius: 1.5,
+                  bgcolor: 'rgba(255,179,48,0.1)',
+                  border: '1px solid rgba(255,179,48,0.3)',
+                }}
+              >
+                <Typography sx={{ fontSize: 12, fontWeight: 700, color: '#b8860b' }}>
+                  הוסף {formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25
+                </Typography>
+              </Box>
+            )}
+
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
               <Typography sx={{ fontSize: 13 }}>סכום ביניים</Typography>
               <Typography sx={{ fontSize: 13 }}>{formatPrice(subtotal)}</Typography>
             </Stack>
             <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
               <Typography sx={{ fontSize: 13 }}>משלוח</Typography>
-              <Typography sx={{ fontSize: 13, color: delivery === 0 ? BRAND.green : undefined, fontWeight: 700 }}>
-                {delivery === 0 ? 'חינם' : formatPrice(delivery)}
+              <Typography sx={{ fontSize: 13, fontWeight: 700 }}>
+                {formatPrice(delivery)}
               </Typography>
             </Stack>
             <Divider sx={{ my: 1 }} />
@@ -286,6 +317,24 @@ export function CheckoutForm() {
                 {formatPrice(total)}
               </Typography>
             </Stack>
+
+            {/* Fee tiers legend */}
+            <Box sx={{ mt: 2, pt: 1.5, borderTop: '1px solid', borderColor: 'divider' }}>
+              <Typography sx={{ fontSize: 11, color: 'text.secondary', mb: 0.75, fontWeight: 700 }}>
+                מדרגות משלוח:
+              </Typography>
+              <Stack spacing={0.5}>
+                <Typography sx={{ fontSize: 11, color: subtotal >= FREE_DELIVERY_THRESHOLD ? BRAND.green : 'text.secondary', fontWeight: subtotal >= FREE_DELIVERY_THRESHOLD ? 700 : 400 }}>
+                  {subtotal >= FREE_DELIVERY_THRESHOLD ? '✅' : '○'} מעל ₪150 — משלוח ₪25
+                </Typography>
+                <Typography sx={{ fontSize: 11, color: (!belowMinimum && subtotal < FREE_DELIVERY_THRESHOLD) ? '#b8860b' : 'text.secondary', fontWeight: (!belowMinimum && subtotal < FREE_DELIVERY_THRESHOLD) ? 700 : 400 }}>
+                  {(!belowMinimum && subtotal < FREE_DELIVERY_THRESHOLD) ? '⚡' : '○'} ₪50–₪149 — משלוח ₪40
+                </Typography>
+                <Typography sx={{ fontSize: 11, color: belowMinimum ? 'error.main' : 'text.secondary', fontWeight: belowMinimum ? 700 : 400 }}>
+                  {belowMinimum ? '🚫' : '○'} פחות מ-₪50 — לא ניתן להזמין
+                </Typography>
+              </Stack>
+            </Box>
           </Paper>
         </Stack>
       </Container>

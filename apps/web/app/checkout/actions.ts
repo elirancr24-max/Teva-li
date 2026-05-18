@@ -3,15 +3,15 @@ import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { getSettings, whatsappLink } from '@/lib/settings';
 import { sendNewOrderEmail } from '@/lib/email/resend';
-import { computeDeliveryCents } from '@/lib/delivery';
+import { computeDeliveryCents, CITIES_ALLOWED, MIN_ORDER_CENTS } from '@/lib/delivery';
 import type { OrderItem } from '@/types/db';
 
 const CheckoutSchema = z.object({
   name: z.string().min(2),
   phone: z.string().min(9).max(15),
-  email: z.string().email(),
+  email: z.string().email().optional(),
   address: z.string().min(5),
-  city: z.string().min(2),
+  city: z.enum(CITIES_ALLOWED),
   deliveryDate: z.string().min(8),
   deliveryWindow: z.string(),
   notes: z.string().optional(),
@@ -36,7 +36,7 @@ function buildWhatsAppMessage(args: {
   orderId: string;
   name: string;
   phone: string;
-  email: string;
+  email?: string;
   address: string;
   city: string;
   deliveryDate: string;
@@ -54,7 +54,7 @@ function buildWhatsAppMessage(args: {
   lines.push(`*פרטי לקוח:*`);
   lines.push(`שם: ${args.name}`);
   lines.push(`טלפון: ${args.phone}`);
-  lines.push(`אימייל: ${args.email}`);
+  if (args.email) lines.push(`אימייל: ${args.email}`);
   lines.push(`כתובת: ${args.address}, ${args.city}`);
   lines.push(`תאריך משלוח: ${args.deliveryDate}`);
   lines.push(`חלון שעות: ${args.deliveryWindow}`);
@@ -79,13 +79,16 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     return { success: false, error: 'נתונים לא תקינים' };
   }
 
-  const { name, phone, email, address, city, deliveryDate, deliveryWindow, notes, items } = parsed.data;
+  const { name, phone, email = '', address, city, deliveryDate, deliveryWindow, notes, items } = parsed.data;
 
   const subtotal = items.reduce((s, i) => s + i.price_cents * i.qty, 0);
-  const delivery = computeDeliveryCents(city);
-  const total = subtotal + delivery;
 
-  if (total < 100) return { success: false, error: 'הזמנה מינימלית 1 ₪' };
+  if (subtotal < MIN_ORDER_CENTS) {
+    return { success: false, error: 'מינימום הזמנה ₪50' };
+  }
+
+  const delivery = computeDeliveryCents(subtotal);
+  const total = subtotal + delivery;
 
   const supabase = await createClient();
 

@@ -2,7 +2,7 @@ import { Box, Container, Stack, Typography } from '@mui/material';
 import LocalShippingOutlinedIcon from '@mui/icons-material/LocalShippingOutlined';
 import { BRAND } from '@/lib/brand';
 
-const CITIES = ['דימונה', 'ערד', 'באר שבע', 'ירוחם', 'מצפה רמון'];
+const CITIES = ['דימונה', 'ירוחם', 'באר שבע'];
 
 /** Delivery zones block — soft green band, icon + cities pills + free-shipping highlight. */
 export function DeliveryAreas() {
@@ -92,7 +92,7 @@ export function DeliveryAreas() {
               }}
             >
               <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: BRAND.gold }} />
-              משלוח חינם מעל ₪150
+              ₪25 מעל ₪150 | ₪40 מתחת
             </Box>
           </Stack>
 

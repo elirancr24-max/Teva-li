@@ -8,7 +8,13 @@ import {
   Typography,
   Button,
   IconButton,
+  LinearProgress,
 } from '@mui/material';
+import {
+  MIN_ORDER_CENTS,
+  FREE_DELIVERY_THRESHOLD,
+  computeDeliveryCents,
+} from '@/lib/delivery';
 import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
 import RefreshIcon from '@mui/icons-material/Refresh';
@@ -39,6 +45,11 @@ export function CartSidebar() {
     () => items.reduce((sum, i) => sum + i.product.priceCents * i.amount, 0),
     [items],
   );
+
+  const belowMinimum = total < MIN_ORDER_CENTS;
+  const delivery = belowMinimum ? null : computeDeliveryCents(total);
+  const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - total);
+  const progressPct = Math.min(100, (total / FREE_DELIVERY_THRESHOLD) * 100);
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
   const isEmpty = items.length === 0;
@@ -97,11 +108,46 @@ export function CartSidebar() {
           {formatPrice(total)}
         </Typography>
 
+        {/* Delivery progress toward ₪150 */}
+        {!isEmpty && (
+          <Box sx={{ mt: 1.5 }}>
+            <LinearProgress
+              variant="determinate"
+              value={progressPct}
+              sx={{
+                height: 6,
+                borderRadius: 3,
+                bgcolor: 'rgba(255,255,255,0.2)',
+                '& .MuiLinearProgress-bar': {
+                  bgcolor: belowMinimum
+                    ? '#ef5350'
+                    : towardsThreshold > 0
+                    ? BRAND.gold
+                    : BRAND.green,
+                  borderRadius: 3,
+                },
+              }}
+            />
+            <Typography sx={{ fontSize: 11, color: 'rgba(255,255,255,0.85)', mt: 0.75, fontWeight: 600 }}>
+              {belowMinimum
+                ? `🚫 נדרש מינימום ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - total)})`
+                : towardsThreshold > 0
+                ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25`
+                : `✅ משלוח ₪25`}
+            </Typography>
+            {delivery !== null && (
+              <Typography sx={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', mt: 0.25 }}>
+                דמי משלוח: {formatPrice(delivery)}
+              </Typography>
+            )}
+          </Box>
+        )}
+
         <Button
           component={Link}
           href="/checkout"
           fullWidth
-          disabled={isEmpty}
+          disabled={isEmpty || belowMinimum}
           sx={{
             mt: 2,
             bgcolor: BRAND.green,
