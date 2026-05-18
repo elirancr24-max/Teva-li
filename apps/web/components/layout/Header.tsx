@@ -288,7 +288,6 @@ function CategoryButton({
         display: 'inline-flex',
         alignItems: 'center',
         justifyContent: 'center',
-        border: 'none',
         cursor: 'pointer',
         fontFamily: 'inherit',
         whiteSpace: 'nowrap',
