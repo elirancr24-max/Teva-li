@@ -92,8 +92,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
     <html lang="he" dir="rtl" className={`${rubik.variable} ${heebo.variable}`}>
       <head>
         <link rel="manifest" href="/manifest.webmanifest" />
-        <link rel="apple-touch-icon" href="/logo-teva-trans.png" />
-        <link rel="icon" type="image/png" href="/logo-teva-trans.png" />
+        <link rel="apple-touch-icon" href="/apple-icon-180.png" />
+        <link rel="icon" type="image/png" sizes="192x192" href="/manifest-icon-192.png" />
+        <link rel="icon" type="image/png" sizes="512x512" href="/manifest-icon-512.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="טבע לי" />
