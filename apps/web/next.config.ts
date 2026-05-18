@@ -15,7 +15,13 @@ const config: NextConfig = {
     ],
   },
   experimental: {
-    optimizePackageImports: ['@supabase/supabase-js', '@stripe/stripe-js'],
+    optimizePackageImports: [
+      '@supabase/supabase-js',
+      '@mui/material',
+      '@mui/icons-material',
+    ],
+    // Allow larger uploads via Server Actions (product images up to 5MB)
+    serverActions: { bodySizeLimit: '10mb' },
   },
 };
 

@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import { Heebo, Rubik } from 'next/font/google';
+import { Analytics } from '@vercel/analytics/react';
 import { Providers } from './providers';
 import { AccessibilityWidget } from '@/components/a11y/AccessibilityWidget';
 import { BottomNav } from '@/components/layout/BottomNav';
@@ -90,6 +91,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="he" dir="rtl" className={`${rubik.variable} ${heebo.variable}`}>
       <head>
+        <link rel="manifest" href="/manifest.webmanifest" />
+        <link rel="apple-touch-icon" href="/logo-teva-trans.png" />
+        <link rel="icon" type="image/png" href="/logo-teva-trans.png" />
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
         <meta name="apple-mobile-web-app-title" content="טבע לי" />
@@ -105,6 +109,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <BottomNav />
         </Providers>
         <AccessibilityWidget />
+        <Analytics />
       </body>
     </html>
   );

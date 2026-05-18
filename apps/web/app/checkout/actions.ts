@@ -1,7 +1,9 @@
 'use server';
 import { z } from 'zod';
-import { stripe, CURRENCY, computeDeliveryCents } from '@/lib/stripe';
 import { createClient } from '@/lib/supabase/server';
+import { getSettings, whatsappLink } from '@/lib/settings';
+import { sendNewOrderEmail } from '@/lib/email/resend';
+import { computeDeliveryCents } from '@/lib/delivery';
 import type { OrderItem } from '@/types/db';
 
 const CheckoutSchema = z.object({
@@ -25,10 +27,53 @@ const CheckoutSchema = z.object({
 
 export type CheckoutInput = z.infer<typeof CheckoutSchema>;
 export type CheckoutResult =
-  | { success: true; clientSecret: string; orderId: string }
+  | { success: true; orderId: string; whatsappUrl: string }
   | { success: false; error: string };
 
-export async function createCheckoutIntent(input: CheckoutInput): Promise<CheckoutResult> {
+const shekel = (cents: number) => `₪${(cents / 100).toLocaleString('he-IL', { minimumFractionDigits: 2, maximumFractionDigits: 2 })}`;
+
+function buildWhatsAppMessage(args: {
+  orderId: string;
+  name: string;
+  phone: string;
+  email: string;
+  address: string;
+  city: string;
+  deliveryDate: string;
+  deliveryWindow: string;
+  notes?: string;
+  items: { name_he: string; weight: string; qty: number; price_cents: number }[];
+  subtotal: number;
+  delivery: number;
+  total: number;
+}): string {
+  const lines: string[] = [];
+  lines.push(`היי טבע לי 👋`);
+  lines.push(`הזמנה חדשה — מספר ${args.orderId.slice(0, 8).toUpperCase()}`);
+  lines.push(``);
+  lines.push(`*פרטי לקוח:*`);
+  lines.push(`שם: ${args.name}`);
+  lines.push(`טלפון: ${args.phone}`);
+  lines.push(`אימייל: ${args.email}`);
+  lines.push(`כתובת: ${args.address}, ${args.city}`);
+  lines.push(`תאריך משלוח: ${args.deliveryDate}`);
+  lines.push(`חלון שעות: ${args.deliveryWindow}`);
+  if (args.notes) lines.push(`הערות: ${args.notes}`);
+  lines.push(``);
+  lines.push(`*פירוט הזמנה:*`);
+  for (const it of args.items) {
+    lines.push(`• ${it.name_he} (${it.weight}) × ${it.qty} — ${shekel(it.price_cents * it.qty)}`);
+  }
+  lines.push(``);
+  lines.push(`סכום ביניים: ${shekel(args.subtotal)}`);
+  lines.push(`משלוח: ${args.delivery === 0 ? 'חינם' : shekel(args.delivery)}`);
+  lines.push(`*סה"כ: ${shekel(args.total)}*`);
+  lines.push(``);
+  lines.push(`אשמח לאישור ופרטי תשלום (Bit / העברה בנקאית). תודה!`);
+  return lines.join('\n');
+}
+
+export async function createWhatsAppOrder(input: CheckoutInput): Promise<CheckoutResult> {
   const parsed = CheckoutSchema.safeParse(input);
   if (!parsed.success) {
     return { success: false, error: 'נתונים לא תקינים' };
@@ -44,7 +89,6 @@ export async function createCheckoutIntent(input: CheckoutInput): Promise<Checko
 
   const supabase = await createClient();
 
-  // Upsert customer (guest — no auth_user_id)
   const { data: rawCustomer, error: custErr } = await supabase
     .from('customers')
     .insert({ name, phone, email, default_address: `${address}, ${city}` } as never)
@@ -63,15 +107,6 @@ export async function createCheckoutIntent(input: CheckoutInput): Promise<Checko
     kind: i.kind,
   }));
 
-  // Create Stripe PaymentIntent
-  const intent = await stripe.paymentIntents.create({
-    amount: total,
-    currency: CURRENCY,
-    metadata: { customer_id: customer.id, city, delivery_date: deliveryDate },
-    description: `טבע לי — ${items.length} פריטים — ${name}`,
-  });
-
-  // Insert order (status='pending' until webhook flips to 'paid')
   const { data: rawOrder, error: orderErr } = await supabase
     .from('orders')
     .insert({
@@ -80,11 +115,11 @@ export async function createCheckoutIntent(input: CheckoutInput): Promise<Checko
       subtotal_cents: subtotal,
       delivery_cents: delivery,
       total_cents: total,
-      stripe_payment_intent: intent.id,
       delivery_date: deliveryDate,
       delivery_address: `${address}, ${city}`,
       delivery_window: deliveryWindow,
       notes: notes ?? null,
+      status: 'pending',
     } as never)
     .select('id')
     .single();
@@ -92,5 +127,31 @@ export async function createCheckoutIntent(input: CheckoutInput): Promise<Checko
 
   if (orderErr || !order) return { success: false, error: 'שגיאה בשמירת הזמנה' };
 
-  return { success: true, clientSecret: intent.client_secret!, orderId: order.id };
+  const settings = await getSettings();
+  const text = buildWhatsAppMessage({
+    orderId: order.id,
+    name, phone, email, address, city, deliveryDate, deliveryWindow, notes,
+    items, subtotal, delivery, total,
+  });
+  const whatsappUrl = whatsappLink(settings.business_whatsapp, text);
+
+  // Fire-and-forget admin email — failure must not block the order
+  sendNewOrderEmail({
+    orderId: order.id,
+    customerName: name,
+    customerPhone: phone,
+    customerEmail: email,
+    address: `${address}, ${city}`,
+    deliveryDate,
+    deliveryWindow,
+    items: items.map((i) => ({ name: i.name_he, weight: i.weight, qty: i.qty, priceCents: i.price_cents })),
+    subtotalCents: subtotal,
+    deliveryCents: delivery,
+    totalCents: total,
+    notes,
+  }).catch((err) => {
+    console.error('[checkout] sendNewOrderEmail failed', err);
+  });
+
+  return { success: true, orderId: order.id, whatsappUrl };
 }
