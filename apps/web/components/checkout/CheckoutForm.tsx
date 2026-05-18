@@ -52,7 +52,7 @@ export function CheckoutForm() {
   const [error, setError] = useState<string | null>(null);
 
   const belowMinimum = subtotal < MIN_ORDER_CENTS;
-  const delivery = belowMinimum ? 0 : computeDeliveryCents(subtotal);
+  const delivery = belowMinimum ? 0 : computeDeliveryCents(subtotal, form.city as import('@/lib/delivery').AllowedCity);
   const total = subtotal + delivery;
   const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
 

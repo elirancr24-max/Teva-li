@@ -92,7 +92,7 @@ export function DeliveryAreas() {
               }}
             >
               <Box sx={{ width: 6, height: 6, borderRadius: '50%', bgcolor: BRAND.gold }} />
-              ₪25 מעל ₪150 | ₪40 מתחת
+              דימונה ₪20/₪35 · שאר ₪25/₪40
             </Box>
           </Stack>
 

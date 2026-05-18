@@ -87,7 +87,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     return { success: false, error: 'מינימום הזמנה ₪50' };
   }
 
-  const delivery = computeDeliveryCents(subtotal);
+  const delivery = computeDeliveryCents(subtotal, city);
   const total = subtotal + delivery;
 
   const supabase = await createClient();

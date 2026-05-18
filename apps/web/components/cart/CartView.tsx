@@ -33,7 +33,7 @@ import { BRAND } from '@/lib/brand';
 import {
   MIN_ORDER_CENTS,
   FREE_DELIVERY_THRESHOLD,
-  computeDeliveryCents,
+  deliveryRange,
 } from '@/lib/delivery';
 
 const UNIT_LABEL: Record<string, string> = {
@@ -237,8 +237,8 @@ export function CartView() {
                       {belowMin
                         ? `🚫 מינימום הזמנה ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - total)})`
                         : towardsThreshold > 0
-                        ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25`
-                        : `✅ משלוח ₪25`}
+                        ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח`
+                        : `✅ משלוח ₪20 (דימונה) / ₪25 (שאר)`}
                     </Typography>
                     <Box sx={{ width: '100%', height: 6, bgcolor: 'grey.200', borderRadius: 999, overflow: 'hidden' }}>
                       <Box sx={{
@@ -259,26 +259,31 @@ export function CartView() {
               </Stack>
               {(() => {
                 const belowMin = total < MIN_ORDER_CENTS;
-                const delivery = belowMin ? computeDeliveryCents(MIN_ORDER_CENTS) : computeDeliveryCents(total);
-                const grandTotal = total + (belowMin ? 0 : delivery);
+                const { min: dMin, max: dMax } = deliveryRange(belowMin ? MIN_ORDER_CENTS : total);
+                const deliveryLabel = dMin === dMax ? `₪${dMin / 100}` : `₪${dMin / 100}–₪${dMax / 100}`;
                 return (
                   <>
                     <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                       <Typography>משלוח</Typography>
-                      <Typography sx={{ fontWeight: 700, color: belowMin ? 'text.disabled' : delivery === 2500 ? BRAND.green : 'text.primary' }}>
-                        {belowMin ? '—' : formatPrice(delivery)}
+                      <Typography sx={{ fontWeight: 700, color: belowMin ? 'text.disabled' : 'text.primary' }}>
+                        {belowMin ? '—' : deliveryLabel}
                       </Typography>
                     </Stack>
                     <Divider sx={{ my: 1.5 }} />
-                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 2 }}>
+                    <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
                       <Typography sx={{ fontWeight: 700 }}>סה״כ</Typography>
                       <Typography sx={{ fontWeight: 800, fontSize: 18, color: BRAND.green }}>
-                        {belowMin ? formatPrice(total) : formatPrice(grandTotal)}
+                        {formatPrice(total)}
                       </Typography>
                     </Stack>
+                    {!belowMin && (
+                      <Typography sx={{ fontSize: 11, color: 'text.secondary', mb: 1.5 }}>
+                        + משלוח {deliveryLabel} (תלוי בעיר)
+                      </Typography>
+                    )}
                     {belowMin && (
                       <Typography sx={{ fontSize: 11, color: 'error.main', fontWeight: 600, mb: 1.5 }}>
-                        + דמי משלוח {formatPrice(delivery)} יחושבו לאחר השלמת המינימום
+                        + דמי משלוח {deliveryLabel} יחושבו לאחר השלמת המינימום
                       </Typography>
                     )}
                   </>

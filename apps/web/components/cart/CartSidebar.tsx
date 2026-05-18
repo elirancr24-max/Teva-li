@@ -13,7 +13,7 @@ import {
 import {
   MIN_ORDER_CENTS,
   FREE_DELIVERY_THRESHOLD,
-  computeDeliveryCents,
+  deliveryRange,
 } from '@/lib/delivery';
 import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
@@ -47,10 +47,12 @@ export function CartSidebar() {
   );
 
   const belowMinimum = subtotal < MIN_ORDER_CENTS;
-  const delivery = belowMinimum ? computeDeliveryCents(MIN_ORDER_CENTS) : computeDeliveryCents(subtotal);
-  const grandTotal = subtotal + (belowMinimum ? 0 : delivery);
+  const { min: deliveryMin, max: deliveryMax } = deliveryRange(belowMinimum ? MIN_ORDER_CENTS : subtotal);
   const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
   const progressPct = Math.min(100, (subtotal / FREE_DELIVERY_THRESHOLD) * 100);
+  const formatDelivery = deliveryMin === deliveryMax
+    ? `₪${deliveryMin / 100}`
+    : `₪${deliveryMin / 100}–₪${deliveryMax / 100}`;
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
   const isEmpty = items.length === 0;
@@ -106,7 +108,7 @@ export function CartSidebar() {
             letterSpacing: '-0.01em',
           }}
         >
-          {formatPrice(belowMinimum ? subtotal : grandTotal)}
+          {formatPrice(subtotal)}
         </Typography>
 
         {/* Delivery progress toward ₪150 */}
@@ -133,12 +135,12 @@ export function CartSidebar() {
               {belowMinimum
                 ? `🚫 נדרש מינימום ₪50 (חסר ${formatPrice(MIN_ORDER_CENTS - subtotal)})`
                 : towardsThreshold > 0
-                ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25`
-                : `✅ משלוח ₪25`}
+                ? `⚡ הוסף ${formatPrice(towardsThreshold)} להוזלת משלוח`
+                : `✅ משלוח ${formatDelivery} (תלוי בעיר)`}
             </Typography>
             {!belowMinimum && (
               <Typography sx={{ fontSize: 10, color: 'rgba(255,255,255,0.6)', mt: 0.25 }}>
-                כולל משלוח {formatPrice(delivery)}
+                + משלוח {formatDelivery} בתשלום
               </Typography>
             )}
           </Box>
@@ -318,7 +320,7 @@ export function CartSidebar() {
                 דמי משלוח
                 {towardsThreshold > 0 && !belowMinimum && (
                   <Typography component="span" sx={{ fontSize: 10, color: BRAND.gold, fontWeight: 700, mr: 0.5 }}>
-                    {' '}הוסף {formatPrice(towardsThreshold)} לחסוך ₪15
+                    {' '}הוסף {formatPrice(towardsThreshold)} לחסוך
                   </Typography>
                 )}
               </Typography>
@@ -326,22 +328,27 @@ export function CartSidebar() {
                 sx={{
                   fontSize: 12,
                   fontWeight: 700,
-                  color: belowMinimum ? 'text.disabled' : delivery === 2500 ? BRAND.green : 'text.primary',
+                  color: belowMinimum ? 'text.disabled' : towardsThreshold === 0 ? BRAND.green : 'text.primary',
                 }}
               >
-                {belowMinimum ? '—' : formatPrice(delivery)}
+                {belowMinimum ? '—' : formatDelivery}
               </Typography>
             </Stack>
             <Box sx={{ borderTop: '1px solid', borderColor: 'grey.300', pt: 0.75, mt: 0.25 }}>
               <Stack direction="row" justifyContent="space-between">
                 <Typography sx={{ fontSize: 14, fontWeight: 800 }}>סה״כ לתשלום</Typography>
                 <Typography sx={{ fontSize: 14, fontWeight: 800, color: BRAND.green }}>
-                  {belowMinimum ? formatPrice(subtotal) : formatPrice(grandTotal)}
+                  {formatPrice(subtotal)}
                 </Typography>
               </Stack>
+              {!belowMinimum && (
+                <Typography sx={{ fontSize: 10, color: 'text.secondary', mt: 0.5 }}>
+                  + משלוח {formatDelivery} (תלוי בעיר)
+                </Typography>
+              )}
               {belowMinimum && (
                 <Typography sx={{ fontSize: 10, color: 'error.main', fontWeight: 600, mt: 0.5 }}>
-                  + דמי משלוח {formatPrice(delivery)} יחושבו לאחר השלמת המינימום
+                  + דמי משלוח {formatDelivery} יחושבו לאחר השלמת המינימום
                 </Typography>
               )}
             </Box>
