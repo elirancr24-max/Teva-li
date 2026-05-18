@@ -32,7 +32,7 @@ const BADGES: BadgeWithColor[] = [
     Icon: LocalShippingOutlinedIcon,
     label: 'DELIVERY',
     title: 'משלוח עד חצי שעה',
-    desc: 'דימונה והסביבה · מעל ₪150 חינם',
+    desc: 'דימונה ₪20 · שאר הערים ₪25 (מעל ₪150)',
     iconBg: '#FFF4D6',
     iconColor: BRAND.goldDark,
   },

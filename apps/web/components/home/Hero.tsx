@@ -15,8 +15,8 @@ interface HeroProps {
  * two-column layout: text + floating stats card with floating logo.
  */
 export function Hero({
-  title = 'פירות וירקות טריים במשלוח חינם לדימונה',
-  subtitle = 'נקטף בבוקר — אצלכם עד הצהריים. משלוח חינם בדימונה מעל ₪150.',
+  title = 'פירות וירקות טריים עד הדלת',
+  subtitle = 'נקטף בבוקר — אצלכם עד הצהריים. משלוח ₪20 בדימונה, ₪25 בשאר הערים.',
   imageSrc = '/hero-tropical.jpg',
   ctaHref = '/shop',
   ctaLabel = 'לקנייה בחנות',
