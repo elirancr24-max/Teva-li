@@ -20,6 +20,7 @@ export default async function OgImage() {
           fontFamily: 'sans-serif',
           position: 'relative',
           overflow: 'hidden',
+          direction: 'rtl',
         }}
       >
         {/* Decorative circles */}

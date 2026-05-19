@@ -30,7 +30,8 @@ export function Hero({
         minHeight: { xs: 600, md: 820 },
         display: 'flex',
         alignItems: 'center',
-        // Full-bleed photo
+        // Full-bleed photo — backgroundColor is the fallback when image hasn't loaded
+        backgroundColor: BRAND.brown,
         backgroundImage: `url(${imageSrc})`,
         backgroundSize: 'cover',
         backgroundPosition: 'center',
