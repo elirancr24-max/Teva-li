@@ -10,10 +10,10 @@ export const metadata: Metadata = {
   description: 'פירות וירקות טריים. נחתכים בבוקר, נארזים במקרר. משלוח ₪20 בדימונה, ₪25 בשאר הערים.',
 };
 
-type SearchParams = Promise<{ cat?: string }>;
+type SearchParams = Promise<{ cat?: string; q?: string }>;
 
 export default async function ShopPage({ searchParams }: { searchParams: SearchParams }) {
-  const { cat } = await searchParams;
+  const { cat, q } = await searchParams;
   const { products, categories } = await getCatalog();
 
   const activeCategoryName = cat ? categories.find((c) => c.slug === cat)?.name : undefined;
@@ -26,7 +26,8 @@ export default async function ShopPage({ searchParams }: { searchParams: SearchP
         products={products}
         categories={categories}
         activeCategorySlug={cat ?? null}
-        title={activeCategoryName ?? 'כל המוצרים'}
+        searchQuery={q ?? ''}
+        title={q ? `תוצאות: "${q}"` : (activeCategoryName ?? 'כל המוצרים')}
       />
       <Footer />
     </>

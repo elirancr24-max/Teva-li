@@ -281,7 +281,7 @@ export function CartView() {
                     </Stack>
                     <Divider sx={{ my: 1.5 }} />
                     <Stack direction="row" justifyContent="space-between" sx={{ mb: 1 }}>
-                      <Typography sx={{ fontWeight: 700 }}>סה״כ</Typography>
+                      <Typography sx={{ fontWeight: 700 }}>סכום מוצרים</Typography>
                       <Typography sx={{ fontWeight: 800, fontSize: 18, color: BRAND.green }}>
                         {formatPrice(total)}
                       </Typography>

@@ -17,7 +17,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
-import PersonOutlineIcon from '@mui/icons-material/PersonOutline';
 import PlaceOutlinedIcon from '@mui/icons-material/PlaceOutlined';
 import GridViewOutlinedIcon from '@mui/icons-material/GridViewOutlined';
 import LocalCafeOutlinedIcon from '@mui/icons-material/LocalCafeOutlined';
@@ -205,19 +204,6 @@ export function Header() {
               }}
             >
               לאן מגיעים? <Box component="span" sx={{ ml: 0.5, opacity: 0.85 }}>· דימונה</Box>
-            </Button>
-            <Button
-              component={Link}
-              href="/admin-login"
-              startIcon={<PersonOutlineIcon />}
-              sx={{
-                color: '#fff',
-                display: { xs: 'none', md: 'inline-flex' },
-                fontSize: 14,
-                '&:hover': { bgcolor: 'rgba(255,255,255,0.08)' },
-              }}
-            >
-              הרשמה / התחברות
             </Button>
             <IconButton
               component={Link}

@@ -6,6 +6,7 @@ import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { BRAND } from '@/lib/brand';
+import { getSettings, whatsappLink } from '@/lib/settings';
 
 export const metadata: Metadata = { title: 'הזמנה התקבלה' };
 
@@ -14,7 +15,8 @@ export default async function SuccessPage({
 }: {
   searchParams: Promise<{ order?: string }>;
 }) {
-  const { order } = await searchParams;
+  const [{ order }, settings] = await Promise.all([searchParams, getSettings()]);
+  const waLink = whatsappLink(settings.business_whatsapp);
 
   return (
     <>
@@ -62,7 +64,7 @@ export default async function SuccessPage({
           <Stack direction={{ xs: 'column', sm: 'row' }} spacing={1.5} sx={{ pt: 2, width: { xs: '100%', sm: 'auto' } }}>
             <Button
               component="a"
-              href="https://wa.me/972548897445"
+              href={waLink}
               target="_blank"
               rel="noopener noreferrer"
               variant="contained"

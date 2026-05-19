@@ -17,7 +17,6 @@ import {
 } from '@/lib/delivery';
 import ShoppingBasketOutlinedIcon from '@mui/icons-material/ShoppingBasketOutlined';
 import ShoppingCartIcon from '@mui/icons-material/ShoppingCart';
-import RefreshIcon from '@mui/icons-material/Refresh';
 import AddIcon from '@mui/icons-material/Add';
 import RemoveIcon from '@mui/icons-material/Remove';
 import CloseIcon from '@mui/icons-material/Close';
@@ -168,24 +167,6 @@ export function CartSidebar() {
           המשך לתשלום
         </Button>
 
-        <Button
-          fullWidth
-          variant="outlined"
-          startIcon={<RefreshIcon />}
-          sx={{
-            mt: 1,
-            color: '#fff',
-            borderColor: 'rgba(255,255,255,0.4)',
-            fontWeight: 600,
-            fontSize: 13,
-            '&:hover': {
-              borderColor: '#fff',
-              bgcolor: 'rgba(255,255,255,0.06)',
-            },
-          }}
-        >
-          טעינת הזמנה קודמת
-        </Button>
       </Box>
 
       {/* Scrollable middle */}
@@ -336,7 +317,7 @@ export function CartSidebar() {
             </Stack>
             <Box sx={{ borderTop: '1px solid', borderColor: 'grey.300', pt: 0.75, mt: 0.25 }}>
               <Stack direction="row" justifyContent="space-between">
-                <Typography sx={{ fontSize: 14, fontWeight: 800 }}>סה״כ לתשלום</Typography>
+                <Typography sx={{ fontSize: 14, fontWeight: 800 }}>סכום מוצרים</Typography>
                 <Typography sx={{ fontSize: 14, fontWeight: 800, color: BRAND.green }}>
                   {formatPrice(subtotal)}
                 </Typography>

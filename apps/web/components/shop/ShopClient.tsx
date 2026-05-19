@@ -2,7 +2,7 @@
 import { useEffect } from 'react';
 import { Box, Container } from '@mui/material';
 import { useAppDispatch } from '@/store';
-import { setProducts } from '@/store/slices/productsSlice';
+import { setProducts, setQuery } from '@/store/slices/productsSlice';
 import { setActiveCategory, setCategories } from '@/store/slices/categoriesSlice';
 import { ProductGrid } from '@/components/products/ProductGrid';
 import { CartSidebar } from '@/components/cart/CartSidebar';
@@ -12,6 +12,7 @@ interface Props {
   products: Product[];
   categories: Category[];
   activeCategorySlug?: string | null;
+  searchQuery?: string;
   title?: string;
 }
 
@@ -23,7 +24,7 @@ interface Props {
  * Reads `?cat=<slug>` from props (server-resolved) and dispatches the active category
  * into Redux on mount / when the slug changes.
  */
-export function ShopClient({ products, categories, activeCategorySlug, title }: Props) {
+export function ShopClient({ products, categories, activeCategorySlug, searchQuery = '', title }: Props) {
   const dispatch = useAppDispatch();
 
   useEffect(() => {
@@ -37,6 +38,11 @@ export function ShopClient({ products, categories, activeCategorySlug, title }: 
       : null;
     dispatch(setActiveCategory(cat));
   }, [dispatch, activeCategorySlug, categories]);
+
+  useEffect(() => {
+    dispatch(setQuery(searchQuery));
+    return () => { dispatch(setQuery('')); };
+  }, [dispatch, searchQuery]);
 
   return (
     <Container maxWidth="xl" sx={{ py: 3, px: { xs: 2, md: 3 } }}>

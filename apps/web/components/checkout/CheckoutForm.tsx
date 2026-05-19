@@ -52,9 +52,11 @@ export function CheckoutForm() {
   const [error, setError] = useState<string | null>(null);
 
   const belowMinimum = subtotal < MIN_ORDER_CENTS;
-  const delivery = belowMinimum ? 0 : computeDeliveryCents(subtotal, form.city as import('@/lib/delivery').AllowedCity);
+  const selectedCity = form.city as import('@/lib/delivery').AllowedCity;
+  const delivery = belowMinimum ? 0 : computeDeliveryCents(subtotal, selectedCity);
   const total = subtotal + delivery;
   const towardsThreshold = Math.max(0, FREE_DELIVERY_THRESHOLD - subtotal);
+  const reducedDelivery = computeDeliveryCents(FREE_DELIVERY_THRESHOLD, selectedCity);
 
   const formatPrice = (cents: number) => `₪${(cents / 100).toFixed(2)}`;
 
@@ -194,6 +196,7 @@ export function CheckoutForm() {
                     required
                     fullWidth
                     InputLabelProps={{ shrink: true }}
+                    inputProps={{ min: new Date().toISOString().split('T')[0] }}
                   />
                 </Stack>
                 <TextField
@@ -295,7 +298,7 @@ export function CheckoutForm() {
                 }}
               >
                 <Typography sx={{ fontSize: 12, fontWeight: 700, color: '#b8860b' }}>
-                  הוסף {formatPrice(towardsThreshold)} להוזלת משלוח ל-₪25
+                  הוסף {formatPrice(towardsThreshold)} להוזלת משלוח ל-{formatPrice(reducedDelivery)}
                 </Typography>
               </Box>
             )}
