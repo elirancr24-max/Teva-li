@@ -32,6 +32,8 @@ export function BottomNav() {
   const pathname = usePathname();
   const cartCount = useAppSelector((s) => s.cart.items.length);
 
+  const isAdmin = pathname?.startsWith('/admin') || pathname === '/admin-login';
+
   /* Smart hide/show on scroll — hides when scrolling down, shows on scroll up */
   const [visible, setVisible] = useState(true);
   const lastY = useRef(0);
@@ -47,6 +49,8 @@ export function BottomNav() {
     return () => window.removeEventListener('scroll', onScroll);
   }, []);
 
+  if (isAdmin) return null;
+
   return (
     <>
     {/* Screen reader announcement for cart count changes */}
@@ -54,7 +58,7 @@ export function BottomNav() {
       role="status"
       aria-live="polite"
       aria-atomic="true"
-      sx={{ position: 'absolute', width: 1, height: 1, overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}
+      sx={{ position: 'absolute', width: '1px', height: '1px', overflow: 'hidden', clip: 'rect(0,0,0,0)', whiteSpace: 'nowrap' }}
     >
       {cartCount > 0 ? `${cartCount} פריטים בעגלה` : 'העגלה ריקה'}
     </Box>
