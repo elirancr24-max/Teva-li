@@ -2,8 +2,12 @@
 import { useTransition } from 'react';
 import { Box, Typography, Button } from '@mui/material';
 import { updateKayakStatus } from '@/app/admin/actions';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
 import { BRAND } from '@/lib/brand';
 import type { KayakOrder } from '@/types/db';
+import type { Database } from '@/types/db';
+
+type KayakStatus = Database['public']['Tables']['kayak_orders']['Row']['status'];
 
 const STATUS_HE: Record<string, string> = {
   pending: 'ממתין', approved: 'אושר', in_prep: 'בהכנה',
@@ -21,6 +25,15 @@ function fmt(cents: number | null) {
 export function KayakCard({ kayak }: { kayak: KayakOrder }) {
   const [isPending, startTransition] = useTransition();
   const isPendingApproval = kayak.status === 'pending';
+  const toast = useAdminToast();
+
+  function changeStatus(next: KayakStatus, label: string) {
+    startTransition(async () => {
+      const res = await updateKayakStatus(kayak.id, next);
+      if (res.ok) toast.success(label);
+      else toast.error(res.error);
+    });
+  }
 
   return (
     <Box sx={{ border: `2px solid ${BRAND.ink}` }}>
@@ -93,7 +106,7 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
               size="small"
               variant="contained"
               disabled={isPending}
-              onClick={() => startTransition(() => updateKayakStatus(kayak.id, 'approved'))}
+              onClick={() => changeStatus('approved', 'הזמנה אושרה')}
               sx={{ bgcolor: BRAND.green, '&:hover': { bgcolor: BRAND.greenDark }, fontWeight: 700, borderRadius: 0 }}
             >
               אשר
@@ -102,7 +115,7 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
               size="small"
               variant="outlined"
               disabled={isPending}
-              onClick={() => startTransition(() => updateKayakStatus(kayak.id, 'cancelled'))}
+              onClick={() => changeStatus('cancelled', 'הזמנה נדחתה')}
               sx={{ borderColor: '#ef4444', color: '#ef4444', '&:hover': { borderColor: '#ef4444', bgcolor: '#fff5f5' }, borderRadius: 0 }}
             >
               דחה
@@ -114,7 +127,7 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             size="small"
             variant="contained"
             disabled={isPending}
-            onClick={() => startTransition(() => updateKayakStatus(kayak.id, 'in_prep'))}
+            onClick={() => changeStatus('in_prep', 'הזמנה בהכנה')}
             sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' }, fontWeight: 700, borderRadius: 0 }}
           >
             התחל הכנה
@@ -125,7 +138,7 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             size="small"
             variant="contained"
             disabled={isPending}
-            onClick={() => startTransition(() => updateKayakStatus(kayak.id, 'ready'))}
+            onClick={() => changeStatus('ready', 'הזמנה מוכנה למסירה')}
             sx={{ bgcolor: '#22c55e', '&:hover': { bgcolor: '#16a34a' }, fontWeight: 700, borderRadius: 0 }}
           >
             מוכן למסירה
@@ -136,7 +149,7 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             size="small"
             variant="contained"
             disabled={isPending}
-            onClick={() => startTransition(() => updateKayakStatus(kayak.id, 'delivered'))}
+            onClick={() => changeStatus('delivered', 'הזמנה נמסרה')}
             sx={{ bgcolor: '#888', '&:hover': { bgcolor: '#666' }, fontWeight: 700, borderRadius: 0 }}
           >
             נמסר

@@ -21,6 +21,7 @@ import { adminSupabase } from '@/lib/supabase/admin';
 import { BRAND } from '@/lib/brand';
 import { ProductToggle } from './ProductToggle';
 import { RowActions } from './RowActions';
+import { BulkActions } from './BulkActions';
 import { bulkToggleActive, bulkDeleteProducts } from '@/app/admin/actions';
 import type { Product, Category } from '@/types/db';
 
@@ -152,8 +153,8 @@ export default async function ProductsPage({
     <Box>
       <Box
         sx={{
-          px: 4,
-          pt: 4,
+          px: { xs: 2, md: 4 },
+          pt: { xs: 3, md: 4 },
           pb: 2.5,
           borderBottom: `2px solid ${BRAND.ink}`,
           display: 'flex',
@@ -195,7 +196,7 @@ export default async function ProductsPage({
         </Button>
       </Box>
 
-      <Box sx={{ p: 4 }}>
+      <Box sx={{ p: { xs: 2, md: 4 } }}>
         {/* Filter bar — GET form so search/cat/sort persist in the URL. */}
         <Box
           component="form"
@@ -249,20 +250,14 @@ export default async function ProductsPage({
             submitted FormData; each action button targets a different server
             action via formAction. */}
         <Box component="form">
-          <Box sx={{ display: 'flex', gap: 1, mb: 1.5, flexWrap: 'wrap' }}>
-            <Typography sx={{ ...labelSx, mb: 0, alignSelf: 'center' }}>פעולות מרובות:</Typography>
-            <Button type="submit" formAction={bulkActivateAction} sx={bulkBtnSx}>הפעל</Button>
-            <Button type="submit" formAction={bulkDeactivateAction} sx={bulkBtnSx}>השהה</Button>
-            <Button
-              type="submit"
-              formAction={bulkDeleteAction}
-              sx={{ ...bulkBtnSx, borderColor: '#c0392b', color: '#c0392b', '&:hover': { bgcolor: '#fff5f4' } }}
-            >
-              מחק
-            </Button>
-          </Box>
+          <BulkActions
+            activate={bulkActivateAction}
+            deactivate={bulkDeactivateAction}
+            remove={bulkDeleteAction}
+          />
 
-          <Paper variant="outlined" sx={{ borderRadius: 0, border: `2px solid ${BRAND.ink}`, overflow: 'hidden' }}>
+          <Box sx={{ overflowX: 'auto' }}>
+          <Paper variant="outlined" sx={{ borderRadius: 0, border: `2px solid ${BRAND.ink}`, overflow: 'hidden', minWidth: 900 }}>
             <Table size="small">
               <TableHead>
                 <TableRow sx={{ bgcolor: '#f0efec' }}>
@@ -414,6 +409,7 @@ export default async function ProductsPage({
               </TableBody>
             </Table>
           </Paper>
+          </Box>
         </Box>
       </Box>
     </Box>

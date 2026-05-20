@@ -3,14 +3,14 @@ import { cookies } from 'next/headers';
 import { redirect } from 'next/navigation';
 import { Box, Typography } from '@mui/material';
 import { LoginForm } from './LoginForm';
+import { verifyAdminCookie } from '@/lib/admin/auth';
 
 export const metadata: Metadata = { title: 'כניסה לאדמין', robots: { index: false, follow: false } };
 
 export default async function AdminLoginPage() {
   const cookieStore = await cookies();
   const token = cookieStore.get('admin-token')?.value;
-  const adminPassword = process.env.ADMIN_PASSWORD;
-  if (adminPassword && token === adminPassword) redirect('/admin');
+  if (verifyAdminCookie(token)) redirect('/admin');
 
   return (
     <Box

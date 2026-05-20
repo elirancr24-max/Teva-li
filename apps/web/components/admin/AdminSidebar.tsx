@@ -11,11 +11,13 @@ const NAV = [
   { href: '/admin/kayaks',     label: 'קיאקים',   icon: '⬡' },
   { href: '/admin/products',   label: 'מוצרים',   icon: '◇' },
   { href: '/admin/categories', label: 'קטגוריות', icon: '▦' },
+  { href: '/admin/customers',  label: 'לקוחות',   icon: '◉' },
   { href: '/admin/coupons',    label: 'קופונים',  icon: '✺' },
+  { href: '/admin/audit',      label: 'יומן',     icon: '☷' },
   { href: '/admin/settings',   label: 'הגדרות',   icon: '⚙' },
 ];
 
-export function AdminSidebar() {
+export function AdminSidebar({ onNavigate }: { onNavigate?: () => void }) {
   const pathname = usePathname();
 
   return (
@@ -42,11 +44,15 @@ export function AdminSidebar() {
       </Box>
 
       {/* Nav */}
-      <Box component="nav" sx={{ p: '16px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}>
+      <Box
+        component="nav"
+        aria-label="ניווט אדמין"
+        sx={{ p: '16px 12px', flex: 1, display: 'flex', flexDirection: 'column', gap: 0.5 }}
+      >
         {NAV.map(({ href, label, icon }) => {
-          const isActive = href === '/admin' ? pathname === '/admin' : pathname.startsWith(href);
+          const isActive = href === '/admin' ? pathname === '/admin' : pathname?.startsWith(href);
           return (
-            <Link key={href} href={href} style={{ textDecoration: 'none' }}>
+            <Link key={href} href={href} style={{ textDecoration: 'none' }} onClick={onNavigate}>
               <Box
                 sx={{
                   display: 'flex',

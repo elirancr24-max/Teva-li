@@ -1,6 +1,7 @@
 'use client';
 
 import { useState, useEffect } from 'react';
+import { usePathname } from 'next/navigation';
 import Link from 'next/link';
 import { Box, Button, Stack, Typography } from '@mui/material';
 import { BRAND } from '@/lib/brand';
@@ -8,7 +9,10 @@ import { BRAND } from '@/lib/brand';
 const STORAGE_KEY = 'tl-cookie-consent';
 
 export function CookieBanner() {
+  const pathname = usePathname();
   const [visible, setVisible] = useState(false);
+
+  const isAdmin = pathname?.startsWith('/admin') || pathname === '/admin-login';
 
   useEffect(() => {
     try {
@@ -39,7 +43,7 @@ export function CookieBanner() {
     setVisible(false);
   }
 
-  if (!visible) return null;
+  if (isAdmin || !visible) return null;
 
   return (
     <Box

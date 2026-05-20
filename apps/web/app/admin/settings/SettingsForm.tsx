@@ -1,6 +1,6 @@
 'use client';
 
-import { useActionState } from 'react';
+import { useActionState, useEffect } from 'react';
 import {
   Box,
   Paper,
@@ -10,6 +10,7 @@ import {
   InputAdornment,
 } from '@mui/material';
 import { updateSettings } from '@/app/admin/actions';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
 import { BRAND } from '@/lib/brand';
 import type { Settings } from '@/lib/settings';
 
@@ -47,7 +48,7 @@ async function action(_prev: State, formData: FormData): Promise<State> {
   }
 
   const res = await updateSettings(updates);
-  return res?.ok ? { ok: true } : { error: 'שמירה נכשלה' };
+  return res?.ok ? { ok: true } : { error: res && 'error' in res ? res.error : 'שמירה נכשלה' };
 }
 
 const labelSx = {
@@ -179,6 +180,12 @@ function Field({
 
 export function SettingsForm({ initial }: { initial: Settings }) {
   const [state, formAction, pending] = useActionState<State, FormData>(action, null);
+  const toast = useAdminToast();
+  // Surface result as toast in addition to inline text.
+  useEffect(() => {
+    if (state?.ok) toast.success('ההגדרות נשמרו');
+    else if (state?.error) toast.error(state.error);
+  }, [state, toast]);
 
   const deliveryFee = (Number(initial.delivery_fee_cents) / 100 || 0).toFixed(2);
   const minOrder = (Number(initial.min_order_cents) / 100 || 0).toFixed(2);

@@ -23,6 +23,8 @@ import {
 import DeleteOutlineIcon from '@mui/icons-material/DeleteOutline';
 import AddIcon from '@mui/icons-material/Add';
 import { createCoupon, deleteCoupon, toggleCoupon } from '@/app/admin/actions';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
+import { ConfirmDialog } from '@/components/admin/ConfirmDialog';
 import { BRAND } from '@/lib/brand';
 
 export type Coupon = {
@@ -53,16 +55,23 @@ const monoHeader = {
 function CouponToggle({ id, active }: { id: string; active: boolean }) {
   const [checked, setChecked] = useState(active);
   const [pending, start] = useTransition();
+  const toast = useAdminToast();
   return (
     <Switch
       checked={checked}
       disabled={pending}
       size="small"
+      inputProps={{ 'aria-label': checked ? 'השהה קופון' : 'הפעל קופון' }}
       onChange={(e) => {
         const next = e.target.checked;
         setChecked(next);
-        start(() => {
-          toggleCoupon(id, next);
+        start(async () => {
+          const res = await toggleCoupon(id, next);
+          if (res.ok) toast.success(next ? 'הקופון הופעל' : 'הקופון הושהה');
+          else {
+            setChecked(!next);
+            toast.error(res.error);
+          }
         });
       }}
       sx={{
@@ -75,22 +84,43 @@ function CouponToggle({ id, active }: { id: string; active: boolean }) {
 
 function DeleteButton({ id, code }: { id: string; code: string }) {
   const [pending, start] = useTransition();
+  const [open, setOpen] = useState(false);
+  const toast = useAdminToast();
+
+  function confirm() {
+    start(async () => {
+      const res = await deleteCoupon(id);
+      if (res.ok) {
+        toast.success(`קופון ${code} נמחק`);
+        setOpen(false);
+      } else {
+        toast.error(res.error);
+      }
+    });
+  }
+
   return (
-    <IconButton
-      size="small"
-      disabled={pending}
-      onClick={() => {
-        if (confirm(`למחוק את הקופון ${code}?`)) {
-          start(() => {
-            deleteCoupon(id);
-          });
-        }
-      }}
-      sx={{ color: BRAND.ink, '&:hover': { color: '#c0392b' } }}
-      aria-label={`מחק קופון ${code}`}
-    >
-      <DeleteOutlineIcon fontSize="small" />
-    </IconButton>
+    <>
+      <IconButton
+        size="small"
+        disabled={pending}
+        onClick={() => setOpen(true)}
+        sx={{ color: BRAND.ink, '&:hover': { color: '#c0392b' } }}
+        aria-label={`מחק קופון ${code}`}
+      >
+        <DeleteOutlineIcon fontSize="small" />
+      </IconButton>
+      <ConfirmDialog
+        open={open}
+        title="מחיקת קופון"
+        message={`למחוק את הקופון ${code}?`}
+        confirmLabel="מחק"
+        destructive
+        pending={pending}
+        onConfirm={confirm}
+        onCancel={() => setOpen(false)}
+      />
+    </>
   );
 }
 

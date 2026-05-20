@@ -1,5 +1,6 @@
 'use client';
 import { useEffect, useState, useCallback } from 'react';
+import { usePathname } from 'next/navigation';
 import { Box, IconButton, Stack, Typography, Button, Drawer } from '@mui/material';
 import AccessibilityNewIcon from '@mui/icons-material/AccessibilityNew';
 import CloseIcon from '@mui/icons-material/Close';
@@ -30,8 +31,11 @@ function apply(state: State) {
 }
 
 export function AccessibilityWidget() {
+  const pathname = usePathname();
   const [open, setOpen] = useState(false);
   const [state, setState] = useState<State>(DEFAULT);
+
+  const isAdmin = pathname?.startsWith('/admin') || pathname === '/admin-login';
 
   useEffect(() => {
     try {
@@ -58,6 +62,8 @@ export function AccessibilityWidget() {
     apply(DEFAULT);
     try { localStorage.removeItem(STORAGE_KEY); } catch {}
   }, []);
+
+  if (isAdmin) return null;
 
   return (
     <>

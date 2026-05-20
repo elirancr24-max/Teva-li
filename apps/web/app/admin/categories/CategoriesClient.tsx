@@ -19,6 +19,7 @@ import {
 } from '@mui/material';
 import { BRAND } from '@/lib/brand';
 import { createCategory, updateCategory, deleteCategory } from '@/app/admin/actions';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
 import type { Category } from '@/types/db';
 
 type DialogState =
@@ -39,6 +40,7 @@ export function CategoriesClient({ categories }: { categories: Category[] }) {
   const [confirmDelete, setConfirmDelete] = useState<Category | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [isPending, startTransition] = useTransition();
+  const toast = useAdminToast();
 
   const closeDialog = () => {
     setDialog({ mode: 'closed' });
@@ -72,10 +74,15 @@ export function CategoriesClient({ categories }: { categories: Category[] }) {
     }
   }
 
-  function handleDelete(id: string) {
+  function handleDelete(id: string, name: string) {
     startTransition(async () => {
-      await deleteCategory(id);
-      setConfirmDelete(null);
+      const res = await deleteCategory(id);
+      if (res.ok) {
+        toast.success(`קטגוריה "${name}" נמחקה`);
+        setConfirmDelete(null);
+      } else {
+        toast.error(res.error);
+      }
     });
   }
 
@@ -408,7 +415,7 @@ export function CategoriesClient({ categories }: { categories: Category[] }) {
             ביטול
           </Button>
           <Button
-            onClick={() => confirmDelete && handleDelete(confirmDelete.id)}
+            onClick={() => confirmDelete && handleDelete(confirmDelete.id, confirmDelete.name_he)}
             disabled={isPending}
             sx={{
               borderRadius: 0,
