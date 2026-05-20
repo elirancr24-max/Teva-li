@@ -36,6 +36,7 @@ button, a, [role="button"] {
 @media (max-width: 899px) {
   body {
     padding-bottom: calc(var(--bottom-nav-h) + var(--safe-bottom));
+    background: #0F2818; /* matches footer — gap below footer blends in */
   }
 }
 

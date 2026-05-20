@@ -95,6 +95,13 @@ export const theme = createTheme(
           root: { boxShadow: 'none' },
         },
       },
+      MuiCssBaseline: {
+        styleOverrides: {
+          '@media (max-width: 899px)': {
+            body: { backgroundColor: '#0F2818' },
+          },
+        },
+      },
     },
   },
   heIL,
