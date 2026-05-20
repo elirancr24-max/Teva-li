@@ -67,13 +67,44 @@ export default async function OrdersPage({
   return (
     <Box>
       {/* Header */}
-      <Box sx={{ px: { xs: 2, md: 4 }, pt: { xs: 3, md: 4 }, pb: 2.5, borderBottom: `2px solid ${BRAND.ink}` }}>
-        <Typography sx={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.15em', color: '#888', mb: 0.5 }}>
-          {Object.values(statusCounts).reduce((a, b) => a + b, 0)} הזמנות סה״כ
-        </Typography>
-        <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 52 }, fontWeight: 900, color: BRAND.ink, letterSpacing: '-0.04em' }}>
-          הזמנות.
-        </Typography>
+      <Box
+        sx={{
+          px: { xs: 2, md: 4 },
+          pt: { xs: 3, md: 4 },
+          pb: 2.5,
+          borderBottom: `2px solid ${BRAND.ink}`,
+          display: 'flex',
+          alignItems: { xs: 'flex-start', md: 'flex-end' },
+          justifyContent: 'space-between',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Typography sx={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.15em', color: '#888', mb: 0.5 }}>
+            {Object.values(statusCounts).reduce((a, b) => a + b, 0)} הזמנות סה״כ
+          </Typography>
+          <Typography variant="h1" sx={{ fontSize: { xs: 36, md: 52 }, fontWeight: 900, color: BRAND.ink, letterSpacing: '-0.04em' }}>
+            הזמנות.
+          </Typography>
+        </Box>
+        <Link
+          href="/admin/orders/export.csv"
+          style={{
+            fontFamily: 'monospace',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            padding: '10px 18px',
+            border: `2px solid ${BRAND.ink}`,
+            background: '#fff',
+            color: BRAND.ink,
+            textDecoration: 'none',
+          }}
+        >
+          ⇩ ייצא CSV
+        </Link>
       </Box>
 
       {/* Status summary strip */}

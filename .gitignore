@@ -16,3 +16,11 @@ apps/web/scripts/meshek-dahan-catalog*.json
 apps/web/scripts/debug-*.json
 
 .vercel
+
+# Temp screenshot/preview artifacts (playwright-mcp, preview crops, codex)
+.playwright-mcp/
+.crops-preview/
+.codex/
+/*.jpeg
+/*.png
+!/LOGO.png

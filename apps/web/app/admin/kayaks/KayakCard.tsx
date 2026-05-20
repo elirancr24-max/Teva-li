@@ -107,16 +107,44 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
               variant="contained"
               disabled={isPending}
               onClick={() => changeStatus('approved', 'הזמנה אושרה')}
-              sx={{ bgcolor: BRAND.green, '&:hover': { bgcolor: BRAND.greenDark }, fontWeight: 700, borderRadius: 0 }}
+              sx={{
+                bgcolor: BRAND.green,
+                color: '#fff',
+                border: `2px solid ${BRAND.ink}`,
+                borderRadius: 0,
+                fontFamily: 'monospace',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                boxShadow: 'none',
+                px: 2,
+                py: 0.75,
+                '&:hover': { bgcolor: BRAND.greenDark, boxShadow: 'none' },
+              }}
             >
               אשר
             </Button>
             <Button
               size="small"
-              variant="outlined"
+              variant="contained"
               disabled={isPending}
               onClick={() => changeStatus('cancelled', 'הזמנה נדחתה')}
-              sx={{ borderColor: '#ef4444', color: '#ef4444', '&:hover': { borderColor: '#ef4444', bgcolor: '#fff5f5' }, borderRadius: 0 }}
+              sx={{
+                bgcolor: '#ef4444',
+                color: '#fff',
+                border: '2px solid #ef4444',
+                borderRadius: 0,
+                fontFamily: 'monospace',
+                fontSize: 11,
+                fontWeight: 700,
+                letterSpacing: '0.12em',
+                textTransform: 'uppercase',
+                boxShadow: 'none',
+                px: 2,
+                py: 0.75,
+                '&:hover': { bgcolor: '#dc2626', borderColor: '#dc2626', boxShadow: 'none' },
+              }}
             >
               דחה
             </Button>
@@ -128,7 +156,21 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             variant="contained"
             disabled={isPending}
             onClick={() => changeStatus('in_prep', 'הזמנה בהכנה')}
-            sx={{ bgcolor: '#3b82f6', '&:hover': { bgcolor: '#2563eb' }, fontWeight: 700, borderRadius: 0 }}
+            sx={{
+              bgcolor: '#3b82f6',
+              color: '#fff',
+              border: `2px solid ${BRAND.ink}`,
+              borderRadius: 0,
+              fontFamily: 'monospace',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              boxShadow: 'none',
+              px: 2,
+              py: 0.75,
+              '&:hover': { bgcolor: '#2563eb', boxShadow: 'none' },
+            }}
           >
             התחל הכנה
           </Button>
@@ -139,7 +181,21 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             variant="contained"
             disabled={isPending}
             onClick={() => changeStatus('ready', 'הזמנה מוכנה למסירה')}
-            sx={{ bgcolor: '#22c55e', '&:hover': { bgcolor: '#16a34a' }, fontWeight: 700, borderRadius: 0 }}
+            sx={{
+              bgcolor: '#22c55e',
+              color: '#fff',
+              border: `2px solid ${BRAND.ink}`,
+              borderRadius: 0,
+              fontFamily: 'monospace',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              boxShadow: 'none',
+              px: 2,
+              py: 0.75,
+              '&:hover': { bgcolor: '#16a34a', boxShadow: 'none' },
+            }}
           >
             מוכן למסירה
           </Button>
@@ -150,7 +206,21 @@ export function KayakCard({ kayak }: { kayak: KayakOrder }) {
             variant="contained"
             disabled={isPending}
             onClick={() => changeStatus('delivered', 'הזמנה נמסרה')}
-            sx={{ bgcolor: '#888', '&:hover': { bgcolor: '#666' }, fontWeight: 700, borderRadius: 0 }}
+            sx={{
+              bgcolor: '#888',
+              color: '#fff',
+              border: `2px solid ${BRAND.ink}`,
+              borderRadius: 0,
+              fontFamily: 'monospace',
+              fontSize: 11,
+              fontWeight: 700,
+              letterSpacing: '0.12em',
+              textTransform: 'uppercase',
+              boxShadow: 'none',
+              px: 2,
+              py: 0.75,
+              '&:hover': { bgcolor: '#666', boxShadow: 'none' },
+            }}
           >
             נמסר
           </Button>

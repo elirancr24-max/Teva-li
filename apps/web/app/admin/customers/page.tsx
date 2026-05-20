@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import Link from 'next/link';
 import { Box, Typography, Paper, Table, TableHead, TableBody, TableRow, TableCell, TextField } from '@mui/material';
 import { adminSupabase } from '@/lib/supabase/admin';
 import { BRAND } from '@/lib/brand';
@@ -100,13 +101,44 @@ export default async function CustomersPage({
 
   return (
     <Box>
-      <Box sx={{ px: { xs: 2, md: 4 }, pt: { xs: 3, md: 4 }, pb: 2.5, borderBottom: `2px solid ${BRAND.ink}` }}>
-        <Typography sx={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.15em', color: '#888', mb: 0.5 }}>
-          {customers.length} לקוחות · סה״כ {fmt(totalRevenue)}
-        </Typography>
-        <Typography variant="h1" sx={{ fontSize: { xs: 32, md: 52 }, fontWeight: 900, color: BRAND.ink, letterSpacing: '-0.04em' }}>
-          לקוחות.
-        </Typography>
+      <Box
+        sx={{
+          px: { xs: 2, md: 4 },
+          pt: { xs: 3, md: 4 },
+          pb: 2.5,
+          borderBottom: `2px solid ${BRAND.ink}`,
+          display: 'flex',
+          alignItems: { xs: 'flex-start', md: 'flex-end' },
+          justifyContent: 'space-between',
+          flexDirection: { xs: 'column', md: 'row' },
+          gap: 2,
+        }}
+      >
+        <Box>
+          <Typography sx={{ fontFamily: 'monospace', fontSize: 11, letterSpacing: '0.15em', color: '#888', mb: 0.5 }}>
+            {customers.length} לקוחות · סה״כ {fmt(totalRevenue)}
+          </Typography>
+          <Typography variant="h1" sx={{ fontSize: { xs: 32, md: 52 }, fontWeight: 900, color: BRAND.ink, letterSpacing: '-0.04em' }}>
+            לקוחות.
+          </Typography>
+        </Box>
+        <Link
+          href="/admin/customers/export.csv"
+          style={{
+            fontFamily: 'monospace',
+            fontSize: 11,
+            fontWeight: 700,
+            letterSpacing: '0.12em',
+            textTransform: 'uppercase',
+            padding: '10px 18px',
+            border: `2px solid ${BRAND.ink}`,
+            background: '#fff',
+            color: BRAND.ink,
+            textDecoration: 'none',
+          }}
+        >
+          ⇩ ייצא CSV
+        </Link>
       </Box>
 
       <Box sx={{ p: { xs: 2, md: 4 } }}>
