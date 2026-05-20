@@ -10,7 +10,7 @@ export default async function OgImage() {
     ? `https://${process.env.VERCEL_URL}`
     : process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3001';
 
-  const logoUrl = `${base}/logo-brand.png`;
+  const logoUrl = `${base}/logo-teva-trans.png`;
 
   return new ImageResponse(
     (
@@ -48,7 +48,7 @@ export default async function OgImage() {
               width={300}
               height={300}
               alt="לוגו טבע לי"
-              style={{ borderRadius: 32, boxShadow: '0 8px 40px rgba(0,0,0,0.50)' }}
+              style={{ filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.60))' }}
             />
           </div>
 

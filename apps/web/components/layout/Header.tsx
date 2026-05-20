@@ -123,15 +123,14 @@ export function Header() {
           >
             <Box
               component="img"
-              src="/logo-brand.png"
+              src="/logo-teva-trans.png"
               alt="טבע לי"
               sx={{
                 height: { xs: 46, md: 60 },
                 width: 'auto',
                 display: 'block',
                 objectFit: 'contain',
-                borderRadius: { xs: '10px', md: '12px' },
-                boxShadow: '0 2px 12px rgba(0,0,0,0.35)',
+                filter: 'drop-shadow(0 2px 8px rgba(0,0,0,0.45))',
               }}
             />
           </Link>
