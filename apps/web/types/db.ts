@@ -7,6 +7,33 @@ export type Json = string | number | boolean | null | { [k: string]: Json | unde
 export type Database = {
   public: {
     Tables: {
+      admin_audit_log: {
+        Row: {
+          id: string;
+          action: string;
+          target_type: string | null;
+          target_id: string | null;
+          payload: Json | null;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          action: string;
+          target_type?: string | null;
+          target_id?: string | null;
+          payload?: Json | null;
+          created_at?: string;
+        };
+        Update: {
+          id?: string;
+          action?: string;
+          target_type?: string | null;
+          target_id?: string | null;
+          payload?: Json | null;
+          created_at?: string;
+        };
+        Relationships: [];
+      };
       admin_users: {
         Row: {
           auth_user_id: string;
@@ -165,6 +192,7 @@ export type Database = {
           delivery_address: string | null;
           delivery_window: string | null;
           notes: string | null;
+          notes_internal: string | null;
           created_at: string;
           updated_at: string;
         };

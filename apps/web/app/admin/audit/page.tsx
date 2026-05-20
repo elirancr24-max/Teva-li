@@ -34,15 +34,14 @@ export default async function AuditPage({
   const page = Math.max(1, Number(sp.page ?? '1') || 1);
   const offset = (page - 1) * PER_PAGE;
 
-  // Table type isn't in generated db.ts until migration 007 applied; cast.
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const { data, error } = await (adminSupabase.from as any)('admin_audit_log')
+  const { data, error } = await adminSupabase
+    .from('admin_audit_log')
     .select('*')
     .order('created_at', { ascending: false })
     .range(offset, offset + PER_PAGE - 1);
 
   const rows = (data ?? []) as AuditRow[];
-  const missingTable = error?.code === '42P01';
+  const missingTable = (error as { code?: string } | null)?.code === '42P01';
 
   return (
     <Box>

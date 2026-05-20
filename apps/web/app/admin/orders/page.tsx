@@ -28,7 +28,7 @@ export default async function OrdersPage({
   const filterStatus = (sp.status ?? '').trim();
   const q = (sp.q ?? '').trim().toLowerCase();
 
-  const { data } = await adminSupabase
+  const { data, error: queryError } = await adminSupabase
     .from('orders')
     .select('*')
     .order('created_at', { ascending: false });
@@ -172,7 +172,7 @@ export default async function OrdersPage({
             <TableHead>
               <TableRow sx={{ bgcolor: '#f0efec' }}>
                 {['מזהה', 'כתובת', 'פריטים', 'סכום', 'תאריך משלוח', 'סטטוס', 'פעולות'].map((h) => (
-                  <TableCell key={h} sx={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase', py: 1.5 }}>
+                  <TableCell key={h} sx={{ fontFamily: 'monospace', fontSize: 10, letterSpacing: '0.12em', fontWeight: 700, textTransform: 'uppercase', py: 1.5, position: 'sticky', top: 0, bgcolor: '#f0efec', zIndex: 1 }}>
                     {h}
                   </TableCell>
                 ))}
@@ -229,7 +229,11 @@ export default async function OrdersPage({
               {orders.length === 0 && (
                 <TableRow>
                   <TableCell colSpan={7} sx={{ textAlign: 'center', py: 4, color: '#888', fontFamily: 'monospace', fontSize: 12 }}>
-                    אין הזמנות עדיין
+                    {queryError
+                      ? `שגיאת טעינה: ${queryError.message}`
+                      : (filterStatus || q)
+                        ? 'אין הזמנות שתואמות לסינון'
+                        : 'אין הזמנות עדיין'}
                   </TableCell>
                 </TableRow>
               )}
