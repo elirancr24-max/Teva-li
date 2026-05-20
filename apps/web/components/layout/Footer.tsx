@@ -53,6 +53,8 @@ export function Footer() {
         bgcolor: BRAND.brown,
         color: '#fff',
         mt: { xs: 5, md: 8 },
+        // extend background to fill the body padding-bottom gap left by the mobile BottomNav
+        pb: { xs: '72px', md: 0 },
       }}
     >
       <Container maxWidth="xl" sx={{ pt: { xs: 5, md: 6 }, pb: 3, px: { xs: 2, md: 2 } }}>

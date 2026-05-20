@@ -122,27 +122,18 @@ export function Header() {
             }}
           >
             <Box
+              component="img"
+              src="/logo-brand.png"
+              alt="טבע לי"
               sx={{
-                bgcolor: '#fff',
-                borderRadius: { xs: '10px', md: '14px' },
-                p: { xs: '3px 6px', md: '4px 8px' },
-                display: 'flex',
-                alignItems: 'center',
-                boxShadow: '0 2px 10px rgba(0,0,0,0.28)',
+                height: { xs: 46, md: 60 },
+                width: 'auto',
+                display: 'block',
+                objectFit: 'contain',
+                borderRadius: { xs: '10px', md: '12px' },
+                boxShadow: '0 2px 12px rgba(0,0,0,0.35)',
               }}
-            >
-              <Box
-                component="img"
-                src="/logo-brand.png"
-                alt="טבע לי"
-                sx={{
-                  height: { xs: 46, md: 64 },
-                  width: 'auto',
-                  display: 'block',
-                  objectFit: 'contain',
-                }}
-              />
-            </Box>
+            />
           </Link>
 
           {/* Center — Search bar: full on desktop, icon on mobile */}
