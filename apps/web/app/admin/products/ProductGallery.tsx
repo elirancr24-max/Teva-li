@@ -8,6 +8,7 @@ import {
   setPrimaryImage,
   reorderProductImages,
 } from '@/app/admin/actions';
+import { useAdminToast } from '@/components/admin/AdminToastProvider';
 import { BRAND } from '@/lib/brand';
 
 type GalleryImage = {
@@ -43,6 +44,7 @@ export function ProductGallery({ productId, refreshKey = 0 }: Props) {
   const [loading, setLoading] = useState(true);
   const [dragId, setDragId] = useState<string | null>(null);
   const [, startTransition] = useTransition();
+  const toast = useAdminToast();
 
   const load = useCallback(async () => {
     setLoading(true);
@@ -92,12 +94,16 @@ export function ProductGallery({ productId, refreshKey = 0 }: Props) {
   async function handleDelete(id: string) {
     const ok = window.confirm('למחוק את התמונה?');
     if (!ok) return;
-    await deleteProductImage(id);
+    const res = await deleteProductImage(id);
+    if (res.ok) toast.success('התמונה נמחקה');
+    else toast.error(res.error);
     await load();
   }
 
   async function handlePrimary(id: string) {
-    await setPrimaryImage(productId, id);
+    const res = await setPrimaryImage(productId, id);
+    if (res.ok) toast.success('התמונה הוגדרה כראשית');
+    else toast.error(res.error);
     await load();
   }
 
