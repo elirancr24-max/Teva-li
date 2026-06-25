@@ -37,7 +37,9 @@ export function whatsappLink(whatsapp: string, message?: string) {
 }
 
 export function bitPayLink(phone: string, amountCents: number, description: string): string {
-  const cleaned = phone.replace(/[^0-9]/g, '').replace(/^0/, '972');
+  const digits = phone.replace(/[^0-9]/g, '');
+  // Bit expects local Israeli format: 05XXXXXXXX (not 972...)
+  const local = digits.startsWith('972') ? '0' + digits.slice(3) : digits.startsWith('0') ? digits : '0' + digits;
   const amount = Math.round(amountCents / 100);
-  return `https://bitpay.co.il/app/payment-request?phoneNumber=${cleaned}&amount=${amount}&description=${encodeURIComponent(description)}`;
+  return `https://www.bitpay.co.il/app/payment-request?phoneNumber=${local}&amount=${amount}&description=${encodeURIComponent(description)}`;
 }
