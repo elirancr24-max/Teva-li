@@ -38,6 +38,6 @@ export function whatsappLink(whatsapp: string, message?: string) {
 
 export function bitPayLink(phone: string, amountCents: number, description: string): string {
   const cleaned = phone.replace(/[^0-9]/g, '').replace(/^0/, '972');
-  const amount = (amountCents / 100).toFixed(2);
-  return `https://www.bitpay.co.il/app/payment-request?phoneNumber=${cleaned}&amount=${amount}&description=${encodeURIComponent(description)}`;
+  const amount = Math.round(amountCents / 100);
+  return `https://bitpay.co.il/app/payment-request?phoneNumber=${cleaned}&amount=${amount}&description=${encodeURIComponent(description)}`;
 }
