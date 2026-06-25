@@ -90,9 +90,6 @@ export function CheckoutForm() {
     }
 
     dispatch(clearCart());
-    if (typeof window !== 'undefined') {
-      window.open(result.whatsappUrl, '_blank', 'noopener,noreferrer');
-    }
     router.push(`/checkout/success?order=${result.orderId}&total=${total}`);
   }
 
