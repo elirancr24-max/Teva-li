@@ -14,7 +14,6 @@ import {
   CircularProgress,
   MenuItem,
 } from '@mui/material';
-import WhatsAppIcon from '@mui/icons-material/WhatsApp';
 import { Header } from '@/components/layout/Header';
 import { Footer } from '@/components/layout/Footer';
 import { useAppDispatch, useAppSelector } from '@/store';
@@ -73,7 +72,7 @@ export function CheckoutForm() {
 
     const result = await createWhatsAppOrder({
       ...form,
-      email: form.email || undefined,
+      email: form.email,
       items: items.map((i) => ({
         product_id: i.productId,
         qty: Math.max(1, Math.round(i.amount)),
@@ -94,7 +93,7 @@ export function CheckoutForm() {
     if (typeof window !== 'undefined') {
       window.open(result.whatsappUrl, '_blank', 'noopener,noreferrer');
     }
-    router.push(`/checkout/success?order=${result.orderId}`);
+    router.push(`/checkout/success?order=${result.orderId}&total=${total}`);
   }
 
   if (items.length === 0) {
@@ -155,11 +154,13 @@ export function CheckoutForm() {
                 </Stack>
                 <TextField
                   name="email"
-                  label='דוא״ל (לא חובה)'
+                  label='דוא״ל — לאישור הזמנה'
                   type="email"
                   value={form.email}
                   onChange={handleChange}
+                  required
                   fullWidth
+                  helperText="ישלח אליך אישור הזמנה וקישור לתשלום בביט"
                 />
 
                 <Typography variant="h2" sx={{ fontSize: 18, fontWeight: 700, pt: 2 }}>
@@ -225,28 +226,23 @@ export function CheckoutForm() {
 
                 <Box
                   sx={{
-                    border: `1px solid rgba(0,0,0,0.12)`,
+                    border: `2px solid #009FE3`,
                     borderRadius: 2,
                     p: 2,
-                    bgcolor: 'grey.50',
+                    bgcolor: '#f0f9ff',
                   }}
                 >
-                  <Typography sx={{ fontSize: 13, fontWeight: 700, mb: 1, color: 'text.secondary' }}>
-                    אמצעי תשלום מקובלים
-                  </Typography>
-                  <Stack direction="row" spacing={1.5} alignItems="center" flexWrap="wrap" gap={1}>
-                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, bgcolor: '#fff', border: '1px solid #eee', borderRadius: 1.5, px: 1.5, py: 0.75 }}>
-                      <Box component="span" sx={{ fontSize: 18 }}>💙</Box>
-                      <Typography sx={{ fontSize: 13, fontWeight: 700 }}>ביט</Typography>
-                    </Box>
-                    <Box sx={{ display: 'inline-flex', alignItems: 'center', gap: 0.75, bgcolor: '#fff', border: '1px solid #eee', borderRadius: 1.5, px: 1.5, py: 0.75 }}>
-                      <Box component="span" sx={{ fontSize: 18 }}>🏦</Box>
-                      <Typography sx={{ fontSize: 13, fontWeight: 700 }}>העברה בנקאית</Typography>
+                  <Stack direction="row" spacing={1.5} alignItems="center">
+                    <Box component="span" sx={{ fontSize: 22 }}>💙</Box>
+                    <Box>
+                      <Typography sx={{ fontSize: 14, fontWeight: 800, color: '#006fa0' }}>
+                        תשלום בביט בלבד
+                      </Typography>
+                      <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 0.25 }}>
+                        לאחר ההזמנה תקבלו קישור ביט לתשלום הסכום המדויק
+                      </Typography>
                     </Box>
                   </Stack>
-                  <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 1 }}>
-                    תשלום מאובטח לאחר אישור ההזמנה בוואטסאפ
-                  </Typography>
                 </Box>
 
                 <Button
@@ -254,16 +250,16 @@ export function CheckoutForm() {
                   variant="contained"
                   size="large"
                   disabled={submitting || belowMinimum}
-                  startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <WhatsAppIcon />}
+                  startIcon={submitting ? <CircularProgress size={18} color="inherit" /> : <Box component="span" sx={{ fontSize: 18, lineHeight: 1 }}>💙</Box>}
                   sx={{
-                    bgcolor: BRAND.green,
+                    bgcolor: '#009FE3',
                     py: 1.75,
                     fontSize: 16,
                     fontWeight: 800,
-                    '&:hover': { bgcolor: BRAND.greenDark },
+                    '&:hover': { bgcolor: '#007ab8' },
                   }}
                 >
-                  {submitting ? 'שולח…' : 'שליחת הזמנה ב‑WhatsApp'}
+                  {submitting ? 'שולח…' : 'אישור הזמנה ותשלום בביט'}
                 </Button>
               </Stack>
             </Box>

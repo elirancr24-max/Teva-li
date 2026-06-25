@@ -2,14 +2,15 @@
 import { z } from 'zod';
 import { createClient } from '@/lib/supabase/server';
 import { getSettings, whatsappLink } from '@/lib/settings';
-import { sendNewOrderEmail } from '@/lib/email/resend';
+import { sendNewOrderEmail, sendOrderConfirmationEmail } from '@/lib/email/resend';
+import { bitPayLink } from '@/lib/settings';
 import { computeDeliveryCents, CITIES_ALLOWED, MIN_ORDER_CENTS } from '@/lib/delivery';
 import type { OrderItem } from '@/types/db';
 
 const CheckoutSchema = z.object({
   name: z.string().min(2),
   phone: z.string().min(9).max(15),
-  email: z.string().email().optional(),
+  email: z.string().email(),
   address: z.string().min(5),
   city: z.enum(CITIES_ALLOWED),
   deliveryDate: z.string().min(8),
@@ -69,7 +70,7 @@ function buildWhatsAppMessage(args: {
   lines.push(`משלוח: ${shekel(args.delivery)}`);
   lines.push(`*סה"כ: ${shekel(args.total)}*`);
   lines.push(``);
-  lines.push(`אשמח לאישור ופרטי תשלום (Bit / העברה בנקאית). תודה!`);
+  lines.push(`הלקוח ישלם בביט — אנא אשרו את ההזמנה. תודה!`);
   return lines.join('\n');
 }
 
@@ -79,7 +80,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     return { success: false, error: 'נתונים לא תקינים' };
   }
 
-  const { name, phone, email = '', address, city, deliveryDate, deliveryWindow, notes, items } = parsed.data;
+  const { name, phone, email, address, city, deliveryDate, deliveryWindow, notes, items } = parsed.data;
 
   const subtotal = items.reduce((s, i) => s + i.price_cents * i.qty, 0);
 
@@ -122,7 +123,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
       delivery_address: `${address}, ${city}`,
       delivery_window: deliveryWindow,
       notes: notes ?? null,
-      status: 'pending',
+      status: 'pending_payment',
     } as never)
     .select('id')
     .single();
@@ -138,7 +139,12 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   });
   const whatsappUrl = whatsappLink(settings.business_whatsapp, text);
 
-  // Fire-and-forget admin email — failure must not block the order
+  const emailItems = items.map((i) => ({ name: i.name_he, weight: i.weight, qty: i.qty, priceCents: i.price_cents }));
+  const bitUrl = settings.business_bit_phone
+    ? bitPayLink(settings.business_bit_phone, total, `טבע לי הזמנה ${order.id.slice(0, 8).toUpperCase()}`)
+    : null;
+
+  // Fire-and-forget — failures must not block the order
   sendNewOrderEmail({
     orderId: order.id,
     customerName: name,
@@ -147,14 +153,27 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     address: `${address}, ${city}`,
     deliveryDate,
     deliveryWindow,
-    items: items.map((i) => ({ name: i.name_he, weight: i.weight, qty: i.qty, priceCents: i.price_cents })),
+    items: emailItems,
     subtotalCents: subtotal,
     deliveryCents: delivery,
     totalCents: total,
     notes,
-  }).catch((err) => {
-    console.error('[checkout] sendNewOrderEmail failed', err);
-  });
+  }).catch((err) => console.error('[checkout] sendNewOrderEmail failed', err));
+
+  sendOrderConfirmationEmail({
+    orderId: order.id,
+    customerName: name,
+    customerEmail: email,
+    address: `${address}, ${city}`,
+    deliveryDate,
+    deliveryWindow,
+    items: emailItems,
+    subtotalCents: subtotal,
+    deliveryCents: delivery,
+    totalCents: total,
+    bitUrl,
+    notes,
+  }).catch((err) => console.error('[checkout] sendOrderConfirmationEmail failed', err));
 
   return { success: true, orderId: order.id, whatsappUrl };
 }

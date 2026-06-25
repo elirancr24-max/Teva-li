@@ -20,12 +20,12 @@ type OrderItem = {
 };
 
 const STATUS_HE: Record<string, string> = {
-  pending: 'ממתין', paid: 'שולם', preparing: 'בהכנה',
+  pending_payment: 'ממתין לתשלום', pending: 'ממתין', paid: 'שולם', preparing: 'בהכנה',
   shipped: 'במשלוח', delivered: 'נמסר', cancelled: 'בוטל',
 };
 
 const STATUS_COLOR: Record<string, string> = {
-  pending: '#888', paid: BRAND.green, preparing: '#f0a500',
+  pending_payment: '#e67e00', pending: '#888', paid: BRAND.green, preparing: '#f0a500',
   shipped: '#3b82f6', delivered: '#22c55e', cancelled: '#ef4444',
 };
 

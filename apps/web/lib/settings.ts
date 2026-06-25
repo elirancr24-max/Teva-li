@@ -4,6 +4,7 @@ export const DEFAULT_SETTINGS = {
   business_name:      'טבע לי',
   business_phone:     '054-8897445',
   business_whatsapp:  '972548897445',
+  business_bit_phone: '972528986364',
   business_email:     'orders@teva-li.com',
   business_address:   'דימונה',
   business_hours:     'א-ה 8:00-19:00 · ו 8:00-13:00',
@@ -33,4 +34,10 @@ export function whatsappLink(whatsapp: string, message?: string) {
   const cleaned = whatsapp.replace(/[^0-9]/g, '');
   const text = message ? `?text=${encodeURIComponent(message)}` : '';
   return `https://wa.me/${cleaned}${text}`;
+}
+
+export function bitPayLink(phone: string, amountCents: number, description: string): string {
+  const cleaned = phone.replace(/[^0-9]/g, '').replace(/^0/, '972');
+  const amount = (amountCents / 100).toFixed(2);
+  return `https://www.bitpay.co.il/app/payment-request?phoneNumber=${cleaned}&amount=${amount}&description=${encodeURIComponent(description)}`;
 }

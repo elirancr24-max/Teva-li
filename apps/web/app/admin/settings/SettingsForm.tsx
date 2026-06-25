@@ -23,6 +23,7 @@ async function action(_prev: State, formData: FormData): Promise<State> {
     'business_name',
     'business_phone',
     'business_whatsapp',
+    'business_bit_phone',
     'business_email',
     'business_address',
     'business_hours',
@@ -199,6 +200,12 @@ export function SettingsForm({ initial }: { initial: Settings }) {
           name="business_whatsapp"
           label="וואטסאפ (פורמט בינלאומי)"
           defaultValue={initial.business_whatsapp}
+          inputMode="numeric"
+        />
+        <Field
+          name="business_bit_phone"
+          label="💙 טלפון ביט (אישי) — 05X-XXXXXXX"
+          defaultValue={initial.business_bit_phone}
           inputMode="numeric"
         />
         <Field

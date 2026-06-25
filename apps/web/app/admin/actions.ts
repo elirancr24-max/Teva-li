@@ -6,22 +6,74 @@ import { adminSupabase } from '@/lib/supabase/admin';
 import { processProductImage } from '@/lib/image-processing';
 import { uploadToBucket, removeFromBucket, pathFromPublicUrl } from '@/lib/supabase/storage';
 import { logAdminAction } from '@/lib/admin/audit';
+import { sendPaymentConfirmedEmail } from '@/lib/email/resend';
 import type { ActionResult } from '@/lib/admin/result';
 import type { Database } from '@/types/db';
 
-type OrderStatus = Database['public']['Tables']['orders']['Row']['status'];
 type KayakStatus = Database['public']['Tables']['kayak_orders']['Row']['status'];
 
 const PRODUCT_IMAGES_BUCKET = 'product-images';
 
 // ─── Orders ─────────────────────────────────────────────────────────────
-export async function updateOrderStatus(orderId: string, status: OrderStatus): Promise<ActionResult> {
-  const { error } = await adminSupabase.from('orders').update({ status }).eq('id', orderId);
+export async function updateOrderStatus(orderId: string, status: string): Promise<ActionResult> {
+  const { error } = await adminSupabase.from('orders').update({ status } as never).eq('id', orderId);
   if (error) return { ok: false, error: error.message };
   await logAdminAction('order.status', 'order', orderId, { status });
+
+  if (status === 'paid') {
+    _sendPaymentConfirmedForOrder(orderId).catch((err) =>
+      console.error('[admin] sendPaymentConfirmedEmail failed', err),
+    );
+  }
+
   revalidatePath('/admin/orders');
   revalidatePath('/admin');
   return { ok: true };
+}
+
+async function _sendPaymentConfirmedForOrder(orderId: string): Promise<void> {
+  const { data: raw } = await adminSupabase
+    .from('orders')
+    .select('*, customers(*)')
+    .eq('id', orderId)
+    .single();
+  if (!raw) return;
+
+  const order = raw as {
+    id: string;
+    items: unknown;
+    subtotal_cents: number;
+    delivery_cents: number;
+    total_cents: number;
+    delivery_date: string | null;
+    delivery_address: string | null;
+    delivery_window: string | null;
+    customers: { name: string; email: string | null } | null;
+  };
+
+  const customer = order.customers;
+  if (!customer?.email) return;
+
+  type Item = { name_he?: string; name?: string; weight?: string; qty?: number; quantity?: number; price_cents?: number };
+  const items = ((order.items as Item[]) ?? []).map((i) => ({
+    name: i.name_he ?? i.name ?? '',
+    weight: i.weight ?? '',
+    qty: i.qty ?? i.quantity ?? 1,
+    priceCents: i.price_cents ?? 0,
+  }));
+
+  await sendPaymentConfirmedEmail({
+    orderId: order.id,
+    customerName: customer.name,
+    customerEmail: customer.email,
+    address: order.delivery_address ?? '',
+    deliveryDate: order.delivery_date ?? '',
+    deliveryWindow: order.delivery_window ?? '',
+    items,
+    subtotalCents: order.subtotal_cents,
+    deliveryCents: order.delivery_cents,
+    totalCents: order.total_cents,
+  });
 }
 
 export async function updateOrderInternalNotes(orderId: string, notes: string): Promise<ActionResult> {

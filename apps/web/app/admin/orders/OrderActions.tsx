@@ -7,21 +7,22 @@ import type { Database } from '@/types/db';
 
 type OrderStatus = Database['public']['Tables']['orders']['Row']['status'];
 
-const OPTIONS: { value: OrderStatus; label: string }[] = [
-  { value: 'pending',   label: 'ממתין' },
-  { value: 'paid',      label: 'שולם' },
-  { value: 'preparing', label: 'בהכנה' },
-  { value: 'shipped',   label: 'במשלוח' },
-  { value: 'delivered', label: 'נמסר' },
-  { value: 'cancelled', label: 'בוטל' },
+const OPTIONS: { value: string; label: string }[] = [
+  { value: 'pending_payment', label: 'ממתין לתשלום' },
+  { value: 'pending',         label: 'ממתין' },
+  { value: 'paid',            label: 'שולם' },
+  { value: 'preparing',       label: 'בהכנה' },
+  { value: 'shipped',         label: 'במשלוח' },
+  { value: 'delivered',       label: 'נמסר' },
+  { value: 'cancelled',       label: 'בוטל' },
 ];
 
-export function OrderActions({ orderId, currentStatus }: { orderId: string; currentStatus: OrderStatus }) {
+export function OrderActions({ orderId, currentStatus }: { orderId: string; currentStatus: string }) {
   const [isPending, startTransition] = useTransition();
   const toast = useAdminToast();
 
   return (
-    <FormControl size="small" sx={{ minWidth: 110 }}>
+    <FormControl size="small" sx={{ minWidth: 140 }}>
       <Select
         value={currentStatus}
         disabled={isPending}
