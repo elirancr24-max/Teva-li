@@ -18,8 +18,8 @@ const CheckoutSchema = z.object({
   notes: z.string().optional(),
   items: z.array(z.object({
     product_id: z.string().uuid(),
-    qty: z.number().int().positive(),
-    price_cents: z.number().int().positive(),
+    qty: z.number().positive().transform((n) => Math.max(1, Math.round(n))),
+    price_cents: z.number().positive().transform((n) => Math.round(n)),
     name_he: z.string(),
     weight: z.string(),
     kind: z.string(),
@@ -77,7 +77,8 @@ function buildWhatsAppMessage(args: {
 export async function createWhatsAppOrder(input: CheckoutInput): Promise<CheckoutResult> {
   const parsed = CheckoutSchema.safeParse(input);
   if (!parsed.success) {
-    return { success: false, error: 'נתונים לא תקינים' };
+    const detail = parsed.error.errors.map((e) => `${e.path.join('.')}: ${e.message}`).join(' | ');
+    return { success: false, error: `נתונים לא תקינים — ${detail}` };
   }
 
   const { name, phone, email, address, city, deliveryDate, deliveryWindow, notes, items } = parsed.data;
