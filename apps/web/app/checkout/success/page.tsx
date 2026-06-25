@@ -10,6 +10,12 @@ import { getSettings, whatsappLink, bitPayLink } from '@/lib/settings';
 
 export const metadata: Metadata = { title: 'הזמנה התקבלה' };
 
+function formatBitPhone(phone: string): string {
+  const digits = phone.replace(/[^0-9]/g, '');
+  const local = digits.startsWith('972') ? '0' + digits.slice(3) : digits;
+  return local.length === 10 ? `${local.slice(0, 3)}-${local.slice(3)}` : local;
+}
+
 export default async function SuccessPage({
   searchParams,
 }: {
@@ -106,7 +112,7 @@ export default async function SuccessPage({
           </Box>
 
           {/* Bit payment card */}
-          {bitLink && (
+          {settings.business_bit_phone && totalShekel && (
             <Box
               sx={{
                 width: '100%',
@@ -118,37 +124,50 @@ export default async function SuccessPage({
                 textAlign: 'center',
               }}
             >
-              <Box component="span" sx={{ fontSize: 36, display: 'block', mb: 1 }}>💙</Box>
-              <Typography sx={{ fontSize: 20, fontWeight: 900, color: '#006fa0', mb: 0.5 }}>
-                שלמו בביט עכשיו
+              <Box component="span" sx={{ fontSize: 36, display: 'block', mb: 0.5 }}>💙</Box>
+              <Typography sx={{ fontSize: 20, fontWeight: 900, color: '#006fa0', mb: 1.5 }}>
+                שלמו בביט
               </Typography>
-              {totalShekel && (
-                <Typography sx={{ fontSize: 28, fontWeight: 900, color: '#006fa0', mb: 1.5 }}>
-                  {totalShekel}
+
+              {/* Phone number box */}
+              <Box sx={{ bgcolor: 'white', borderRadius: 2, p: 2, mb: 1.5, border: '1px solid #b3d9f0' }}>
+                <Typography sx={{ fontSize: 11, color: 'text.secondary', mb: 0.5, letterSpacing: '0.1em' }}>
+                  שלחו לביט של טבע לי
                 </Typography>
+                <Typography sx={{ fontSize: 26, fontWeight: 900, fontFamily: 'monospace', color: '#006fa0', direction: 'ltr', letterSpacing: '0.05em' }}>
+                  {formatBitPhone(settings.business_bit_phone)}
+                </Typography>
+              </Box>
+
+              {/* Amount box */}
+              <Box sx={{ bgcolor: 'white', borderRadius: 2, p: 1.5, mb: 2, border: '1px solid #b3d9f0' }}>
+                <Typography sx={{ fontSize: 11, color: 'text.secondary', mb: 0.25 }}>סכום לתשלום</Typography>
+                <Typography sx={{ fontSize: 32, fontWeight: 900, color: '#006fa0' }}>{totalShekel}</Typography>
+              </Box>
+
+              {/* Steps */}
+              <Stack spacing={0.5} sx={{ textAlign: 'right', mb: 2, px: 1 }}>
+                {['פתח ביט ← שלח כסף', 'הכנס את המספר למעלה', `הכנס סכום: ${totalShekel}`].map((step, i) => (
+                  <Typography key={i} sx={{ fontSize: 13, color: '#005a85' }}>
+                    {i + 1}. {step}
+                  </Typography>
+                ))}
+              </Stack>
+
+              {bitLink && (
+                <Button
+                  component="a"
+                  href={bitLink}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  variant="contained"
+                  size="large"
+                  fullWidth
+                  sx={{ bgcolor: '#009FE3', py: 1.5, fontSize: 16, fontWeight: 800, borderRadius: 2, '&:hover': { bgcolor: '#007ab8' } }}
+                >
+                  פתח ביט
+                </Button>
               )}
-              <Button
-                component="a"
-                href={bitLink}
-                target="_blank"
-                rel="noopener noreferrer"
-                variant="contained"
-                size="large"
-                fullWidth
-                sx={{
-                  bgcolor: '#009FE3',
-                  py: 1.5,
-                  fontSize: 16,
-                  fontWeight: 800,
-                  borderRadius: 2,
-                  '&:hover': { bgcolor: '#007ab8' },
-                }}
-              >
-                פתח ביט לתשלום
-              </Button>
-              <Typography sx={{ fontSize: 11, color: 'text.secondary', mt: 1.5 }}>
-                לחיצה תפתח את אפליקציית ביט עם הסכום המדויק מולאמלא
-              </Typography>
             </Box>
           )}
 
