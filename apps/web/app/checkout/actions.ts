@@ -1,6 +1,6 @@
 'use server';
 import { z } from 'zod';
-import { createClient } from '@/lib/supabase/server';
+import { adminSupabase } from '@/lib/supabase/admin';
 import { getSettings, whatsappLink } from '@/lib/settings';
 import { sendNewOrderEmail, sendOrderConfirmationEmail } from '@/lib/email/resend';
 import { bitPayLink } from '@/lib/settings';
@@ -92,9 +92,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
   const delivery = computeDeliveryCents(subtotal, city);
   const total = subtotal + delivery;
 
-  const supabase = await createClient();
-
-  const { data: rawCustomer, error: custErr } = await supabase
+  const { data: rawCustomer, error: custErr } = await adminSupabase
     .from('customers')
     .insert({ name, phone, email, default_address: `${address}, ${city}` } as never)
     .select('id')
@@ -112,7 +110,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     kind: i.kind,
   }));
 
-  const { data: rawOrder, error: orderErr } = await supabase
+  const { data: rawOrder, error: orderErr } = await adminSupabase
     .from('orders')
     .insert({
       customer_id: customer.id,
