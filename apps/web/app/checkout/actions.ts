@@ -100,7 +100,7 @@ export async function createWhatsAppOrder(input: CheckoutInput): Promise<Checkou
     .single();
   const customer = rawCustomer as { id: string } | null;
 
-  if (custErr || !customer) return { success: false, error: 'שגיאה בשמירת פרטי לקוח' };
+  if (custErr || !customer) return { success: false, error: `שגיאה בשמירת לקוח: ${custErr?.code} ${custErr?.message}` };
 
   const orderItems: OrderItem[] = items.map((i) => ({
     product_id: i.product_id,
