@@ -39,7 +39,7 @@ async function _sendPaymentConfirmedForOrder(orderId: string): Promise<void> {
     .single();
   if (!raw) return;
 
-  const order = raw as {
+  const order = raw as unknown as {
     id: string;
     items: unknown;
     subtotal_cents: number;
