@@ -17,7 +17,7 @@ const CheckoutSchema = z.object({
   deliveryWindow: z.string(),
   notes: z.string().optional(),
   items: z.array(z.object({
-    product_id: z.string().uuid(),
+    product_id: z.string().min(1),
     qty: z.number().positive().transform((n) => Math.max(1, Math.round(n))),
     price_cents: z.number().positive().transform((n) => Math.round(n)),
     name_he: z.string(),
