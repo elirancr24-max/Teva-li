@@ -120,9 +120,6 @@ export function ProductCard({ product }: { product: Product }) {
 
   return (
     <Card
-      component={Link}
-      href={`/shop/${product.slug}`}
-      aria-label={product.name}
       sx={{
         position: 'relative',
         display: 'flex',
@@ -135,17 +132,10 @@ export function ProductCard({ product }: { product: Product }) {
         borderRadius: 2,
         boxShadow: 'none',
         border: 'none',
-        cursor: 'pointer',
-        textDecoration: 'none',
         color: 'inherit',
-        transition: 'box-shadow 200ms ease, transform 200ms ease',
-        outline: 'none',
+        transition: 'box-shadow 200ms ease',
         '&:hover': {
           boxShadow: '0 4px 12px rgba(0,0,0,0.08)',
-          transform: 'scale(1.01)',
-        },
-        '&:focus-visible': {
-          boxShadow: `0 0 0 2px ${BRAND.green}`,
         },
       }}
     >
@@ -235,66 +225,74 @@ export function ProductCard({ product }: { product: Product }) {
         </Box>
       )}
 
-      {/* Image area */}
-      <Box
-        sx={{
-          width: '100%',
-          height: 140,
-          mt: isDiscount || isPremium ? 2.5 : 0.5,
-          mb: 1,
-          borderRadius: 1.5,
-          bgcolor: '#fff',
-          background: showImage
-            ? '#fff'
-            : KIND_GLOW[product.kind] ?? 'radial-gradient(circle, #f5f5f5 0%, transparent 70%)',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          fontSize: 56,
-          overflow: 'hidden',
-          p: 1,
-        }}
+      {/* Image + Name — clicking navigates to product page */}
+      <Link
+        href={`/shop/${product.slug}`}
+        style={{ textDecoration: 'none', color: 'inherit', display: 'block' }}
+        aria-label={product.name}
       >
-        {showImage ? (
-          // eslint-disable-next-line @next/next/no-img-element
-          <img
-            src={product.imageUrl!}
-            alt={product.name}
-            loading="lazy"
-            onError={() => setImgError(true)}
-            style={{
-              maxHeight: '100%',
-              maxWidth: '100%',
-              width: 'auto',
-              height: 'auto',
-              objectFit: 'contain',
-            }}
-          />
-        ) : (
-          <Box component="span" aria-hidden="true">
-            {KIND_EMOJI[product.kind] ?? '🍎'}
-          </Box>
-        )}
-      </Box>
+        <Box
+          sx={{
+            width: '100%',
+            height: 140,
+            mt: isDiscount || isPremium ? 2.5 : 0.5,
+            mb: 1,
+            borderRadius: 1.5,
+            bgcolor: '#fff',
+            background: showImage
+              ? '#fff'
+              : KIND_GLOW[product.kind] ?? 'radial-gradient(circle, #f5f5f5 0%, transparent 70%)',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            fontSize: 56,
+            overflow: 'hidden',
+            p: 1,
+            cursor: 'pointer',
+            transition: 'opacity 150ms ease',
+            '&:hover': { opacity: 0.88 },
+          }}
+        >
+          {showImage ? (
+            // eslint-disable-next-line @next/next/no-img-element
+            <img
+              src={product.imageUrl!}
+              alt={product.name}
+              loading="lazy"
+              onError={() => setImgError(true)}
+              style={{
+                maxHeight: '100%',
+                maxWidth: '100%',
+                width: 'auto',
+                height: 'auto',
+                objectFit: 'contain',
+              }}
+            />
+          ) : (
+            <Box component="span" aria-hidden="true">
+              {KIND_EMOJI[product.kind] ?? '🍎'}
+            </Box>
+          )}
+        </Box>
 
-      {/* Name */}
-      <Typography
-        sx={{
-          fontSize: 14,
-          fontWeight: 600,
-          textAlign: 'center',
-          color: 'text.primary',
-          lineHeight: 1.3,
-          mb: 0.75,
-          display: '-webkit-box',
-          WebkitLineClamp: 2,
-          WebkitBoxOrient: 'vertical',
-          overflow: 'hidden',
-          minHeight: 36,
-        }}
-      >
-        {product.name}
-      </Typography>
+        <Typography
+          sx={{
+            fontSize: 14,
+            fontWeight: 600,
+            textAlign: 'center',
+            color: 'text.primary',
+            lineHeight: 1.3,
+            mb: 0.75,
+            display: '-webkit-box',
+            WebkitLineClamp: 2,
+            WebkitBoxOrient: 'vertical',
+            overflow: 'hidden',
+            minHeight: 36,
+          }}
+        >
+          {product.name}
+        </Typography>
+      </Link>
 
       {/* Price */}
       <Stack
