@@ -16,6 +16,7 @@ export interface Product {
   imageUrl?: string | null;
   quality?: 'premium' | 'standard';
   tag?: string | null;
+  description?: string | null;
 }
 
 export interface CartItem {
